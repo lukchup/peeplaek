@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยรามคำแหง - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="ru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "ru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="ru.png" alt="โลโก้ ม.ร." class="ru-logo">
+            </div>
+            <h1>มหาวิทยาลัยรามคำแหง</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "เปลวเทียนให้แสง รามคำแหงให้ทาง" — มหาวิทยาลัยรัฐในรูปแบบ "ตลาดวิชา" แห่งเดียวในประเทศไทย มุ่งมั่นให้โอกาสทางการศึกษาอย่างเท่าเทียมและทั่วถึง ผลิตบัณฑิตที่มีความรู้คู่คุณธรรมเพื่อรับใช้สังคมและประเทศชาติ
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง (วิทยาเขตหัวหมาก)</h3>
+                <p>2086 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240</p>
+                <small style="color: #4b5563; display: block; margin-top: 8px;">
+                    <i class="fas fa-train"></i> <strong>รถไฟฟ้า:</strong> MRT สายสีส้ม สถานีมหาวิทยาลัยรามคำแหง (เปิดให้บริการแล้ว) | เรือโดยสารคลองแสนแสบ ท่าเรือ ม.รามคำแหง
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยรามคำแหง (Ramkhamhaeng University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>ม.ร. / RU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา / คติพจน์</strong></td>
+                            <td>"เปลวเทียนให้แสง รามคำแหงให้ทาง"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot ru-blue"></span> สีน้ำเงิน และ 
+                                <span class="color-dot ru-gold"></span> สีทอง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นสุพรรณิการ์ (ฝ้ายคำ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยรัฐในรูปแบบตลาดวิชา (ไม่จำกัดจำนวนรับในคณะส่วนใหญ่)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าหน่วยกิตโดยประมาณ</strong></td>
+                            <td>เริ่มต้นหน่วยกิตละ 25 บาท (ค่าเทอมรวมภาคปกติประมาณ 1,200 - 3,500 บาท)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>รูปแบบการเรียน</strong></td>
+                            <td>เลือกเข้าฟังการบรรยายในห้องเรียน หรือเรียนออนไลน์/ดูวิดีโอย้อนหลังยืดหยุ่นตามเวลาของผู้เรียน</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> โอกาสทองสำหรับผู้จบ ปวส. (ระบบเทียบโอนรายวิชาที่คุ้มที่สุด)</h3>
+                <p>
+                    มหาวิทยาลัยรามคำแหง เป็นสถาบันที่ **เอื้อประโยชน์ให้ผู้จบ ปวส. (และอนุปริญญา) มากที่สุดในประเทศไทย** โดยแทบทุกคณะหลักเปิดรับสิทธิ์เทียบโอนหน่วยกิตแบบเหมาจ่ายตามสาขาที่จบมา ทำให้ผู้เรียนสามารถ **ลดเวลาเรียนเหลือเพียง 1.5 - 2 ปี** ก็สามารถคว้าปริญญาตรีได้ เหมาะทั้งสำหรับผู้ที่อยากเรียนต่อภาคปกติ หรือทำงานไปด้วยเรียนไปด้วย
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid #002366; padding-left: 15px; background: #f4f7fc; padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong>สถิติการเทียบโอน:</strong> สำหรับผู้จบ ปวส. สายตรง (เช่น จบ ปวส.บัญชี ต่อตรีบัญชี) สามารถเทียบโอนวิชาพื้นฐานและวิชาเลือกได้สูงสุดกว่า 50-60 หน่วยกิต ทำให้เหลือลงทะเบียนเรียนต่ออีกไม่กี่วิชาก็จบการศึกษาได้ทันที
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอน (แยกตามกลุ่มหลัก)</h2>
+            
+            <h4><i class="fas fa-gavel"></i> กลุ่มสังคมศาสตร์และกฎหมาย</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะนิติศาสตร์ (กฎหมายอันดับต้นๆ ของประเทศ)</span>
+                <span><i class="fas fa-check-circle"></i> คณะรัฐศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะบริหารธุรกิจ</span>
+                <span><i class="fas fa-check-circle"></i> คณะเศรษฐศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์</span>
+            </div>
+
+            <h4><i class="fas fa-microscope"></i> กลุ่มวิทยาศาสตร์และเทคโนโลยี</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิศวกรรมศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีการเกษตร</span>
+            </div>
+
+            <h4><i class="fas fa-heartbeat"></i> กลุ่มครุศาสตร์และสุขภาพ</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะศึกษาศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะสาธารณสุขศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะพยาบาลศาสตร์</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.ru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เว็บไซต์หลัก ม.รามฯ
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยรามคำแหง | เปลวเทียนให้แสง รามคำแหงให้ทาง</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏเลย - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="lru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "lru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script> 
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="lru.png" alt="โลโก้ มรภ.เลย" class="lru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏเลย</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยแห่งการเรียนรู้และการพัฒนาท้องถิ่นที่ยั่งยืน" — มุ่งเน้นการสร้างองค์ความรู้ควบคู่กับคุณธรรม พัฒนาทรัพยากรมนุษย์เพื่อตอบสนองต่ออุตสาหกรรมการบริการ การท่องเที่ยว และเทคโนโลยีชุมชนแห่งดินแดนที่โอบล้อมด้วยขุนเขา
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง</h3>
+                <p>234 ถ.เลย-เชียงคาน ต.เมือง อ.เมือง จ.เลย 42000</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-location-arrow"></i> <strong>การเดินทาง:</strong> ตั้งอยู่ริมทางหลวงหมายเลข 201 (ถนนเลย-เชียงคาน) สามารถเดินทางมามหาวิทยาลัยได้อย่างสะดวกสบายด้วยรถโดยสารประจำทางสายเมืองเลย-เชียงคาน หรือรถสองแถวบริการสาธารณะ
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏเลย (Loei Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.ล. / LRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot lru-green"></span> สีเขียว และ 
+                                <span class="color-dot lru-yellow"></span> สีเหลือง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ศูนย์การศึกษาเพิ่มเติม</strong></td>
+                            <td>ศูนย์การศึกษาศูนย์ขอนแก่น (จังหวัดขอนแก่น) เพื่อขยายโอกาสการเรียนรู้สู่ศูนย์กลางภาคอีสาน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>อัตลักษณ์ประจำถิ่น</strong></td>
+                            <td>บูรณาการองค์ความรู้ด้านการท่องเที่ยวเชิงนิเวศ วัฒนธรรมไทเลย และการพัฒนาการเกษตรในพื้นที่สูง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประวัติความเป็นมา</strong></td>
+                            <td>ได้รับการสถาปนาขึ้นในปี พ.ศ. 2516 จากวิทยาลัยครูเลย สู่วิทยาลัยครูที่เติบโตเคียงคู่พี่น้องประชาชนชาวจังหวัดเลยและพื้นที่ใกล้เคียง</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> ประตูสู่ความสำเร็จของนักศึกษา ปวส. (หลักสูตรเทียบโอน)</h3>
+                <p>
+                    มรภ.เลย ตระหนักถึงความสำคัญในการพัฒนาทักษะวิชาชีพชั้นสูง จึงเปิดหลักสูตร **ปริญญาตรีเทียบโอนหน่วยกิต (ต่อเนื่อง/เทียบโอน)** เพื่อรองรับผู้สำเร็จการศึกษาระดับ **ปวส.** ที่ต้องการยกระดับวิทยฐานะ โดยสาขาที่เปิดรับสมัครจะครอบคลุมใน **คณะเทคโนโลยีอุตสาหกรรม คณะวิทยาการจัดการ และคณะวิทยาศาสตร์และเทคโนโลยี**
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid #007a33; padding-left: 15px; background: #e8f7ee; padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong>โอกาสการเติบโต:</strong> จังหวัดเลยเป็นเมืองแห่งการท่องเที่ยวและเป็นประตูการค้าชายแดน (ท่าลี่) หลักสูตรสำหรับ ปวส. ของ มรภ.เลย จึงปรับโครงสร้างเน้นไปที่ภาคปฏิบัติจริง เช่น เทคโนโลยีวิศวกรรมการจัดการอุตสาหกรรม การจัดการโลจิสติกส์ และเทคโนโลยีคอมพิวเตอร์ ทำให้นักศึกษาสามารถทำงานตรงสายงานในภาคบริการและอุตสาหกรรมยุคใหม่ได้ทันที
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะวิชาที่เปิดสอน</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะครุศาสตร์ (เสาหลักแห่งการผลิตครูในเขตพื้นที่สูง)</span>
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีอุตสาหกรรม (ตอบโจทย์สายช่างและนวัตกรรมโรงงาน)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (บริหารธุรกิจ, การบัญชี, โลจิสติกส์การท่องเที่ยว)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์และเทคโนโลยี (วิทยาศาสตร์การอาหาร, คอมพิวเตอร์)</span>
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.lru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.เลย
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏเลย | บูรณาการภูมิปัญญาท้องถิ่นสู่วิชาการระดับสากล</p>
+    </footer>
+
+</body>
+</html>

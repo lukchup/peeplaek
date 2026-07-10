@@ -1,0 +1,138 @@
+/* --- RPU Official Theme: สีเหลือง-สีเงิน (มหาวิทยาลัยราชพฤกษ์) --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    --rpu-yellow: #eab308;        /* สีเหลืองทองหลัก (Yellow) แทนคุณธรรม จริยธรรม */
+    --rpu-dark-yellow: #a16207;   /* สีเหลืองเข้ม/น้ำตาลทอง สำหรับเน้นข้อความเด่น */
+    --rpu-silver: #94a3b8;        /* สีเงินหลัก (Silver) แทนความเจริญรุ่งเรือง */
+    --rpu-silver-light: #f1f5f9;  /* สีเงินอ่อน/เทาจาง สำหรับพื้นหลังการ์ด */
+    --rpu-bg-light: #fefce8;      /* พื้นหลังเว็บโทนเหลืองครีมอ่อนจาง ๆ คลีนสายตา */
+    --text-dark: #1e293b;
+    --text-muted: #475569;
+    --white: #ffffff;
+    --border-color: #fef08a;
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--rpu-bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+/* ส่วนหัวข้อเด่นด้านบน ธีมเหลือง-เงิน ดูสว่าง ภูมิฐาน และทรงพลัง */
+.hero-section {
+    padding: 65px 0; 
+    text-align: center;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%); /* ใช้พื้นหลังเข้มเขม่าเงินเพื่อให้สีเหลืองทองโดดเด่นสูงสุด */
+    color: var(--white);
+    border-bottom-left-radius: 35px; 
+    border-bottom-right-radius: 35px;
+    box-shadow: 0 10px 25px rgba(30, 41, 59, 0.15);
+    border-bottom: 5px solid var(--rpu-yellow);
+}
+
+.hero-section h1 { 
+    color: var(--rpu-yellow) !important; /* เน้นชื่อสถาบันด้วยสีเหลืองทอง */
+    font-family: 'Prompt', sans-serif; 
+    font-size: 2.4rem; 
+    font-weight: 600; 
+    margin: 15px 0 10px; 
+}
+
+.hero-section h2 {
+    font-size: 1.15rem;
+    color: #cbd5e1;
+    margin: 0 0 15px 0;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.hero-section .intro-text {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    font-weight: 300;
+}
+
+.divider { width: 60px; height: 4px; background: var(--rpu-yellow); margin: 15px auto 20px; border-radius: 2px; }
+
+/* การ์ดที่ตั้งและวิทยาเขต */
+.info-card {
+    background: var(--white); 
+    padding: 25px; 
+    border-radius: 20px;
+    display: flex; 
+    align-items: center; 
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02); 
+    margin-bottom: 35px; 
+    border: 1px solid var(--rpu-silver-light);
+}
+
+.icon-box { 
+    width: 55px; 
+    height: 55px; 
+    background: #fef9c3; 
+    color: var(--rpu-dark-yellow); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 14px; 
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.address-content h3 { margin: 0 0 5px 0; font-family: 'Prompt', sans-serif; color: var(--text-dark); font-size: 1.2rem; }
+.address-content p { margin: 0; color: var(--text-dark); }
+.address-content small { display: block; margin-top: 10px; color: var(--text-muted); line-height: 1.6; }
+
+.section-title { 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 1.4rem; 
+    color: #1e293b; 
+    margin: 45px 0 20px; 
+    border-bottom: 2px solid var(--rpu-yellow); 
+    padding-bottom: 8px; 
+}
+
+/* ตารางข้อมูลพื้นฐาน */
+.table-responsive { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.01); margin-bottom: 40px; border: 1px solid #e2e8f0; }
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { background-color: #334155; color: var(--rpu-yellow); text-align: left; font-family: 'Prompt', sans-serif; font-weight: 500; padding: 15px 20px; }
+.facts-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+.facts-table tr:last-child td { border-bottom: none; }
+
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid #cbd5e1; }
+.color-dot.rpu-yellow { background: #eab308; }
+.color-dot.rpu-silver { background: #cbd5e1; }
+
+/* ไฮไลต์เทียบโอน ปวส. */
+.desc-box { background: var(--white); padding: 30px; border-radius: 20px; border-left: 6px solid var(--rpu-yellow); margin-bottom: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.01); border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+.desc-box h3 { margin-top: 0; font-family: 'Prompt', sans-serif; color: var(--rpu-dark-yellow); font-size: 1.25rem; }
+.desc-box p { color: var(--text-dark); margin-bottom: 15px; }
+
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+.feature-item { background: #fefcf0; padding: 15px; border-radius: 12px; border: 1px solid #fef08a; }
+.feature-item strong { color: var(--rpu-dark-yellow); display: block; margin-bottom: 5px; font-family: 'Prompt', sans-serif; }
+
+/* รายชื่อคณะแบบการ์ด */
+.schools-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 15px; margin-bottom: 40px; }
+.school-card { background: var(--white); padding: 22px; border-radius: 16px; border: 1px solid #e2e8f0; transition: all 0.2s ease; }
+.school-card:hover { transform: translateY(-3px); border-color: var(--rpu-yellow); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.school-card h4 { margin: 0 0 10px 0; font-family: 'Prompt', sans-serif; color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; border-left: 3px solid var(--rpu-yellow); padding-left: 8px; }
+.school-card ul { margin: 0; padding-left: 20px; color: var(--text-dark); font-size: 0.95rem; }
+.school-card li { margin-bottom: 6px; }
+
+/* ปุ่มลิงก์ */
+.btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 55px 0; flex-wrap: wrap; }
+.btn-visit { text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 500; font-family: 'Prompt', sans-serif; background: #334155; color: var(--rpu-yellow); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(30, 41, 59, 0.2); font-size: 1rem; border: 1px solid var(--rpu-yellow); }
+.btn-visit:hover { background: #1e293b; transform: translateY(-2px); }
+.btn-back { text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--white); color: #4b5563; border: 1px solid #cbd5e1; transition: all 0.3s ease; font-size: 1rem; }
+.btn-back:hover { border-color: var(--rpu-yellow); color: var(--rpu-dark-yellow); transform: translateY(-2px); }
+
+footer { text-align: center; padding: 35px 0; color: var(--text-muted); border-top: 1px solid #e2e8f0; font-size: 0.9rem; background: var(--white); margin-top: 60px; }

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="kmutt.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "kmutt";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="kmutt.png" alt="โลโก้ มจธ." class="kmutt-logo">
+            </div>
+            <h1>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยแห่งนวัตกรรมและการพัฒนาที่ยั่งยืน" — โดดเด่นระดับสากลด้วยงานวิจัยระดับสูง คุณภาพการเรียนการสอนด้านวิศวกรรมศาสตร์ เทคโนโลยี และการเป็นมหาวิทยาลัยสีเขียว (Green University) อันดับต้นๆ ของเมืองไทย
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง (วิทยาเขตบางมด)</h3>
+                <p>126 ถ.ประชาอุทิศ แขวงบางมด เขตทุ่งครุ กรุงเทพฯ 10140</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่ฝั่งธนบุรี สามารถเดินทางโดยลงรถไฟฟ้า BTS สถานีกรุงธนบุรี หรือ MRT สถานีบางปะกอก (สายสีม่วงในอนาคต) แล้วต่อรถประจำทางหรือรถซูบารุ (กะป้อ) สายประชาอุทิศเข้าสู่มหาวิทยาลัย
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ / ชื่อเรียกย่อ</strong></td>
+                            <td>มจธ. / KMUTT (มักเรียกติดปากกันว่า "บางมด")</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot kmutt-orange"></span> สีแสด และ 
+                                <span class="color-dot kmutt-yellow"></span> สีเหลืองทอง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ดอกไม้ประจำสถาบัน</strong></td>
+                            <td>ดอกธรรมรักษา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>วิทยาเขตและพื้นที่การศึกษา</strong></td>
+                            <td>วิทยาเขตบางมด (กรุงเทพฯ), พื้นที่การศึกษาบางขุนเทียน (เน้นวิจัยและนวัตกรรม), และราชบุรี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นระดับนานาชาติ</strong></td>
+                            <td>ได้รับการจัดอันดับให้อยู่ในระดับท็อปของประเทศด้านวิศวกรรมและเทคโนโลยีจากการจัดอันดับโลก (เช่น Times Higher Education) อย่างต่อเนื่อง</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> การศึกษาต่อสำหรับผู้จบ ปวส. (ครูช่างและเทคโนโลยี)</h3>
+                <p>
+                    มจธ. (บางมด) มีการเปิดรับผู้สำเร็จการศึกษาระดับ ปวส. เข้าศึกษาต่อในระดับปริญญาตรีเช่นกัน โดยหลักสูตรที่โดดเด่นจะอยู่ที่ **คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี** ซึ่งเน้นการผลิต "ครูช่าง" บัณฑิตสายวิชาชีพชั้นสูง และนักเทคโนโลยีเพื่อป้อนเข้าสู่สถานศึกษาและภาคอุตสาหกรรม นอกจากนี้ยังมีหลักสูตรทางด้านเทคโนโลยีอุตสาหกรรมในบางสาขาที่เปิดโอกาสให้เทียบโอนชุดวิชาได้
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid #fa4616; padding-left: 15px; background: #fff5f2; padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong>สไตล์การเรียนรู้แบบบางมด:</strong> ที่นี่จะเน้นแนวคิด Outcome-Based Education และการทำโปรเจกต์ (Project-based) ค่อนข้างเข้มข้น ทำให้นักศึกษาที่ย้ายมาจากสายอาชีพ (ปวส.) ซึ่งมีพื้นฐานภาคปฏิบัติที่แน่นหนา สามารถประยุกต์ใช้ทักษะฝีมือเข้ากับงานวิจัยเชิงลึกได้อย่างยอดเยี่ยม
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและคณะวิชาที่น่าสนใจ</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิศวกรรมศาสตร์ (วิศวฯ บางมด)</span>
+                <span><i class="fas fa-check-circle"></i> คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี (แหล่งเรียนต่อ ปวส.)</span>
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีสารสนเทศ (SIT)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะสถาปัตยกรรมศาสตร์และการออกแบบ (SoA+D)</span>
+                <span><i class="fas fa-check-circle"></i> สถาบันวิทยาการหุ่นยนต์ภาคสนาม (FIBO - บุกเบิกด้านหุ่นยนต์)</span>
+                <span><i class="fas fa-check-circle"></i> คณะพลังงานสิ่งแวดล้อมและวัสดุ</span>
+                <span><i class="fas fa-check-circle"></i> มจธ. ราชบุรี (พื้นที่การศึกษาจังหวัดราชบุรี)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.kmutt.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มจธ.
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี | นวัตกรรมที่จับต้องได้และยั่งยืน</p>
+    </footer>
+
+</body>
+</html>

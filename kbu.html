@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยเกษมบัณฑิต - KBU</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="kbu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "kbu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="kbu.png" alt="โลโก้ มหาวิทยาลัยเกษมบัณฑิต" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยเกษมบัณฑิต</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "คุณธรรมนำความรู้ บรรลุความสำเร็จ" — มุ่งเน้นการพัฒนานักศึกษาสู่การปฏิบัติงานจริงในโลกวิชาชีพ เพียบพร้อมด้วยสิ่งอำนวยความสะดวกระดับมาตรฐานสากลและเครือข่ายอุตสาหกรรมที่เข้มแข็ง
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตร่มเกล้า (วิทยาเขตหลักสำหรับกลุ่มเทคโนโลยี)</h3>
+                <p>60 ถนนร่มเกล้า แขวงมีนบุรี เขตมีนบุรี กรุงเทพมหานคร 10510</p>
+                <small>
+                    <i class="fas fa-bus"></i> <strong>การเดินทางและจุดสังเกต:</strong> ตั้งอยู่ติดริมถนนร่มเกล้า เดินทางสะดวกสบายใกล้แนวรถไฟฟ้าสายสีส้ม และสายสีชมพู (สถานีมีนบุรี) สามารถเชื่อมต่อรถโดยสารประจำทางสาย 143, 26ก, 549 หรือรถตู้โดยสารประจำทางสายรังสิต-มีนบุรี, สุวรรณภูมิ-มีนบุรี ได้อย่างรวดเร็ว (นอกจากนี้ยังมีวิทยาเขตพัฒนาการ ตั้งอยู่ที่ถนนพัฒนาการ เขตสวนหลวง ด้วย)
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยเกษมบัณฑิต (Kasem Bundit University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มกบ. / KBU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญาการศึกษา</strong></td>
+                            <td>มุ่งสร้างสรรค์องค์ความรู้ ทักษะวิชาชีพ และปลูกฝังคุณธรรมจริยธรรม เพื่อผลิตบัณฑิตที่มีคุณภาพพร้อมตอบสนองความต้องการของตลาดงานระดับชาติและนานาชาติ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot kbu-orange"></span> สีแสด และ
+                                <span class="color-dot kbu-blue"></span> สีน้ำเงิน 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นนนทรี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นด้านกายภาพและกีฬา</strong></td>
+                            <td>เป็นหนึ่งในสถาบันเอกชนที่มีศูนย์กีฬาร่มเกล้าเฉลิมพระเกียรติขนาดใหญ่และทันสมัยที่สุด มีห้องพักเครื่องปรับอากาศภายในแคมปัส (Kasem Bundit Residence) รองรับนักศึกษา และโดดเด่นด้านการส่งเสริมทุนการศึกษานักกีฬา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>หลักสูตรและพันธมิตร</strong></td>
+                            <td>มีศูนย์ฝึกอบรมการบิน (สถาบันพัฒนาบุคลากรการบิน) และห้องปฏิบัติการจำลองสายการบินขนาดใหญ่ รวมถึงความร่วมมือกับภาคอุตสาหกรรมขนส่ง การท่องเที่ยว และเทคโนโลยีเพื่อการฝึกงานจริง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติเริ่มต้นประมาณ 36,000 - 52,000 บาท (ขึ้นอยู่กับสาขาวิชา มีโครงสร้างกองทุน กยศ. และระบบทุนส่วนลดพิเศษสำหรับผู้สมัครเรียนจากสายอาชีพอย่างเป็นระบบ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-hands-helping"></i> การเรียนรู้จากประสบการณ์จริง (Experiential Learning)</h3>
+                <p>
+                    KBU เน้นย้ำให้ผู้เรียนได้สัมผัสเครื่องมือ อุปกรณ์ และระบบโปรแกรมคอมพิวเตอร์ที่ใช้ในอุตสาหกรรมปัจจุบัน มีการจำลองห้องแล็บวิศวกรรม โรงแรม และสตูดิโอนิเทศศาสตร์ เพื่อให้นักศึกษามีทักษะความชำนาญขั้นสูง สามารถแก้ไขปัญหาหน้างานและก้าวเข้าสู่การทำงานจริงในบริษัทชั้นนำได้อย่างมืออาชีพ
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-user-graduate"></i> ข้อมูลเทียบโอน ปวส. เรียนต่อปริญญาตรี</strong>
+                        KBU เปิดโอกาสและต้อนรับนักศึกษาจบ ปวส. เข้าศึกษาต่อในหลักสูตรเทียบโอนปริญญาตรี (ทั้งภาคปกติและภาคค่ำ/วันอาทิตย์) ในคณะยอดนิยม เช่น **คณะบริหารธุรกิจ คณะวิศวกรรมศาสตร์ คณะเทคโนโลยีสารสนเทศ และคณะศิลปศาสตร์** โดยจุดเด่นอยู่ที่โครงสร้างการเทียบโอนวิชาเรียนที่สะดวก รวดเร็ว และจบการศึกษาได้ภายใน 2 ปี ทำให้ได้รับความนิยมจากกลุ่มผู้สำเร็จการศึกษาสายอาชีวศึกษาอย่างสูง
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสถาบันวิชาที่โดดเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-plane-departure"></i> สถาบันการบินและการบริการ</h4>
+                    <ul>
+                        <li>สถาบันพัฒนาบุคลากรการบิน (สาขาวิชาธุรกิจการบิน - มีห้องปฏิบัติการเครื่องบินจำลอง)</li>
+                        <li>คณะการท่องเที่ยวและอุตสาหกรรมบริการ (การจัดการโรงแรม, การท่องเที่ยว)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-tools"></i> กลุ่มวิศวกรรมและเทคโนโลยี</h4>
+                    <ul>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมไฟฟ้าและอิเล็กทรอนิกส์, โยธา, เครื่องกล, อุตสาหการ)</li>
+                        <li>คณะเทคโนโลยีสารสนเทศ (วิทยาการคอมพิวเตอร์, เทคโนโลยีสารสนเทศ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-briefcase"></i> กลุ่มบริหารธุรกิจและนิเทศศาสตร์</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การตลาดดิจิทัล, การจัดการโลจิสติกส์และโซ่อุปทาน, การบัญชี)</li>
+                        <li>คณะนิเทศศาสตร์ (การสื่อสารดิจิทัล, ศิลปะการแสดง, ภาพยนตร์)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-heartbeat"></i> กลุ่มวิทยาศาสตร์สุขภาพและสังคม</h4>
+                    <ul>
+                        <li>คณะพยาบาลศาสตร์ / คณะวิทยาศาสตร์การกีฬา</li>
+                        <li>คณะนิติศาสตร์ / คณะศิลปศาสตร์ (ภาษาไทยเพื่อการสื่อสาร, ภาษาอังกฤษ, ภาษาจีนธุรกิจ)</li>
+                        <li>คณะสถาปัตยกรรมศาสตร์ (สถาปัตยกรรมภายใน, การออกแบบผลิตภัณฑ์)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://kbu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยเกษมบัณฑิต
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยเกษมบัณฑิต | สถาบันแห่งการสร้างมืออาชีพและคุณธรรมนำความรู้สู่อนาคต</p>
+    </footer>
+
+</body>
+</html>

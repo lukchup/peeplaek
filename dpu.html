@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยธุรกิจบัณฑิตย์ - DPU</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="dpu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "dpu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า dpu.png ตามมาตรฐานโครงสร้างโปรเจกต์ -->
+                <img src="dpu.png" alt="โลโก้ มหาวิทยาลัยธุรกิจบัณฑิตย์" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยธุรกิจบัณฑิตย์</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "ธุรกิจบัณฑิตย์สร้างธุรกิจสร้างอนาคต" — มุ่งขับเคลื่อนการศึกษาด้วยเทคโนโลยี AI ก้าวสู่การเป็นมหาวิทยาลัยแห่งนวัตกรรมและการบ่มเพาะผู้ประกอบการรุ่นใหม่ระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งหลัก (ถนนประชาชื่น)</h3>
+                <p>110/1-4 ถนนประชาชื่น แขวงทุ่งสองห้อง เขตหลักสี่ กรุงเทพมหานคร 10210</p>
+                <small>
+                    <i class="fas fa-bus"></i> <strong>การเดินทางสะดวกสบาย:</strong> ตั้งอยู่ริมถนนประชาชื่น เดินทางสะดวกด้วยรถไฟฟ้าสายสีชมพู (ลงสถานีแจ้งวัฒนะ 14 หรือสถานีศูนย์ราชการนนทบุรี แล้วต่อรถประจำทางมาได้ง่าย) หรือสายสีแดง (สถานีบางเขน) นอกจากนี้ยังมีรถประจำทางผ่านหน้ามหาวิทยาลัย เช่น สาย 24 และ 66 รวมถึงมีรถตู้สาธารณะบริการรับ-ส่งเชื่อมต่อหลายจุด
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยธุรกิจบัณฑิตย์ (Dhurakij Pundit University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มธบ. / DPU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเน้นสถาบัน</strong></td>
+                            <td>มุ่งเน้นการสอนด้านการจัดการธุรกิจ ไอที นวัตกรรมดิจิทัล และกฎหมาย โดยปัจจุบันมีการบูรณาการทักษะ AI (Artificial Intelligence) เข้าไปในทุกหลักสูตรเพื่อให้ตอบโจทย์ตลาดยุคใหม่</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot dpu-purple"></span> สีม่วง และ 
+                                <span class="color-dot dpu-blue"></span> สีฟ้า (สีม่วงแทนความหนักแน่น ถาวร ศักดิ์ศรี และสีฟ้าแทนปัญญาที่กว้างไกล ความแจ่มใสเบิกบาน)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นไผ่ (สะท้อนถึงความเพียรพยายาม มีวินัย เติบโตง่ายและทนทานในทุกสภาพแวดล้อม)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นด้านสิ่งแวดล้อม</strong></td>
+                            <td>เป็นมหาวิทยาลัยที่มีภูมิทัศน์สวยงาม ร่มรื่น และเต็มไปด้วยพื้นที่สีเขียว มีการตกแต่งสไตล์สถาปัตยกรรมร่วมสมัย มี Co-Working Space ที่ทันสมัยส่งเสริมการเรียนรู้นอกห้องเรียน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>วิทยาลัยเฉพาะทางระดับท็อป</strong></td>
+                            <td>โดดเด่นอย่างมากด้านหลักสูตรนวัตกรรมธุรกิจและการบัญชี, วิทยาลัยนวัตกรรมดีไซน์และเทคโนโลยีสร้างสรรค์, รวมถึงวิทยาลัยครีเอทีฟดีไซน์แอนด์เอ็นเตอร์เทนเมนต์เทคโนโลยี (ANT) สำหรับสายเกมแอนิเมชัน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติเริ่มต้นประมาณ 42,000 - 60,000 บาท (มีกองทุนเงินให้กู้ยืมเพื่อการศึกษา กยศ. และระบบทุนสนับสนุนโควตานักเรียนสายอาชีพหลากหลายรูปแบบ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-brain"></i> DPU Core: ทักษะแห่งอนาคตและการติดปีก AI</h3>
+                <p>
+                    DPU ได้ปรับโฉมหลักสูตรผ่านโมเดลการสอนที่ช่วยสร้างทักษะ "ผู้ประกอบการยุคดิจิทัล" ให้นักศึกษาคิดเป็น ทำเป็น และสร้างรายได้ระหว่างเรียนได้จริง มีการร่วมมือกับเครือข่ายธุรกิจระดับประเทศ มุ่งเน้นการใช้เครื่องมือเทคโนโลยี และ AI ในการทำงาน เพื่อให้ผู้เรียนพร้อมแข่งขันและก้าวขึ้นเป็นผู้นำในสายอาชีพตนเองอย่างมั่นใจ
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-graduation-cap"></i> หลักสูตรเทียบโอน ปวส. ขวัญใจสายอาชีพ</strong>
+                        DPU เปิดรับผู้สำเร็จการศึกษาระดับ ปวส. เพื่อเข้าศึกษาต่อปริญญาตรี (ภาคปกติและภาคพิเศษเสาร์-อาทิตย์ สำหรับคนทำงาน) ในหลากหลายสาขา เช่น **การบัญชี การตลาด บริหารธุรกิจ เทคโนโลยีสารสนเทศ และโลจิสติกส์** โดดเด่นด้วยระบบการเทียบโอนหน่วยกิตที่ได้มาตรฐาน ยืดหยุ่น จบไวภายในเวลา 2 ปี ช่วยตอบโจทย์นักศึกษาสายอาชีพที่ต้องการเรียนต่อยอดและทำงานไปพร้อมกัน
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะและกลุ่มสาขาวิชาอย่างละเอียด -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> วิทยาลัยและคณะที่น่าสนใจ</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop-code"></i> กลุ่มเทคโนโลยี ดิจิทัล และเกม</h4>
+                    <ul>
+                        <li>วิทยาลัยครีเอทีฟดีไซน์แอนด์เอ็นเตอร์เทนเมนต์เทคโนโลยี (ANT - พัฒนาเกม, ดิจิทัลอาร์ต)</li>
+                        <li>คณะเทคโนโลยีสารสนเทศ (วิทยาการคอมพิวเตอร์, เทคโนโลยีสารสนเทศและนวัตกรรม)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-wallet"></i> กลุ่มบริหารธุรกิจ การบัญชี และการท่องเที่ยว</h4>
+                    <ul>
+                        <li>วิทยาลัยบริหารธุรกิจนวัตกรรมและการบัญชี (CIBA)</li>
+                        <li>คณะการท่องเที่ยวและการบริการ (การจัดการโรงแรม, ธุรกิจการบิน)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-paint-brush"></i> กลุ่มศิลปะ การออกแบบ และนิเทศศาสตร์</h4>
+                    <ul>
+                        <li>วิทยาลัยนวัตกรรมดีไซน์และเทคโนโลยีสร้างสรรค์ (IDDT)</li>
+                        <li>คณะนิเทศศาสตร์ (สื่อสารการตลาดดิจิทัล, ภาพยนตร์และสื่อดิจิทัล)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-balance-scale"></i> กลุ่มมนุษยศาสตร์ นิติศาสตร์ และการแพทย์ทางเลือก</h4>
+                    <ul>
+                        <li>คณะนิติศาสตร์ปรีดี พนมยงค์ / คณะรัฐประศาสนศาสตร์</li>
+                        <li>คณะศิลปศาสตร์ (ภาษาจีนธุรกิจ, ภาษาอังกฤษ)</li>
+                        <li>วิทยาลัยการแพทย์บูรณาการ (CIM - ความงาม, สุขภาพ, การแพทย์แผนไทย)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.dpu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยธุรกิจบัณฑิตย์
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยธุรกิจบัณฑิตย์ | สถาบันการศึกษาชั้นนำด้านธุรกิจดิจิทัลและนวัตกรรมแห่งอนาคต</p>
+    </footer>
+
+</body>
+</html>

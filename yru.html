@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏยะลา - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="yru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "yru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="yru.png" alt="โลโก้ มรภ.ยะลา" class="yru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏยะลา</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "คลังปัญญาแห่งชายแดนใต้" — สถาบันอุดมศึกษาเพื่อการพัฒนาท้องถิ่น มุ่งเน้นการสร้างสรรค์องค์ความรู้ ไอที และนวัตกรรมเพื่อความยั่งยืนบนฐานพหุวัฒนธรรม
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งแคมพัสหลัก</h3>
+                <p>133 ถนนเทศบาล 3 ต.สะเตง อ.เมือง จ.ยะลา 95000</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่ใจกลางเมืองยะลา สะดวกสบายในการเดินทางด้วยรถมอเตอร์ไซค์รับจ้าง รถสองแถวประจำทาง และอยู่ไม่ไกลจากสถานีรถไฟยะลา
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานสถาบัน</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏยะลา (Yala Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.ยล. / YRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot yru-pink"></span> สีชมพู และ 
+                                <span class="color-dot yru-green"></span> สีเขียว
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นจันทน์กะพ้อ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ความเป็นเลิศเด่น</strong></td>
+                            <td>ครุศาสตร์และการพัฒนาวิชาชีพครู, วิทยาศาสตร์เทคโนโลยีและการเกษตร, นวัตกรรมอาหารฮาลาล และภาษาและการสื่อสารเพื่อท้องถิ่น</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> ยกระดับสายอาชีพ: เรียนต่อปริญญาตรีหลักสูตรเทียบโอน ปวส. ที่ YRU</h3>
+                <p>
+                    มรภ.ยะลา มุ่งสนับสนุนผู้สำเร็จการศึกษาระดับ **ปวส.** เพื่อเข้าศึกษาต่อระดับปริญญาตรี (หลักสูตรเทียบโอนหน่วยกิต) มุ่งสร้างนักปฏิบัติการด้านการบริหารจัดการและเทคโนโลยีเพื่อตอบโจทย์การเติบโตทางเศรษฐกิจของชายแดนใต้ โดยมีระบบค่าเล่าเรียนแบบเหมาจ่ายดังนี้:
+                </p>
+                <ul style="margin-top: 10px; padding-left: 20px; color: var(--text-dark);">
+                    <li><strong>ภาคปกติ (เรียนวันจันทร์-ศุกร์):</strong> อัตราค่าเล่าเรียนประมาณ <strong>8,000 - 12,000 บาท / ภาคการศึกษา</strong> (ขึ้นอยู่กับสาขาวิชา)</li>
+                    <li><strong>ภาคพิเศษ (เรียนวันเสาร์-อาทิตย์ สำหรับวัยทำงาน):</strong> อัตราค่าเล่าเรียนประมาณ <strong>10,500 - 14,000 บาท / ภาคการศึกษา</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอนและรับสมัคร ปวส.</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (การบัญชี, คอมพิวเตอร์ธุรกิจ, การจัดการธุรกิจดิจิทัล)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์เทคโนโลยีและการเกษตร (เทคโนโลยีสารสนเทศ, นวัตกรรมเกษตร)</span>
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์ (การพัฒนาชุมชน, นวัตกรรมบริการและการท่องเที่ยว)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.yru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.ยะลา
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏยะลา | พลังปัญญาเพื่อพัฒนาท้องถิ่นและพหุวัฒนธรรมชายแดนใต้</p>
+    </footer>
+
+</body>
+</html>

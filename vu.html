@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยวงษ์ชวลิตกุล - ข้อมูลสถาบันและแนวทางการเทียบโอน ปวส.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- หมายเหตุ: กรุณาตรวจสอบไฟล์ CSS ของคุณเพื่อให้รองรับสีส้มแสด (VU Orange) -->
+    <link rel="stylesheet" href="vu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "vu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <img src="vu.png" alt="โลโก้มหาวิทยาลัยวงษ์ชวลิตกุล" style="width: 100px; height: auto;">
+            <h1>มหาวิทยาลัยวงษ์ชวลิตกุล</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยเอกชนแห่งแรกในภาคตะวันออกเฉียงเหนือ" ก่อตั้งขึ้นเมื่อปี พ.ศ. 2527 ณ จังหวัดนครราชสีมา มุ่งเน้นการผลิตบัณฑิตที่มีคุณภาพด้วยการเรียนรู้เชิงปฏิบัติ (Learning by Doing) พร้อมเปิดโอกาสให้ผู้สำเร็จการศึกษาระดับ ปวส. เข้าศึกษาต่อเพื่อยกระดับวุฒิการศึกษาในหลักสูตรปริญญาตรีที่ตอบโจทย์ตลาดงานยุคใหม่
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง</h3>
+                <p>84 หมู่ 4 ถนนมิตรภาพ-หนองคาย ต.บ้านเกาะ อ.เมือง จ.นครราชสีมา 30000</p>
+                <small style="color: #4b5563; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่บนถนนมิตรภาพ เดินทางสะดวกสบายจากตัวเมืองนครราชสีมา เชื่อมต่อเส้นทางสำคัญสู่ภาคอีสาน มีความพร้อมด้านอาคารปฏิบัติการที่ทันสมัยและสภาพแวดล้อมที่เอื้อต่อการเรียนรู้
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลการเข้าศึกษาต่อ (สำหรับวุฒิ ปวส.)</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อการพิจารณา</th>
+                            <th>รายละเอียดสำหรับกลุ่ม ปวส.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน / ชื่อย่อ</strong></td>
+                            <td>มหาวิทยาลัยวงษ์ชวลิตกุล (VU)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>สีแสด (หมายถึง สติปัญญาเป็นเลิศ และความรุ่งเรือง)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>รูปแบบการรับสมัคร</strong></td>
+                            <td>สมัครออนไลน์ได้ที่เว็บไซต์มหาวิทยาลัย หรือติดต่อศูนย์บริหารสื่อสารการตลาด อาคารมุข-ปราณี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>เกณฑ์การพิจารณาหลัก</strong></td>
+                            <td>เปิดรับผู้จบวุฒิ ปวส. หรือเทียบเท่า โดยมีการพิจารณาจากผลการศึกษาเดิมและพื้นฐานทางวิชาชีพ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบการเรียนต่อ</strong></td>
+                            <td>รองรับการเทียบโอนประสบการณ์และรายวิชา มีหลักสูตรภาคเสาร์-อาทิตย์ (Block Course) ที่ออกแบบมาเพื่อคนทำงานโดยเฉพาะ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าธรรมเนียมการศึกษา</strong></td>
+                            <td>ระบบ Block Course เริ่มต้นประมาณ 8,000 - 8,500 บาทต่อ Block (ข้อมูลอาจมีการเปลี่ยนแปลง โปรดตรวจสอบจากคณะโดยตรง)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-chalkboard-teacher"></i> โอกาสสำหรับผู้จบ ปวส. ที่ ม.วงษ์ชวลิตกุล</h3>
+                <p>
+                    มหาวิทยาลัยให้ความสำคัญกับ <strong>การประยุกต์ใช้ความรู้</strong> นักศึกษาที่จบ ปวส. จะได้เปรียบในการต่อยอดความรู้เชิงทฤษฎีเข้ากับทักษะวิชาชีพเดิมที่มีอยู่ ด้วยระบบการเรียนแบบ Block Course ที่เน้นความกระชับ เข้าใจง่าย และมีความยืดหยุ่นสูง ทำให้สามารถบริหารจัดการเวลาเรียนและทำงานไปพร้อมกันได้อย่างมีประสิทธิภาพ
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่แนะนำสำหรับแนวทาง ปวส.</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะบริหารธุรกิจ (การบัญชี, การจัดการ, การตลาด, โลจิสติกส์)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิศวกรรมศาสตร์ (มีอาคารปฏิบัติการวิศวกรรมครบครัน)</span>
+                <span><i class="fas fa-check-circle"></i> คณะนิติศาสตร์ (มีห้องศาลจำลองเพื่อฝึกทักษะ)</span>
+                <span><i class="fas fa-check-circle"></i> คณะสาธารณสุขศาสตร์ (รวมถึงสาขาอาชีวอนามัยและความปลอดภัย)</span>
+                <span><i class="fas fa-check-circle"></i> คณะศึกษาศาสตร์ (สาขาการสอนภาษาจีน, การศึกษาปฐมวัย)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.vu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เว็บไซต์หลัก ม.วงษ์ชวลิตกุล
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยวงษ์ชวลิตกุล | ระบบสารสนเทศแนะนำแนวทางศึกษาต่อ ปวส.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+/* --- PSRU Theme: เขียว - เหลือง (ฉบับแก้ Layout ล็อกขนาดโลโก้) --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    --psru-green: #006400;         /* สีเขียวหลักประจำสถาบัน (Dark Green) */
+    --psru-green-dark: #004200;    /* สีเขียวเข้มขรึมสำหรับหัวข้อ */
+    --psru-green-light: #e6f2e6;   /* สีเขียวอ่อนสำหรับพื้นหลังข้อความ */
+    --psru-yellow: #ffd700;        /* สีเหลืองทอง */
+    --text-dark: #1f2937;
+    --text-muted: #4b5563;
+    --white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #f7fbf7 0%, #ffffff 100%);
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+.hero-section {
+    padding: 50px 0; 
+    text-align: center;
+    background: linear-gradient(135deg, var(--psru-green-dark) 0%, var(--psru-green) 100%);
+    color: var(--white);
+    border-bottom-left-radius: 40px; 
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 4px 20px rgba(0, 100, 0, 0.15);
+}
+
+.hero-section img { 
+    max-width: 140px; 
+    height: auto; 
+    margin: 0 auto 15px; 
+    display: block;
+    object-fit: contain;
+}
+
+.hero-section h1 { 
+    color: var(--white) !important; 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 2.2rem; 
+    font-weight: 600; 
+    margin: 15px 0 10px; 
+}
+
+.hero-section .intro-text {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 0 15px;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.divider { width: 80px; height: 4px; background: var(--psru-yellow); margin: 15px auto 20px; border-radius: 2px; }
+
+.info-card {
+    background: var(--white); 
+    padding: 25px; 
+    border-radius: 24px;
+    display: flex; 
+    align-items: center; 
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); 
+    margin-bottom: 35px; 
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icon-box { 
+    width: 60px; 
+    height: 60px; 
+    background: var(--psru-green-light); 
+    color: var(--psru-green); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 16px; 
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.address-content h3 { margin: 0 0 5px 0; font-family: 'Prompt', sans-serif; color: var(--psru-green-dark); }
+.address-content p { margin: 0; color: var(--text-dark); }
+
+.section-title { 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 1.5rem; 
+    color: var(--psru-green-dark); 
+    margin: 40px 0 20px; 
+    border-bottom: 2px solid var(--psru-green); 
+    padding-bottom: 8px; 
+}
+
+.table-responsive { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 40px; border: 1px solid #e5e7eb; }
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { background-color: var(--psru-green-dark); color: var(--white); text-align: left; font-family: 'Prompt', sans-serif; font-weight: 500; padding: 15px 20px; }
+.facts-table td { padding: 15px 20px; border-bottom: 1px solid #f3f4f6; }
+
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.color-dot.psru-green { background: var(--psru-green); box-shadow: 0 0 8px rgba(0, 100, 0, 0.5); }
+.color-dot.psru-yellow { background: var(--psru-yellow); box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+
+.desc-box { background: var(--white); padding: 25px; border-radius: 24px; border-left: 6px solid var(--psru-green); margin-bottom: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
+.desc-box h3 { margin-top: 0; font-family: 'Prompt', sans-serif; color: var(--psru-green-dark); }
+
+.schools-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.schools-list span { background: var(--white); padding: 15px 20px; border-radius: 12px; border: 1px solid #e5e7eb; display: flex; align-items: center; gap: 10px; }
+.schools-list i { color: var(--psru-green); }
+
+.btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 50px 0; flex-wrap: wrap; }
+.btn-visit { text-decoration: none; padding: 14px 28px; border-radius: 50px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--psru-green-dark); color: var(--white); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,66,0,0.2); }
+.btn-visit:hover { background: var(--psru-green); transform: translateY(-2px); }
+.btn-back { text-decoration: none; padding: 14px 28px; border-radius: 50px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--white); color: #4b5563; border: 1px solid #cbd5e1; transition: all 0.3s ease; }
+.btn-back:hover { border-color: var(--psru-green); color: var(--psru-green); transform: translateY(-2px); }
+
+footer { text-align: center; padding: 30px 0; color: var(--text-muted); border-top: 1px solid #e5e7eb; font-size: 0.9rem; }

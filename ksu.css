@@ -1,0 +1,135 @@
+/* --- KSU (With Rajabhat Roots) Theme: สีฟ้า-เขียวน้ำทะเล --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght=300;400;600;700&family=Prompt:wght=500;600;700&display=swap');
+
+:root {
+    --ksu-blue: #00a4e4;         /* สีฟ้าหลักประจำมหาวิทยาลัย */
+    --ksu-teal: #00a099;         /* สีเขียวน้ำทะเลประจำมหาวิทยาลัย */
+    --ksu-bg-light: #f0f9ff;     /* สีฟ้าอ่อนพิเศษสำหรับพื้นหลัง */
+    --ksu-dark: #0f172a;         /* สีน้ำเงินเข้มเข้มเพื่อความโมเดิร์น */
+    --rajabhat-gold: #f1c40f;    /* สีทองสัญลักษณ์สะท้อนรากฐานราชภัฏ */
+    --text-dark: #334155;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+.hero-section {
+    padding: 55px 0; 
+    text-align: center;
+    background: linear-gradient(135deg, var(--ksu-blue) 0%, var(--ksu-teal) 100%);
+    color: var(--white);
+    border-bottom-left-radius: 40px; 
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 4px 20px rgba(0, 164, 228, 0.2);
+}
+
+.hero-section img.ksu-logo { 
+    max-width: 90px; 
+    height: auto; 
+    margin: 0 auto 15px; 
+    display: block;
+    object-fit: contain;
+}
+
+.hero-section h1 { 
+    color: var(--white) !important; 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 2.2rem; 
+    font-weight: 600; 
+    margin: 15px 0 10px; 
+}
+
+.hero-section .intro-text {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 0 15px;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.divider { width: 80px; height: 4px; background: var(--white); margin: 15px auto 20px; border-radius: 2px; }
+
+/* กล่องไฮไลต์รากฐานประวัติศาสตร์ มรภ. */
+.history-badge-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 15px 20px;
+    border-radius: 16px;
+    margin: -25px auto 30px;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    font-size: 0.95rem;
+    color: #92400e;
+}
+
+.info-card {
+    background: var(--white); 
+    padding: 25px; 
+    border-radius: 24px;
+    display: flex; 
+    align-items: center; 
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03); 
+    margin-bottom: 35px; 
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icon-box { 
+    width: 60px; 
+    height: 60px; 
+    background: var(--ksu-bg-light); 
+    color: var(--ksu-teal); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 16px; 
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.address-content h3 { margin: 0 0 5px 0; font-family: 'Prompt', sans-serif; color: var(--ksu-teal); }
+.address-content p { margin: 0; color: var(--text-dark); }
+
+.section-title { 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 1.5rem; 
+    color: var(--ksu-dark); 
+    margin: 40px 0 20px; 
+    border-bottom: 2px solid var(--ksu-blue); 
+    padding-bottom: 8px; 
+}
+
+.table-responsive { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 40px; border: 1px solid #e2e8f0; }
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { background-color: var(--ksu-dark); color: var(--white); text-align: left; font-family: 'Prompt', sans-serif; font-weight: 500; padding: 15px 20px; }
+.facts-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; }
+
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.color-dot.ksu-blue { background: #00a4e4; box-shadow: 0 0 8px rgba(0, 164, 228, 0.6); }
+.color-dot.ksu-teal { background: #00a099; box-shadow: 0 0 8px rgba(0, 160, 153, 0.6); }
+
+.desc-box { background: var(--white); padding: 25px; border-radius: 24px; border-left: 6px solid var(--ksu-teal); margin-bottom: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
+.desc-box h3 { margin-top: 0; font-family: 'Prompt', sans-serif; color: var(--ksu-teal); }
+
+.schools-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.schools-list span { background: var(--white); padding: 14px 18px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
+.schools-list i { color: var(--ksu-blue); }
+
+.btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 50px 0; flex-wrap: wrap; }
+.btn-visit { text-decoration: none; padding: 14px 28px; border-radius: 50px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--ksu-blue); color: var(--white); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 164, 228, 0.25); }
+.btn-visit:hover { background: #0082b5; transform: translateY(-2px); }
+.btn-back { text-decoration: none; padding: 14px 28px; border-radius: 50px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--white); color: #4b5563; border: 1px solid #cbd5e1; transition: all 0.3s ease; }
+.btn-back:hover { border-color: var(--ksu-blue); color: var(--ksu-blue); transform: translateY(-2px); }
+
+footer { text-align: center; padding: 30px 0; color: var(--text-muted); border-top: 1px solid #e2e8f0; font-size: 0.9rem; }

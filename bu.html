@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยกรุงเทพ - Creative University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="bu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "bu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="bu.png" alt="โลโก้ มหาวิทยาลัยกรุงเทพ" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยกรุงเทพ</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "Creative University" — มุ่งเน้นการหลอมรวมความคิดสร้างสรรค์เข้ากับเทคโนโลยีล้ำสมัย บ่มเพาะจิตวิญญาณผู้ประกอบการ และเตรียมความพร้อมนักศึกษาสู่การทำงานในระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตรังสิต (วิทยาเขตหลัก)</h3>
+                <p>9 หมู่ 5 ถนนพหลโยธิน ตำบลคลองหนึ่ง อำเภอคลองหลวง ปทุมธานี 12120</p>
+                <small>
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่ติดริมถนนพหลโยธิน ฝั่งขาออก มุ่งหน้าสู่อยุธยา เดินทางสะดวกด้วยรถตู้โดยสารสาธารณะสายรังสิต-ม.กรุงเทพ หรือรถประจำทางสาย 29, 39, 510 และ 520 นอกจากนี้ยังใกล้กับสถานีรถไฟฟ้าสายสีแดง (สถานีรังสิต) ซึ่งสามารถต่อรถโดยสารเข้ามาถึงหน้ามหาวิทยาลัยได้อย่างรวดเร็ว
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยกรุงเทพ (Bangkok University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มกท. / BU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา</strong></td>
+                            <td>"ความคิดสร้างสรรค์ เทคโนโลยี และจิตวิญญาณผู้ประกอบการ"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot bu-purple"></span> สีม่วง และ 
+                                <span class="color-dot bu-orange"></span> สีส้ม (คู่สีสะท้อนอัตลักษณ์ของนักสร้างสรรค์ยุคใหม่ ความล้ำสมัย และพลังขับเคลื่อนเทคโนโลยี)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นชัยพฤกษ์</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>สถาบันอุดมศึกษาเอกชนขนาดใหญ่ที่มีชื่อเสียงและจำนวนนักศึกษาเป็นอันดับต้นๆ ของประเทศ โดดเด่นด้านสภาพแวดล้อมและอาคารสถาปัตยกรรมระดับโลก (เช่น อาคาร Landmark รูปเพชร)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อเสียงและความเป็นเลิศ</strong></td>
+                            <td>เป็นที่ยอมรับอย่างสูงสุดในด้านวิชาการและโปรดักชันของคณะนิเทศศาสตร์, ความคิดสร้างสรรค์ในคณะดิจิทัลมีเดียและศิลปะภาพยนตร์, คณะบริหารธุรกิจที่เน้นการสร้างสตาร์ทอัพ และหลักสูตรนานาชาติ (BU International)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างระบบการเรียน</strong></td>
+                            <td>ระบบ 2 ภาคการศึกษา (Semester) และมีภาคฤดูร้อน เพียบพร้อมไปด้วยห้องปฏิบัติการระดับมืออาชีพ เช่น สตูดิโอถ่ายทำ, โรงแรมจำลอง, และห้องแล็บคอมพิวเตอร์ประสิทธิภาพสูง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติเริ่มต้นประมาณ 40,000 - 65,000 บาท (ขึ้นอยู่กับกลุ่มคณะและวิชาปฏิบัติการ โดยมีกองทุนกู้ยืมเพื่อการศึกษา และทุนโควตาหลากหลายรูปแบบสนับสนุน)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-gem"></i> โลกแห่งการเรียนรู้ไร้ขีดจำกัด (The Diamond Campus)</h3>
+                <p>
+                    ม.กรุงเทพ มุ่งเน้นการเรียนการสอนรูปแบบใหม่อย่างแท้จริง ไม่ได้จำกัดอยู่แค่ในตำรา นักศึกษาจะได้เรียนรู้ผ่านเครื่องมือและห้องปฏิบัติการที่ใช้ในอุตสาหกรรมจริง เช่น กล้องถ่ายภาพยนตร์ระดับฮอลลีวูด, ครัวเชฟมาตรฐานสากล, และ Co-Working Space สไตล์ซิลิคอนแวลลีย์ เพื่อเตรียมความพร้อมสู่การทำงานจริงหรือเป็นเจ้าของธุรกิจทันทีหลังจบการศึกษา
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-graduation-cap"></i> ข้อมูลเพิ่มเติมสำหรับ ปวส. เรียนต่อ</strong>
+                        เปิดรับผู้สำเร็จการศึกษาระดับ ปวส. เข้าศึกษาต่อปริญญาตรี (หลักสูตรเทียบโอน) ในหลากหลายคณะ เช่น คณะบริหารธุรกิจ คณะบัญชี คณะเทคโนโลยีสารสนเทศและนวัตกรรม และคณะนิเทศศาสตร์ โดยมีการพิจารณาเทียบโอนรายวิชาที่ตรงตามเกณฑ์อย่างเป็นระบบ ช่วยให้สามารถเรียนจบและคว้าปริญญาตรีได้ภายใน 2 ปี
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและกลุ่มสาขาวิชาที่โดดเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-video"></i> กลุ่มนิเทศศาสตร์และศิลปะภาพยนตร์</h4>
+                    <ul>
+                        <li>คณะนิเทศศาสตร์ (สาขาวิทยุกระจายเสียงและโทรทัศน์, สื่อสารการตลาด, โฆษณา)</li>
+                        <li>คณะดิจิทัลมีเดียและศิลปะภาพยนตร์ (ภาพยนตร์, ดิจิทัลมีเดีย)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-lightbulb"></i> กลุ่มบริหารธุรกิจ เอนเทอร์เพรนเนอร์ และบัญชี</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ / คณะบัญชี</li>
+                        <li>วิทยาลัยผู้ประกอบการสร้างสรรค์ (BUSEM) เพื่อการสร้างธุรกิจสตาร์ทอัพ</li>
+                        <li>คณะการท่องเที่ยวและการบริการ (สาขาการจัดการโรงแรม, ศิลปะการประกอบอาหาร)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-code"></i> กลุ่มเทคโนโลยี สถาปัตย์ และการออกแบบ</h4>
+                    <ul>
+                        <li>คณะเทคโนโลยีสารสนเทศและนวัตกรรม (วิทยาการคอมพิวเตอร์, Cyber Security, ไอที)</li>
+                        <li>คณะสถาปัตยกรรมศาสตร์ / คณะศิลปกรรมศาสตร์ (การออกแบบแฟชั่น, กราฟิก)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-globe"></i> กลุ่มมนุษยศาสตร์ นิติศาสตร์ และนานาชาติ</h4>
+                    <ul>
+                        <li>คณะมนุษยศาสตร์และการจัดการการท่องเที่ยว (สาขาภาษาอังกฤษ, ภาษาจีน, ธุรกิจการบิน)</li>
+                        <li>คณะนิติศาสตร์ / คณะเศรษฐศาสตร์และการลงทุน</li>
+                        <li>มหาวิทยาลัยกรุงเทพหลักสูตรนานาชาติ (Bangkok University International)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.bu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยกรุงเทพ
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยกรุงเทพ | มหาวิทยาลัยสร้างสรรค์เพื่ออนาคตและการเรียนรู้ระดับสากล</p>
+    </footer>
+
+</body>
+</html>

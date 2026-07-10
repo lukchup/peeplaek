@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยเวสเทิร์น (WTU) - Western University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="wtu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "wtu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="wtu.png" alt="โลโก้ มหาวิทยาลัยเวสเทิร์น" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยเวสเทิร์น</h1>
+            <h2>WESTERN UNIVERSITY</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "ศึกษาเพื่อพัฒนาคุณภาพชีวิต" — ผู้นำด้านการศึกษาสายแพทยศาสตร์ วิทยาศาสตร์สุขภาพ และนวัตกรรมการเรียนรู้ระบบออนไลน์ที่เข้าถึงได้จากทุกที่
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตหลัก (วิทยาเขตกาญจนบุรี)</h3>
+                <p>600 หมู่ 11 ตำบลสระลงเรือ อำเภอห้วยกระเจา จังหวัดกาญจนาบุรี 71170</p>
+                <small>
+                    <i class="fas fa-info-circle"></i> <strong>วิทยาเขตเพิ่มเติม:</strong> มีวิทยาเขตวัชรพล (กรุงเทพฯ) ตั้งอยู่ริมถนนหทัยราษฎร์ เขตคลองสามวา ซึ่งเป็นศูนย์กลางหลักสำหรับคณะทันตแพทยศาสตร์ คณะพยาบาลศาสตร์ และหลักสูตรระดับบัณฑิตศึกษา
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยเวสเทิร์น (Western University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มวท. / WTU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นเฉพาะทาง</strong></td>
+                            <td>เป็นที่ยอมรับอย่างสูงในการเปิดสอน **คณะสายวิทยาศาสตร์สุขภาพระดับวิชาชีพ** (คณะแพทยศาสตร์, ทันตแพทยศาสตร์, สัตวแพทยศาสตร์ และพยาบาลศาสตร์) ที่เพียบพร้อมด้วยห้องปฏิบัติการ Lab ที่ทันสมัยระดับสากล</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot wtu-blue"></span> สีฟ้า และ 
+                                <span class="color-dot wtu-yellow"></span> สีเหลือง (สีฟ้าแทนความสว่างสดใสของวิสัยทัศน์ สีเหลืองแทนความเจริญรุ่งเรืองของปัญญาและจิตวิญญาณที่เป็นหนึ่งเดียว)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นราชพฤกษ์ หรือต้นคูน (ออกดอกสีเหลืองชูช่อเหลืองอร่าม สื่อถึงความสำเร็จอันรุ่งโรจน์)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบการเรียนออนไลน์</strong></td>
+                            <td>โดดเด่นด้วย **Western Virtual University** ระบบการเรียนปริญญาตรี-โท-เอก ทางไกลผ่านอินเทอร์เน็ตแบบร้อยเปอร์เซ็นต์ ได้รับการรับรองถูกต้อง เหมาะสำหรับผู้ที่ทำงานแล้วและต้องการศึกษาต่อโดยไม่กระทบเวลาทำงานประจำ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>คณะทั่วไปและระบบออนไลน์เริ่มต้นที่ประมาณ 30,000 - 45,000 บาทต่อเทอม ส่วนกลุ่มวิชาชีพแพทยศาสตร์และทันตแพทยศาสตร์จะเป็นโครงสร้างค่าใช้จ่ายเฉพาะทางของสายการแพทย์ (สามารถยื่นกู้ กยศ. และมีระบบผ่อนชำระช่วยเหลือ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> ทางเลือกการศึกษาต่อปริญญาตรีสำหรับผู้สำเร็จการศึกษา ปวส.</h3>
+                <p>
+                    มหาวิทยาลัยเวสเทิร์นเปิดโอกาสกว้างแก่นักศึกษาสายอาชีวศึกษา (ปวส.) ที่ต้องการยกระดับวุฒิการศึกษาไปสู่ปริญญาตรี โดยมีหลักสูตรที่ยืดหยุ่นและเอื้อต่อการโอนย้ายความรู้เดิม
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-user-md"></i> โอกาสเทียบโอนเข้าสู่สายวิชาชีพและบริหาร</strong>
+                        สำหรับผู้จบ **ปวส.** WTU มีหลักสูตร **เทียบโอนหน่วยกิต** รองรับใน **คณะบริหารธุรกิจ, คณะบัญชี, คณะนิติศาสตร์ และคณะเทคโนโลยีสารสนเทศ** ทั้งในรูปแบบการเรียนในชั้นเรียนปกติ หรือเลือกเรียนผ่าน **ระบบออนไลน์ (Virtual University)** ซึ่งได้รับความนิยมสูงสุดจากศิษย์เก่าสายอาชีวะ เนื่องจากสามารถทำงานประจำควบคู่กับการเก็บหน่วยกิตปริญญาตรีให้จบภายใน 2 ปีได้อย่างสะดวกสบายครับ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและกลุ่มสาขาวิชาชั้นนำ</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-user-nurse"></i> กลุ่มแพทยศาสตร์และวิทยาศาสตร์สุขภาพ</h4>
+                    <ul>
+                        <li>คณะแพทยศาสตร์ / คณะทันตแพทยศาสตร์ </li>
+                        <li>คณะสัตวแพทยศาสตร์ / คณะพยาบาลศาสตร์</li>
+                        <li>คณะเทคนิคการแพทย์ / คณะสาธารณสุขศาสตร์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-chart-bar"></i> กลุ่มบริหารธุรกิจและการบัญชี</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (สาขาการจัดการ, การตลาดดิจิทัล, ธุรกิจระหว่างประเทศ)</li>
+                        <li>คณะบัญชี (เน้นการตรวจสอบบัญชีและเทคโนโลยีสารสนเทศทางการบัญชี)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop-code"></i> กลุ่มเทคโนโลยีและวิศวกรรมศาสตร์</h4>
+                    <ul>
+                        <li>คณะเทคโนโลยีสารสนเทศ (วิทยาการคอมพิวเตอร์, เทคโนโลยีดิจิทัลเพื่อธุรกิจ)</li>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมการจัดการอุตสาหกรรม)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-gavel"></i> กลุ่มมนุษยศาสตร์และสังคมศาสตร์</h4>
+                    <ul>
+                        <li>คณะนิติศาสตร์ (กฎหมายแพ่ง อาญา และกฎหมายธุรกิจ)</li>
+                        <li>คณะรัฐประศาสนศาสตร์ (การบริหารงานภาครัฐและเอกชน)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.western.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยเวสเทิร์น
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยเวสเทิร์น (WTU) | มุ่งมั่นสู่ความเป็นเลิศทางวิชาการและการพัฒนาคุณภาพชีวิตอย่างยั่งยืน</p>
+    </footer>
+
+</body>
+</html>

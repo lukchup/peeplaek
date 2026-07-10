@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยเทคโนโลยีมหานคร - เทคโนโลยีและวิศวกรรมศาสตร์ระดับท็อป</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="mut.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "mut";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า mut.png ตามมาตรฐานโครงสร้าง -->
+                <img src="mut.png" alt="โลโก้ มหาวิทยาลัยเทคโนโลยีมหานคร" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยเทคโนโลยีมหานคร</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "Knowledge is Power: ความรู้คือพลัง" — มุ่งเน้นการเป็นมหาวิทยาลัยแห่งนวัตกรรมและการวิจัยขั้นสูง ผลิตบัณฑิตสายเทคโนโลยีและวิศวกรรมศาสตร์ที่มีศักยภาพแข่งขันได้ในระดับโลก
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งสถาบัน (หนองจอก)</h3>
+                <p>140 ถนนเชื่อมสัมพันธ์ แขวงกระทุ่มราย เขตหนองจอก กรุงเทพมหานคร 10530</p>
+                <small>
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่บนถนนเชื่อมสัมพันธ์ เขตหนองจอก สามารถเดินทางโดยรถตู้สาธารณะจากสถานีรถไฟฟ้า BTS หมอชิต หรือ อนุสาวรีย์ชัยสมรภูมิ สายกรุงเทพฯ-หนองจอก หรือใช้บริการรถประจำทางสาย 131 มาลงด้านหน้ามหาวิทยาลัยได้อย่างสะดวก
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม (จัดเรียงสมมาตร แยกแถวสีและต้นไม้ตามมาตรฐาน) -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยเทคโนโลยีมหานคร (Mahanakorn University of Technology)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มทม. / MUT</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา</strong></td>
+                            <td>"ขยัน คิด ประดิษฐ์ สร้างสรรค์"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot mut-red"></span> สีแดงกล่ำ (ความมุ่งมั่นและกล้าหาญ) และ 
+                                <span class="color-dot mut-gold"></span> สีทอง (ปัญญาอันรุ่งเรือง)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นนนทรี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>สถาบันอุดมศึกษาเอกชน (เน้นความเป็นเลิศทางด้านวิศวกรรมศาสตร์ เทคโนโลยีขั้นสูง และวิทยาศาสตร์)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อเสียงและความเป็นเลิศ</strong></td>
+                            <td>ได้รับการจัดอันดับให้เป็นมหาวิทยาลัยเอกชนอันดับ 1 ของไทยด้านการวิจัยและเทคโนโลยีจากหลากหลายสำนัก โดดเด่นด้วยการสร้างดาวเทียมไทพัฒ (ดาวเทียมสัญชาติไทยดวงแรก) และเป็นผู้นำด้านเทคโนโลยีหุ่นยนต์และปัญญาประดิษฐ์ (AI)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างระบบการเรียน</strong></td>
+                            <td>ระบบ 2 ภาคการศึกษา (Semester) มีการเรียนการสอนทั้งหลักสูตรภาคภาษาไทย หลักสูตรสองภาษา (Bilingual) และหลักสูตรนานาชาติ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>จัดเก็บในอัตราค่าธรรมเนียมการศึกษาเริ่มต้นประมาณ 28,000 - 45,000 บาท ต่อภาคการศึกษา (ขึ้นอยู่กับสาขาวิชาและอุปกรณ์ปฏิบัติการเฉพาะทางของคณะวิศวกรรมศาสตร์และสัตวแพทยศาสตร์)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-microchip"></i> ศูนย์วิจัยขั้นสูงและพันธมิตรอุตสาหกรรม (High-Tech Ecosystem)</h3>
+                <p>
+                    MUT ไม่ได้สอนแค่ในตำรา แต่ขับเคลื่อนด้วยระบบนิเวศน์แบบแฮกกาธอน นักศึกษาจะได้คลุกคลีกับห้องปฏิบัติการเครือข่ายความร่วมมือระดับโลก เช่น สถาบันวิจัยร่วมกับเครือข่ายยุโรป และศูนย์นวัตกรรมหุ่นยนต์อุตสาหกรรม เพื่อให้มั่นใจว่าบัณฑิตที่จบออกไปจะเป็นวิศวกรและนักเทคโนโลยีที่ทำงานได้ทันทีโดยไม่ต้องฝึกงานใหม่
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-tools"></i> ข้อมูลเพิ่มเติมสำหรับ ปวส. เรียนต่อ</strong>
+                        เปิดรับผู้จบ ปวส. สายช่างอุตสาหกรรมและเทคโนโลยีสารสนเทศเข้าศึกษาต่อใน "หลักสูตรเทียบโอนวิศวกรรมศาสตร์และเทคโนโลยี" มุ่งเน้นการอัปเกรดทักษะปฏิบัติเดิมสู่การเป็นวิศวกรวิชาชีพ (มีใบ กว.) และนักจัดการระบบความปลอดภัยไซเบอร์ขั้นสูง
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะและกลุ่มสาขาวิชาอย่างละเอียด -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและกลุ่มสาขาวิชาที่โดดเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-cogs"></i> คณะวิศวกรรมศาสตร์ (สถาบันหลัก)</h4>
+                    <ul>
+                        <li>สาขาวิศวกรรมไฟฟ้าและอิเล็กทรอนิกส์กำหนดยุคหน้า</li>
+                        <li>สาขาวิศวกรรมหุ่นยนต์และปัญญาประดิษฐ์ (Robotics & AI)</li>
+                        <li>สาขาวิศวกรรมโยธา และวิศวกรรมเครื่องกล</li>
+                        <li>สาขาวิศวกรรมคอมพิวเตอร์และเครือข่าย</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop-code"></i> คณะเทคโนโลยีสารสนเทศ</h4>
+                    <ul>
+                        <li>สาขาวิทยาการคอมพิวเตอร์ (มุ่งเน้น Data Science)</li>
+                        <li>สาขาเทคโนโลยีสารสนเทศและความมั่นคงปลอดภัยไซเบอร์</li>
+                        <li>สาขาดิจิทัลมีเดียและวิศวกรรมซอฟต์แวร์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-paw"></i> คณะสัตวแพทยศาสตร์ (โดดเด่นระดับประเทศ)</h4>
+                    <ul>
+                        <li>หลักสูตรสัตวแพทยศาสตรบัณฑิต (หนึ่งในสถาบันเอกชนแห่งแรกๆ ที่ได้รับการรับรองวิชาชีพ)</li>
+                        <li>ศูนย์ชันสูตรโรคสัตว์และโรงพยาบาลสัตว์ขนาดใหญ่</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-user-tie"></i> คณะบริหารธุรกิจ</h4>
+                    <ul>
+                        <li>สาขาการจัดการอุตสาหกรรมและเทคโนโลยี</li>
+                        <li>สาขาการตลาดดิจิทัลและนวัตกรรมธุรกิจ</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.mut.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก ม.เทคโนโลยีมหานคร
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยเทคโนโลยีมหานคร | ผู้นำการสร้างสรรค์นวัตกรรมและวิศวกรรมศาสตร์ระดับสากล</p>
+    </footer>
+
+</body>
+</html>

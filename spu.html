@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยศรีปทุม - เรียนกับตัวจริง ประสบการณ์จริง</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="spu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "spu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า spu.png ตามมาตรฐานโครงสร้าง -->
+                <img src="spu.png" alt="โลโก้ มหาวิทยาลัยศรีปทุม" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยศรีปทุม</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "เรียนกับตัวจริง ประสบการณ์จริง" — มุ่งเน้นการพัฒนานักศึกษาผ่านการลงมือทำร่วมกับผู้เชี่ยวชาญในอุตสาหกรรม มุ่งสู่การเป็นบุคลากรยุคดิจิทัลที่ตอบโจทย์ตลาดงานระดับสากลอย่างแท้จริง
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตหลัก (บางเขน)</h3>
+                <p>2410/2 ถนนพหลโยธิน แขวงเสนานิคม เขตจตุจักร กรุงเทพมหานคร 10900</p>
+                <small>
+                    <i class="fas fa-subway"></i> <strong>การเดินทาง:</strong> เดินทางสะดวกสบายที่สุดด้วยรถไฟฟ้า BTS สายสีเขียว มาลงที่ <strong>"สถานีมหาวิทยาลัยศรีปทุม" (ทางออก 1)</strong> ซึ่งตัวสถานีเชื่อมต่อเข้าสู่ประตูด้านหน้ามหาวิทยาลัยโดยตรง หรือเดินทางด้วยรถประจำทางสาย 26, 39, 51, 59, 129 และ 524
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม (จัดเรียงสมมาตร แยกแถวสีและต้นไม้ตามมาตรฐาน) -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยศรีปทุม (Sripatum University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มสป. / SPU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา</strong></td>
+                            <td>"ปัญญา เชี่ยวชาญ เบิกบาน คุณธรรม"</td>
+                        </tr>
+                        <tr>
+                        <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                        <td>
+                            <span class="color-dot spu-pink"></span> สีชมพู และ 
+                            <span class="color-dot spu-gold"></span> สีทอง (สีชมพูเป็นสีประจำวันพระราชสมภพของสมเด็จพระศรีนครินทราบรมราชชนนี ส่วนสีทองหมายถึงความเจริญรุ่งเรือง เกียรติยศ และคุณธรรม)
+                        </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นบัวหลวง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>สถาบันอุดมศึกษาเอกชนระดับแนวหน้า (เป็นหนึ่งในมหาวิทยาลัยเอกชนที่เก่าแก่ที่สุดเป็นอันดับ 4 ของประเทศไทย)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อเสียงและความเป็นเลิศ</strong></td>
+                            <td>เป็นผู้นำด้านดิจิทัลมีเดีย เกม อีสปอร์ต และแอนิเมชันระดับประเทศ โดดเด่นด้วยวิทยาลัยโลจิสติกส์และซัพพลายเชน รวมถึงคณะสหวิทยาการเทคโนโลยีและนวัตกรรม ที่เปิดเสรีให้นักศึกษาออกแบบสาขาเรียนเองได้</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างระบบการเรียน</strong></td>
+                            <td>ระบบ 2 ภาคการศึกษา (Semester) มีการเรียนการสอนทั้งภาคปกติ ภาคค่ำ และภาควันเสาร์-อาทิตย์ เพื่อตอบสนองความยืดหยุ่นของผู้เรียนและคนทำงาน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>จัดเก็บในอัตราค่าธรรมเนียมการศึกษาเหมาจ่ายเริ่มต้นประมาณ 26,000 - 45,000 บาท ต่อภาคการศึกษา (มีทุนการศึกษาโควตาแรกเข้า และระบบผ่อนชำระเพื่อสนับสนุนนักศึกษา)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-bolt"></i> โครงสร้าง Dynamic แคมปัสและเครือข่ายธุรกิจ (Dynamic Learning Ecosystem)</h3>
+                <p>
+                    SPU ขับเคลื่อนด้วยแนวคิดโมเดิร์นแคมปัสใจกลางเมือง มีคอมมูนิตี้แล็บล้ำสมัย เช่น ศูนย์เกมและอีสปอร์ตระดับมาตรฐานแข่งขัน, สตูดิโอโปรดักชันครบวงจร, และความร่วมมือกับพันธมิตรระดับประเทศ เพื่อดึงโปรเจกต์และโจทย์จริงจากภาคธุรกิจมาให้นักศึกษาได้ฝึกแก้ไขปัญหา คัดเลือก และฝึกงานจริงตั้งแต่ยังเรียนไม่จบ
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-graduation-cap"></i> ข้อมูลเพิ่มเติมสำหรับ ปวส. เรียนต่อ</strong>
+                        เป็นสถาบันยอดนิยมสำหรับผู้จบระดับ ปวส. ในการเข้าศึกษาต่อปริญญาตรี (หลักสูตรเทียบโอน) สามารถเทียบโอนได้สูงสุดตามเกณฑ์เพื่อจบได้ภายใน 1 ปีครึ่ง - 2 ปี เปิดรับในคณะยอดนิยม เช่น คณะบัญชี คณะบริหารธุรกิจ คณะเทคโนโลยีสารสนเทศ และคณะนิเทศศาสตร์ โดยมีรอบวันอาทิตย์วันเดียวรองรับคนทำงาน
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะและกลุ่มสาขาวิชาอย่างละเอียด -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและกลุ่มสาขาวิชาที่โดดเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-gamepad"></i> กลุ่มดิจิทัลมีเดียและเทคโนโลยี</h4>
+                    <ul>
+                        <li>คณะดิจิทัลมีเดีย (สาขาดิจิทัลอาร์ต, แอนิเมชัน, เกม, การออกแบบกราฟิก)</li>
+                        <li>คณะเทคโนโลยีสารสนเทศ (วิศวกรรมซอฟต์แวร์, Cyber Security, เทคโนโลยีสารสนเทศ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-bullhorn"></i> กลุ่มนิเทศศาสตร์และมนุษยศาสตร์</h4>
+                    <ul>
+                        <li>คณะนิเทศศาสตร์ (สื่อสารการตลาดดิจิทัล, ภาพยนตร์และสื่อดิจิทัล)</li>
+                        <li>คณะศิลปศาสตร์ (ธุรกิจการบิน, ภาษาอังกฤษสื่อสารธุรกิจ, ภาษาจีน/ญี่ปุ่น)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-briefcase"></i> กลุ่มบริหารธุรกิจ โลจิสติกส์ และบัญชี</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การตลาดดิจิทัล, การจัดการธุรกิจสมัยใหม่)</li>
+                        <li>วิทยาลัยโลจิสติกส์และซัพพลายเชน</li>
+                        <li>คณะบัญชี (หลักสูตรเทียบโอนยอดนิยมอันดับต้นๆ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-building"></i> กลุ่มวิศวกรรม สถาปัตย์ และนวัตกรรม</h4>
+                    <ul>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมโยธา, ไฟฟ้า, ยานยนต์สมัยใหม่)</li>
+                        <li>คณะสถาปัตยกรรมศาสตร์และการออกแบบหลักสูตรโมเดิร์น</li>
+                        <li>คณะสหวิทยาการเทคโนโลยีและนวัตกรรม (เลือกเรียนตามใจชอบ)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.spu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยศรีปทุม
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยศรีปทุม | มหาวิทยาลัยชั้นนำสำหรับคนรุ่นใหม่ เรียนกับตัวจริง ประสบการณ์จริง</p>
+    </footer>
+
+</body>
+</html>

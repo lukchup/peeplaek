@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยวลัยลักษณ์ - ข้อมูลสถาบันและแนวทางการรับวุฒิ ปวส.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="wu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "wu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="wu.png" alt="โลโก้ มวล." class="wu-logo">
+            </div>
+            <h1>มหาวิทยาลัยวลัยลักษณ์</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยระดับโลก" — มหาวิทยาลัยวิจัยชั้นนำระดับสากลในภาคใต้ มุ่งมั่นสร้างสรรค์งานวิจัยที่มีผลกระทบสูงต่อสังคมและผลิตบัณฑิตที่สามารถแข่งขันได้ในระดับเวทีสากล โดดเด่นด้วยระบบนิเวศการเรียนรู้อัจฉริยะ บนพื้นที่สวนพฤกษศาสตร์ที่โอบล้อมด้วยธรรมชาติอันสวยงามของจังหวัดนครศรีธรรมราช
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง</h3>
+                <p>222 ต.ไทยบุรี อ.ท่าศาลา จ.นครศรีธรรมราช 80160</p>
+                <small style="color: #4b5563; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> มหาวิทยาลัยตั้งอยู่ติดถนนสายเอเชีย (ทางหลวงหมายเลข 401) สามารถเดินทางจากตัวเมืองนครศรีธรรมราชหรือจากสนามบินนครศรีธรรมราช ด้วยรถตู้ประจำทางและรถสองแถวสาย นครฯ-ท่าศาลา-สิชล เข้าสู่พื้นที่ภายในสถาบันได้อย่างสะดวกสบาย
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยวลัยลักษณ์ (Walailak University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มวล. / WU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา</strong></td>
+                            <td>"ความรู้คู่ดีงาม" (Virtue and Knowledge)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot wu-orange"></span> สีแสด และ 
+                                <span class="color-dot wu-purple"></span> สีม่วง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นประดู่บ้าน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยในกำกับของรัฐ (เน้นการบริหารงานที่ยืดหยุ่นและก้าวหน้าสู่ระดับสากล)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อเสียงระดับสากล</strong></td>
+                            <td>ได้รับการจัดอันดับโลกโดย Times Higher Education (THE) อยู่ในอันดับท็อปของกลุ่มมหาวิทยาลัยไทย และได้รับการรับรองให้เป็นหนึ่งในกลุ่มมหาวิทยาลัยวิจัยระดับแนวหน้าของโลก (Global Frontier Research University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างระบบการเรียน</strong></td>
+                            <td>ใช้ระบบ 3 ภาคการศึกษา (Trimester) ต่อปีการศึกษา ช่วยเพิ่มประสิทธิภาพในการจัดการเรียนการสอนและการฝึกงานวิชาชีพที่เข้มข้นยิ่งขึ้น</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>จัดเก็บในอัตราค่าธรรมเนียมการศึกษาแบบเหมาจ่ายเริ่มต้นประมาณ 11,200 - 28,000 บาท ต่อภาคการศึกษา (ขึ้นอยู่กับสำนักวิชาและสาขาที่เลือกเรียน)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-chalkboard-teacher"></i> คุณภาพการสอนระดับโลก (มาตรฐาน UKPSF จากอังกฤษ)</h3>
+                <p>
+                    มวล. ขับเคลื่อนสถาบันภายใต้แนวคิด <strong>Smart University</strong> และยกระดับการศึกษาอย่างจริงจัง โดยอาจารย์ผู้สอนเกือบ 100% ได้รับการรับรองวิทยฐานะวิชาชีพอาจารย์ตามกรอบมาตรฐานระดับสากลของสหราชอาณาจักร <strong>UK Professional Standards Framework (UKPSF)</strong> ทำให้นักศึกษาได้เรียนรู้ผ่านกระบวนการคิด วิเคราะห์ และลงมือทำจริง ไม่ใช่แค่การท่องจำในห้องเรียนแบบเดิมๆ
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid #e65c00; padding-left: 15px; background: #fff5ee; padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong>ข้อมูลเพิ่มเติมสำหรับ ปวส. เรียนต่อ:</strong> สำหรับผู้ที่ต้องการนำวุฒิ ปวส. เข้าศึกษาต่อ สามารถยื่นสมัครในกลุ่มสำนักวิชาทางด้านเทคโนโลยี การจัดการ และวิศวกรรมศาสตร์ (เช่น สาขาพืชศาสตร์ เทคโนโลยีอาหาร หรือการจัดการนวัตกรรมการท่องเที่ยว) โดยทางมหาวิทยาลัยจะใช้เกณฑ์พิจารณาเทียบโอนหน่วยกิตตามรายวิชาที่ตรงตามมาตรฐานหลักสูตรปริญญาตรี
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> สำนักวิชาที่โดดเด่น (แบ่งตามกลุ่มวิทยาศาสตร์และสังคมศาสตร์)</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาวิศวกรรมศาสตร์และเทคโนโลยี</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาเทคโนโลยีการเกษตรและอุตสาหกรรมอาหาร</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาการจัดการ (สาขาบัญชี, บริหารธุรกิจ, ท่องเที่ยว)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาสารสนเทศศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาแพทยศาสตร์ / พยาบาลศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาสาธารณสุขศาสตร์ / สหเวชศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาศิลปศาสตร์ / นิติศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาสถาปัตยกรรมศาสตร์และการออกแบบ</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.wu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เว็บไซต์หลัก มวล.
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยวลัยลักษณ์ | ลิขสิทธิ์ถูกต้องตามกฎหมาย</p>
+    </footer>
+
+</body>
+</html>

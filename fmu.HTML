@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยแม่ฟ้าหลวง - ข้อมูลสถาบันและแนวทางการเทียบโอน ปวส.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fmu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "fmu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="fmu.png" alt="โลโก้ มฟล." class="mfu-logo">
+            </div>
+            <h1>มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "University in the Park" — มหาวิทยาลัยในกำกับของรัฐท่ามกลางธรรมชาติอันสวยงามของจังหวัดเชียงราย โดดเด่นด้วยมาตรฐานการเรียนการสอนเป็นภาษาอังกฤษระดับสากล เปิดโอกาสให้ผู้สำเร็จการศึกษาระดับ ปวส. เข้าศึกษาต่อผ่านการเทียบโอนรายวิชาความรู้และประสบการณ์เดิม เพื่อคว้าปริญญาตรีหลักสูตรนานาชาติที่พร้อมแข่งขันในตลาดโลก
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง</h3>
+                <p>333 หมู่ 1 ต.ท่าสุด อ.เมือง จ.เชียงราย 57100</p>
+                <small style="color: #4b5563; display: block; margin-top: 8px;">
+                    <i class="fas fa-plane"></i> <strong>การเดินทางและทำเล:</strong> ห่างจากท่าอากาศยานแม่ฟ้าหลวง เชียงราย ประมาณ 15 กิโลเมตร ตั้งอยู่ริมถนนพหลโยธินสายหลัก มีรถโดยสารประจำทางสายเชียงราย-แม่สาย-กรุงเทพฯ วิ่งผ่านตลอดทั้งวัน สะดวกสบายด้วยระบบขนส่งภายในมหาวิทยาลัย (รถไฟฟ้าส้มพาสเทล) ปลอดภัยและเป็นมิตรต่อสิ่งแวดล้อม
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลการเข้าศึกษาต่อ (สำหรับวุฒิ ปวส.)</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อการพิจารณา</th>
+                            <th>รายละเอียดสำหรับกลุ่ม ปวส.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน / ชื่อย่อ</strong></td>
+                            <td>มหาวิทยาลัยแม่ฟ้าหลวง (มฟล. / MFU)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot mfu-red"></span> สีแดงดาร์กเชอร์รี่ - <span class="color-dot mfu-gold"></span> สีทอง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>รูปแบบการรับสมัคร</strong></td>
+                            <td>รับสมัครตรงผ่านระบบ TCAS (รอบที่ 1 Portfolio หรือ รอบที่ 2 Quota ภาคเหนือ) และโครงการรับตรงอิสระประจำปีของแต่ละสำนักวิชา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>เกณฑ์การพิจารณาหลัก</strong></td>
+                            <td>พิจารณาจากผลการเรียนเฉลี่ยสะสม (GPAX) ขั้นต่ำของวุฒิ ปวส. (มักกำหนดที่ 2.50 ขึ้นไป), แฟ้มสะสมผลงาน (Portfolio) และการสอบสัมภาษณ์ในรูปแบบภาษาอังกฤษเพื่อวัดทัศนคติการเรียนรู้</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบการเรียนต่อ</strong></td>
+                            <td>เข้าศึกษาในหลักสูตรปริญญาตรีภาคปกติ (4 ปี) โดยผู้เรียนวุฒิ ปวส. สามารถยื่นคำร้องขอ **"เทียบโอนรายวิชา"** ในหมวดวิชาศึกษาทั่วไปและวิชาแกนพื้นฐานที่เคยเรียนมา ทำให้นักศึกษาสามารถสำเร็จการศึกษาได้เร็วกว่าแผนปกติ โดยใช้เวลาเรียนจริงเหลือเพียงประมาณ 2 - 3 ปี</td>
+                        </tr>
+                        <tr>
+                            <td><strong>คุณสมบัติเสริมด้านภาษา</strong></td>
+                            <td>เนื่องจากจัดการเรียนการสอนเป็นภาษาอังกฤษทั้งหมด หากมีผลคะแนนสอบวัดระดับภาษาอังกฤษ เช่น TOEIC, TOEFL หรือ IELTS จะได้รับการพิจารณาเป็นพิเศษ ส่วนผู้ที่ไม่มีคะแนน มหาวิทยาลัยจะมีโครงการจัดคอร์สปรับพื้นฐานภาษาอังกฤษ (Intensive English) ให้ก่อนเปิดภาคเรียนแรก</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าธรรมเนียมการศึกษา</strong></td>
+                            <td>อัตราค่าเล่าเรียนเป็นแบบเหมาจ่ายเริ่มต้นที่ประมาณ 15,000 - 25,000 บาท ต่อภาคการศึกษา (ขึ้นอยู่กับสำนักวิชา) สามารถยื่นขอทุนกู้ยืมเพื่อการศึกษา (กยศ.) ได้เต็มจำนวนตามสิทธิ์สถาบันในกำกับของรัฐ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-language"></i> ความท้าทายและโอกาสของเด็กสายอาชีพ (ปวส.) ที่ มฟล.</h3>
+                <p>
+                    แม้ว่า มฟล. จะใช้ <strong>ภาษาอังกฤษเป็นสื่อกลางในการเรียนการสอนหลัก (Medium of Instruction)</strong> ซึ่งอาจฟังดูน่ากังวลสำหรับเด็กสายอาชีวะในตอนแรก แต่ทางมหาวิทยาลัยมีระบบสนับสนุนนักศึกษาที่ยอดเยี่ยม มีศูนย์ภาษา (Language Center) คอยช่วยพัฒนาทักษะ บัณฑิตวุฒิ ปวส. ที่จบจากที่นี่จึงได้เปรียบสูงมาก เพราะจะได้ทั้ง **"ทักษะปฏิบัติงานที่เชี่ยวชาญจากสายอาชีพเดิม"** ผสมผสานกับ **"ทักษะภาษาอังกฤษระดับสากล"** ทำให้เป็นที่ต้องการตัวของบริษัทข้ามชาติและองค์กรใหญ่ ๆ ทั่วประเทศ
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> สำนักวิชาที่เปิดโอกาสและแนะนำสำหรับแนวทาง ปวส.</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาเทคโนโลยีสารสนเทศ (สาขาเทคโนโลยีดิจิทัล, วิศวกรรมคอมพิวเตอร์)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาการจัดการ (สาขาการบัญชี, บริหารธุรกิจ, การจัดการโลจิสติกส์)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาอุตสาหกรรมเกษตร (สาขาเทคโนโลยีการอาหาร, นวัตกรรมอาหารและเครื่องดื่ม)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาศิลปศาสตร์ (สาขาภาษาอังกฤษ, ภาษาไทยสำหรับชาวต่างชาติ)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาจีนวิทยา (สำหรับผู้มีพื้นฐานหรือจบ ปวส. สายภาษาจีนธุรกิจ)</span>
+                <span><i class="fas fa-check-circle"></i> สำนักวิชาวิทยาศาสตร์เครื่องสำอาง (พิจารณาเทียบโอนเฉพาะรายวิชาพื้นฐานวิทยาศาสตร์)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.mfu.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เว็บไซต์หลัก มฟล.
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยแม่ฟ้าหลวง | ระบบสารสนเทศแนะนำแนวทางศึกษาต่อ ปวส.</p>
+    </footer>
+
+</body>
+</html>

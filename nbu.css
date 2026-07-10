@@ -1,0 +1,137 @@
+/* --- NBU Clean & Tech Theme: สีน้ำเงิน-ขาว (มหาวิทยาลัยนอร์ทกรุงเทพ) --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    --nbu-blue: #1e40af;          /* สีน้ำเงินหลักของ ม.นอร์ทกรุงเทพ (Royal Blue) */
+    --nbu-dark-blue: #172554;     /* สีน้ำเงินเข้มลึก เพิ่มมิติและความสุขุม */
+    --nbu-blue-light: #3b82f6;    /* สีฟ้าสว่างสำหรับไอคอนและการตัดเส้น */
+    --nbu-bg-light: #f8fafc;      /* พื้นหลังเว็บสีฟ้า-เทา คลีน ๆ สะอาดตา */
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--nbu-bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+/* ส่วนหัวข้อเด่นด้านบน (Hero Section) ธีมน้ำเงิน-ขาว คลีนและทรงพลัง */
+.hero-section {
+    padding: 65px 0; 
+    text-align: center;
+    background: linear-gradient(135deg, var(--nbu-dark-blue) 0%, var(--nbu-blue) 100%);
+    color: var(--white);
+    border-bottom-left-radius: 35px; 
+    border-bottom-right-radius: 35px;
+    box-shadow: 0 10px 25px rgba(23, 37, 84, 0.12);
+    border-bottom: 5px solid var(--white); /* ตัดเส้นขอบด้วยสีขาวบริสุทธิ์ */
+}
+
+.hero-section h1 { 
+    color: var(--white) !important; 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 2.4rem; 
+    font-weight: 600; 
+    margin: 15px 0 10px; 
+}
+
+.hero-section h2 {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 15px 0;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.hero-section .intro-text {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    color: #cbd5e1;
+    font-weight: 300;
+}
+
+.divider { width: 60px; height: 4px; background: var(--white); margin: 15px auto 20px; border-radius: 2px; }
+
+/* การ์ดที่ตั้งและวิทยาเขต */
+.info-card {
+    background: var(--white); 
+    padding: 25px; 
+    border-radius: 20px;
+    display: flex; 
+    align-items: center; 
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02); 
+    margin-bottom: 35px; 
+    border: 1px solid var(--border-color);
+}
+
+.icon-box { 
+    width: 55px; 
+    height: 55px; 
+    background: #f0f4ff; 
+    color: var(--nbu-blue); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 14px; 
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.address-content h3 { margin: 0 0 5px 0; font-family: 'Prompt', sans-serif; color: var(--nbu-blue); font-size: 1.2rem; }
+.address-content p { margin: 0; color: var(--text-dark); }
+.address-content small { display: block; margin-top: 10px; color: var(--text-muted); line-height: 1.6; }
+
+.section-title { 
+    font-family: 'Prompt', sans-serif; 
+    font-size: 1.4rem; 
+    color: var(--nbu-dark-blue); 
+    margin: 45px 0 20px; 
+    border-bottom: 2px solid var(--nbu-blue); 
+    padding-bottom: 8px; 
+}
+
+/* ตารางข้อมูลพื้นฐาน */
+.table-responsive { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.01); margin-bottom: 40px; border: 1px solid var(--border-color); }
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { background-color: var(--nbu-blue); color: var(--white); text-align: left; font-family: 'Prompt', sans-serif; font-weight: 500; padding: 15px 20px; }
+.facts-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+.facts-table tr:last-child td { border-bottom: none; }
+
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid #cbd5e1; }
+.color-dot.nbu-blue { background: #1e40af; }
+.color-dot.nbu-white { background: #ffffff; }
+
+/* ไฮไลต์เทียบโอน ปวส. */
+.desc-box { background: var(--white); padding: 30px; border-radius: 20px; border-left: 6px solid var(--nbu-blue); margin-bottom: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.01); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+.desc-box h3 { margin-top: 0; font-family: 'Prompt', sans-serif; color: var(--nbu-blue); font-size: 1.25rem; }
+.desc-box p { color: var(--text-dark); margin-bottom: 15px; }
+
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
+.feature-item { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+.feature-item strong { color: var(--nbu-blue); display: block; margin-bottom: 5px; font-family: 'Prompt', sans-serif; }
+
+/* รายชื่อคณะแบบการ์ดคลีน ๆ */
+.schools-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 15px; margin-bottom: 40px; }
+.school-card { background: var(--white); padding: 22px; border-radius: 16px; border: 1px solid var(--border-color); transition: all 0.2s ease; }
+.school-card:hover { transform: translateY(-3px); border-color: var(--nbu-blue-light); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.school-card h4 { margin: 0 0 10px 0; font-family: 'Prompt', sans-serif; color: var(--nbu-blue); font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.school-card ul { margin: 0; padding-left: 20px; color: var(--text-dark); font-size: 0.95rem; }
+.school-card li { margin-bottom: 6px; }
+
+/* ปุ่มลิงก์ */
+.btn-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 55px 0; flex-wrap: wrap; }
+.btn-visit { text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--nbu-blue); color: var(--white); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2); font-size: 1rem; }
+.btn-visit:hover { background: var(--nbu-dark-blue); transform: translateY(-2px); }
+.btn-back { text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 500; font-family: 'Prompt', sans-serif; background: var(--white); color: #4b5563; border: 1px solid #cbd5e1; transition: all 0.3s ease; font-size: 1rem; }
+.btn-back:hover { border-color: var(--nbu-blue); color: var(--nbu-blue); transform: translateY(-2px); }
+
+footer { text-align: center; padding: 35px 0; color: var(--text-muted); border-top: 1px solid var(--border-color); font-size: 0.9rem; background: var(--white); margin-top: 60px; }

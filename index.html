@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือมหาวิทยาลัยสำหรับผู้จบ ปวส.</title>
+
+    <!-- ===== Fonts & Stylesheet ===== -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="tooplate-minimal-white-style.css" rel="stylesheet">
+
+    <!-- ===== Firebase Authentication ===== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query,
+         orderBy, limit, onSnapshot, serverTimestamp,
+         doc, deleteDoc, updateDoc }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    
+        const firebaseConfig = {
+            apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+            authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+            projectId:         "myuniversityguide-c083c", 
+            storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+            messagingSenderId: "649652214412",
+            appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);    // ← เพิ่มบรรทัดนี้
+        // ถ้ายังไม่ได้ล็อกอิน → เด้งไปหน้า login
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        console.log("ยินดีต้อนรับ:", user.email);
+
+        // รอให้ comments.js โหลดเสร็จก่อน แล้วค่อยเรียก
+        const tryInitComments = () => {
+            if (typeof window.initComments === 'function') {
+                window.initComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                });
+            } else {
+                // ยังไม่พร้อม รอ 100ms แล้วลองใหม่
+                setTimeout(tryInitComments, 100);
+            }
+        };
+        tryInitComments();
+    }
+});
+// ฟังก์ชัน logout ผูกไว้ที่ window
+window.logout = function () {
+    signOut(auth)
+        .then(() => { window.location.href = "login.html"; })
+        .catch((err) => { console.error("Logout Error:", err); });
+};
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    } else {
+        const tryInit = () => {
+            if (typeof window.initAIChat === 'function') {
+                // เพิ่ม user.email เป็น parameter ที่ 2
+                window.initAIChat("AQ.Ab8RN6ImgqwzqHYYG4bdqmtW4bOBSIA2NfIXTZV-Yc4-kpNjDw", user.email);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    }
+});
+    </script>
+
+    <!-- ===== Styles ===== -->
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        /* ---------- Search Box ---------- */
+        .search-section    { padding: 28px 0 12px; }
+        .search-wrapper    { position: relative; max-width: 520px; margin: 0 auto; }
+
+        .search-icon {
+            position: absolute; left: 16px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px; color: #aaa; pointer-events: none;
+        }
+        .search-input {
+            width: 100%; padding: 12px 44px;
+            border: 1.5px solid #ddd; border-radius: 50px;
+            font-family: 'Sarabun', sans-serif; font-size: 15px;
+            outline: none; background: #fff; color: #222;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-input:focus       { border-color: #000; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+        .search-input::placeholder { color: #bbb; }
+
+        .search-clear {
+            position: absolute; right: 14px; top: 50%;
+            transform: translateY(-50%);
+            background: #eee; border: none; border-radius: 50%;
+            width: 26px; height: 26px; font-size: 14px;
+            cursor: pointer; color: #666;
+            display: none; align-items: center; justify-content: center;
+        }
+        .search-clear.visible { display: flex; }
+
+        /* ---------- Type Filter ---------- */
+        .filter-section    { padding: 16px 0 6px; text-align: center; }
+        .filter-section h3 { font-size: 15px; font-weight: 500; color: #555; margin-bottom: 10px; }
+        .filter-buttons    { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+        .filter-btn {
+            padding: 6px 16px;
+            border: 1px solid #ccc; border-radius: 30px;
+            background: transparent;
+            font-family: 'Sarabun', sans-serif; font-size: 13px;
+            cursor: pointer; color: #555;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover  { border-color: #000; color: #000; }
+        .filter-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        /* ---------- Region Sub-filter (แสดงเฉพาะตอนกด ราชภัฏ) ---------- */
+        .region-filter         { padding: 8px 0 4px; text-align: center; display: none; }
+        .region-filter.visible { display: block; }
+
+        .region-btn {
+            padding: 4px 12px; margin: 3px;
+            border: 1px solid #ddd; border-radius: 20px;
+            background: transparent;
+            font-family: 'Sarabun', sans-serif; font-size: 12px;
+            cursor: pointer; color: #777;
+            transition: all 0.15s;
+        }
+        .region-btn:hover  { border-color: #888; color: #333; }
+        .region-btn.active { background: #555; color: #fff; border-color: #555; }
+
+        /* ---------- Stats Bar (นับแต่ละประเภท) ---------- */
+        .stats-bar       { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 4px; }
+        .stat-pill       { font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+        .stat-rajabhat   { background: #fdf6e8; color: #c27803; }
+        .stat-rajamongkol{ background: #e8fdf0; color: #03a64a; }
+        .stat-gov        { background: #e8f0fe; color: #1a56db; }
+        .stat-private    { background: #fde8e8; color: #c81e1e; }
+
+        /* ---------- University Card Scroll Track ---------- */
+        .uni-scroll-section  { padding: 12px 0 40px; }
+        .uni-count-label     { font-size: 13px; color: #999; margin-bottom: 4px; }
+
+        .uni-scroll-wrapper {
+            overflow-x: auto; padding: 8px 0 16px;
+            scrollbar-width: thin; scrollbar-color: #ccc transparent;
+        }
+        .uni-scroll-wrapper::-webkit-scrollbar       { height: 5px; }
+        .uni-scroll-wrapper::-webkit-scrollbar-thumb { background: #ccc; border-radius: 5px; }
+
+        .uni-cards-track { display: flex; gap: 16px; width: max-content; padding: 4px 2px; }
+
+        /* ---------- University Card ---------- */
+        .uni-card {
+            width: 200px; flex-shrink: 0;
+            background: #fff; border: 1px solid #e8e8e8; border-radius: 14px;
+            overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            text-decoration: none; color: inherit; display: block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .uni-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-decoration: none; color: inherit;
+        }
+
+        /* รูปภาพโลโก้ / placeholder */
+        .uni-card-img {
+            width: 100%; height: 110px;
+            object-fit: contain; display: block;
+            background: #fff; padding: 8px; box-sizing: border-box;
+            border-bottom: 1px solid #eee;
+        }
+        .uni-card-img-placeholder {
+            width: 100%; height: 110px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 600;
+            background: #f5f5f5; color: #aaa;
+            border-bottom: 1px solid #eee;
+            text-align: center; padding: 8px; box-sizing: border-box;
+        }
+
+        /* เนื้อหาใน Card */
+        .uni-card-body   { padding: 10px 12px; }
+
+        .uni-card-type-badge {
+            display: inline-block; font-size: 9px;
+            padding: 2px 8px; border-radius: 20px;
+            margin-bottom: 6px; font-weight: 600;
+        }
+
+        /* สีตามประเภทมหาวิทยาลัย */
+        .type-gov          { background: #e8f0fe; color: #1a56db; }
+        .type-private      { background: #fde8e8; color: #c81e1e; }
+        .type-rajabhat     { background: #fdf6e8; color: #c27803; }
+        .type-rajamongkol  { background: #e8fdf0; color: #03a64a; }
+
+        .uni-card-name   { font-size: 12px;   font-weight: 600; color: #111; line-height: 1.5; margin-bottom: 3px; }
+        .uni-card-short  { font-size: 10px;   color: #aaa;  margin-bottom: 6px; }
+        .uni-card-region { font-size: 10px;   color: #bbb;  margin-bottom: 5px; }
+        .uni-card-tags   { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 7px; }
+        .uni-tag         { font-size: 9px; padding: 1px 6px; background: #f2f2f2; color: #777; border-radius: 20px; }
+        .uni-card-note   { font-size: 10.5px; color: #999;  line-height: 1.55; border-top: 1px solid #f2f2f2; padding-top: 6px; }
+
+        /* ไม่พบผลการค้นหา */
+        .empty-state { text-align: center; padding: 40px 20px; color: #aaa; font-size: 15px; width: 100%; }
+        /* วางต่อท้าย CSS ตัวเดิมของคุณ ก่อนปิด </style> */
+        
+    </style>
+</head>
+
+<body>
+    <script src="aichat.js" defer></script>
+<script>
+</script>
+    <!-- ===== Navbar ===== -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">มหาวิทยาลัยรับสมัครผู้จบ ปวส.</a>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home"  class="nav-link">หน้าหลัก</a></li>
+                <li><a href="#about" class="nav-link">มหาวิทยาลัย</a></li>
+                <li><a href="javascript:void(0)" onclick="logout()" class="nav-link" style="color:#000;">ออกจากระบบ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== Hero Section ===== -->
+    <section id="home" class="hero">
+        <div class="floating-objects">
+            <div class="floating-circle"></div>
+            <div class="floating-circle"></div>
+            <div class="floating-square"></div>
+            <div class="floating-line"></div>
+        </div>
+        <div class="hero-decoration"></div>
+        <div class="hero-content">
+            <h1>ยินดีต้อนรับ</h1>
+            <p class="subtitle">
+                คู่มือเลือกมหาวิทยาลัยสำหรับผู้สำเร็จการศึกษาระดับ ปวส.<br>
+                รวบรวมมหาวิทยาลัยที่รับสายอาชีวะครบทุกแห่งทั่วประเทศ
+            </p>
+            <a href="#about" class="cta-button">สำรวจมหาวิทยาลัย</a>
+        </div>
+    </section>
+
+    <!-- ===== University Section ===== -->
+    <section id="about" class="about">
+        <div class="container">
+
+            <!-- Quote / Intro -->
+            <div class="about-intro fade-in">
+                <div class="quote-block">
+                    <span class="quote-mark">"</span>
+                    <h3>กำลังมองหามหาวิทยาลัยที่รับผู้จบ ปวส.? ทุกแห่งในรายการนี้รับสายอาชีวะจริง พร้อมระบบเทียบโอนชัดเจน</h3>
+                    <div class="quote-author">
+                        <span class="author-line"></span>
+                        <p>พร้อมที่จะก้าวสู่ระดับปริญญาตรีแล้วหรือยัง?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="black-line"></div>
+
+            <!-- Search Box -->
+            <div class="search-section fade-in">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="ค้นหา เช่น เชียงใหม่, วิศวกรรม, ใต้, ราชมงคล..."
+                    >
+                    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+                </div>
+            </div>
+
+            <!-- Type Filter Buttons -->
+            <div class="filter-section fade-in">
+                <h3>กรองตามประเภท</h3>
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="filter-btn active" data-type="all">ทั้งหมด</button>
+                    <button class="filter-btn" data-type="ราชภัฏ">ราชภัฏ</button>
+                    <button class="filter-btn" data-type="ราชมงคล">ราชมงคล</button>
+                    <button class="filter-btn" data-type="รัฐบาล">รัฐบาล</button>
+                    <button class="filter-btn" data-type="เอกชน">เอกชน</button>
+                </div>
+            </div>
+
+            <!-- Region Sub-filter (แสดงเฉพาะตอนเลือก ราชภัฏ) -->
+            <div class="region-filter fade-in" id="regionFilter">
+                <div class="filter-buttons">
+                    <button class="region-btn active" data-region="all">ทุกภาค</button>
+                    <button class="region-btn" data-region="เหนือ">ภาคเหนือ</button>
+                    <button class="region-btn" data-region="กลาง">ภาคกลาง</button>
+                    <button class="region-btn" data-region="กรุงเทพ">กรุงเทพฯ</button>
+                    <button class="region-btn" data-region="ตะวันออก">ภาคตะวันออก</button>
+                    <button class="region-btn" data-region="ตะวันออกเฉียงเหนือ">ภาคอีสาน</button>
+                    <button class="region-btn" data-region="ใต้">ภาคใต้</button>
+                    <button class="region-btn" data-region="ตะวันตก">ภาคตะวันตก</button>
+                </div>
+            </div>
+
+            <!-- Stats Bar + Card Scroll -->
+            <div class="uni-scroll-section fade-in">
+                <div class="stats-bar" id="statsBar"></div>
+                <p class="uni-count-label" id="uniCount">กำลังโหลด...</p>
+                </p>
+                <div class="uni-scroll-wrapper">
+                    <div class="uni-cards-track" id="uniCardsTrack"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <p>
+            © 2026 Nat CheysriPech — Designed by
+            <a href="https://www.tooplate.com" target="_blank" rel="nofollow noopener" style="color:#000;font-weight:700;">Tooplate</a>
+        </p>
+    </footer>
+
+    <!-- ===== External Scripts ===== -->
+    <script src="tooplate-minimal-script.js"></script>
+    <script src="comments.js" defer></script>   <!-- ← เพิ่มบรรทัดนี้ -->
+
+    <!-- ===== University Data & App Logic ===== -->
+    <script>
+    
+
+    /* ============================================================
+       ข้อมูลมหาวิทยาลัย (universities array)
+       โครงสร้างแต่ละแห่ง:
+         name      = ชื่อเต็ม
+         short     = ชื่อย่อ
+         type      = ประเภท (ราชมงคล / ราชภัฏ / รัฐบาล / เอกชน)
+         typeClass = CSS class สำหรับสี badge
+         region    = ภูมิภาค
+         tags      = สาขาที่โดดเด่น (array)
+         note      = หมายเหตุสำหรับผู้จบ ปวส.
+         link      = ลิงก์ไปหน้ารายละเอียด
+         imgSrc    = path รูปโลโก้ (ถ้ามี) ← ใส่ชื่อไฟล์ตรงนี้
+    ============================================================ */
+    const universities = [
+
+        // ==================== ราชมงคล 9 แห่ง ====================
+        // รับ ปวส./ปวช. โดยตรง ไม่ต้องใช้คะแนน TCAS
+
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี",
+            short:     "มทร.ธัญบุรี (RMUTT)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "กลาง",
+            tags:      ["วิศวกรรม", "เทคโนโลยี", "บริหาร"],
+            note:      "รับ ปวส. โควตาโดยตรง ไม่ต้องใช้คะแนน GAT/PAT เหมาะสายอาชีวะที่สุด",
+            link:      "rmutt.html",
+            imgSrc:    "rmutt.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลกรุงเทพ",
+            short:     "มทร.กรุงเทพ (RMUTK)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "กรุงเทพ",
+            tags:      ["วิศวกรรม", "บริหาร", "ออกแบบ"],
+            note:      "รับตรงวุฒิ ปวส. โดยตรง ใจกลางกรุงเทพ",
+            link:      "rmutk.html",
+            imgSrc:    "rmutk.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลพระนคร",
+            short:     "มทร.พระนคร (RMUTP)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "กรุงเทพ",
+            tags:      ["อุตสาหกรรม", "บริหาร", "IT"],
+            note:      "เน้นสายช่าง รับ ปวส. ต่อเนื่องโดยตรง ไม่ต้องสอบข้อเขียน",
+            link:      "rmutp.html",
+            imgSrc:    "rmutp.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา",
+            short:     "มทร.ล้านนา (RMUTL)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "เหนือ",
+            tags:      ["วิศวกรรม", "เกษตร", "ศิลปะ"],
+            note:      "ครอบคลุม 6 พื้นที่ภาคเหนือ รับ ปวส. ต่อเนื่อง",
+            link:      "rmutl.html",
+            imgSrc:    "rmutl.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน",
+            short:     "มทร.อีสาน (RMUTI)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "ตะวันออกเฉียงเหนือ",
+            tags:      ["วิศวกรรม", "เกษตร", "บริหาร"],
+            note:      "ชั้นนำภาคอีสาน รับ ปวส. โดยตรง หลายวิทยาเขต",
+            link:      "rmuti.html",
+            imgSrc:    "rmuti.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์",
+            short:     "มทร.รัตนโกสินทร์ (RMUTR)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "กลาง",
+            tags:      ["วิศวกรรม", "สถาปัตย์", "บริหาร"],
+            note:      "มีวิทยาเขตศาลายา บพิตรพิมุข และวังไกลกังวล รับ ปวส.",
+            link:      "rmutr.html",
+            imgSrc:    "rmutr.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย",
+            short:     "มทร.ศรีวิชัย (RMUTSV)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "ใต้",
+            tags:      ["วิศวกรรม", "เกษตร", "อุตสาหกรรม"],
+            note:      "ชั้นนำภาคใต้ รับ ปวส. หลายวิทยาเขต เช่น สงขลา ตรัง นครฯ",
+            link:      "rmutsv.html",
+            imgSrc:    "rmutsv.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลสุวรรณภูมิ",
+            short:     "มทร.สุวรรณภูมิ (RMUTSB)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "กลาง",
+            tags:      ["บริหาร", "โลจิสติกส์", "วิศวกรรม"],
+            note:      "รับ ปวส. เทียบโอน ป.ตรี คณะบริหาร 5 สาขา เช่น บัญชี โลจิสติกส์",
+            link:      "rmutsb.html",
+            imgSrc:    "rmutsb.png"
+        },
+        {
+            name:      "มหาวิทยาลัยเทคโนโลยีราชมงคลตะวันออก",
+            short:     "มทร.ตะวันออก (RMUTO)",
+            type:      "ราชมงคล",
+            typeClass: "type-rajamongkol",
+            region:    "ตะวันออก",
+            tags:      ["เกษตร", "วิศวกรรม", "บริหาร"],
+            note:      "มีวิทยาเขตในชลบุรี จันทบุรี บ้านนา รับ ปวส. ต่อเนื่อง",
+            link:      "rmuto.html",
+            imgSrc:    "rmuto.png"
+        },
+        //ราชมงคล 9 แห่งเสร็จแล้ว
+
+        // ==================== ราชภัฏ 38 แห่ง ====================
+
+        // -- ภาคเหนือ 8 แห่ง --
+        { 
+        name:"มหาวิทยาลัยราชภัฏเชียงใหม่",    
+        short:"มรภ.เชียงใหม่ (CMRU)",    
+        type:"ราชภัฏ", typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","มนุษยศาสตร์","วิทยาศาสตร์"],    
+        note:"ราชภัฏชั้นนำภาคเหนือ รับ ปวส. หลายสาขา มีหอพัก",          
+        link:"cmru.html",  
+        imgSrc:"cmru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏเชียงราย",     
+        short:"มรภ.เชียงราย (CRRU)",     
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","ท่องเที่ยว","เทคโนโลยีดิจิทัล"], 
+        note:"รับ ปวส. เทียบโอน ป.ตรี มีทุน กยศ. รองรับ",              
+        link:"crru.html",  
+        imgSrc:"crru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏลำปาง",        
+        short:"มรภ.ลำปาง (LPRU)",        
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],          
+        note:"รับ ปวส. เทียบโอน ค่าเรียนราคาประหยัด",                  
+        link:"lpru.html",  
+        imgSrc:"lpru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏอุตรดิตถ์",    
+        short:"มรภ.อุตรดิตถ์ (URU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","เกษตร","วิศวกรรม"],              
+        note:"รับ ปวส. สายเกษตรและวิศวกรรม มีทุนการศึกษา",             
+        link:"uru.html",   
+        imgSrc:"uru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏพิบูลสงคราม",  
+        short:"มรภ.พิบูลสงคราม (PSRU)", 
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","วิทยาศาสตร์","เทคโนโลยี"],       
+        note:"รับ ปวส. เทียบโอน ป.ตรี หลายคณะ",                       
+        link:"psru.html",  
+        imgSrc:"psru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏกำแพงเพชร",    
+        short:"มรภ.กำแพงเพชร (KPRU)",   
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","บริหาร","เกษตร"],                
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด มีทุน กยศ.",           
+        link:"kpru.html",  
+        imgSrc:"kpru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏนครสวรรค์",    
+        short:"มรภ.นครสวรรค์ (NSRU)",   
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],          
+        note:"รับ ปวส. ต่อยอด ป.ตรี ค่าเรียนประหยัด",                 
+        link:"nsru.html",  
+        imgSrc:"nsru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏเพชรบูรณ์",    
+        short:"มรภ.เพชรบูรณ์ (PCRU)",   
+        type:"ราชภัฏ", typeClass:"type-rajabhat", 
+        region:"เหนือ",               
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],          
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ. รองรับ",                   
+        link:"pcru.html",  
+        imgSrc:"pcru.png" 
+        },
+        //ภาคเหนือ 8 แห่งเสร็จแล้ว
+
+        // -- กรุงเทพฯ 5 แห่ง --
+        { 
+        name:"มหาวิทยาลัยราชภัฏพระนคร",              
+        short:"มรภ.พระนคร (PNRU)",       
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กรุงเทพ", 
+        tags:["ศึกษาศาสตร์","มนุษย์ศาสตร์","บริหาร"], 
+        note:"รับ ปวส. เทียบโอน ป.ตรี มีทุน กยศ. ค่าเรียนประหยัด",  
+        link:"pnru.html", 
+        imgSrc:"pnru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏสวนสุนันทา",           
+        short:"มรภ.สวนสุนันทา (SSRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กรุงเทพ", 
+        tags:["นิเทศศาสตร์","ศิลปะ","บริหาร"],       
+        note:"ชื่อเสียงด้านศิลปะและสื่อ รับ ปวส. เทียบโอน ป.ตรี ทุกปี", 
+        link:"ssru.html", 
+        imgSrc:"ssru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏจันทรเกษม",            
+        short:"มรภ.จันทรเกษม (CRU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กรุงเทพ", 
+        tags:["นิเทศ","บริหาร","วิทยาศาสตร์"],       
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด มีทุน กยศ.",          
+        link:"cru.html",  
+        imgSrc:"cru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏบ้านสมเด็จเจ้าพระยา", 
+        short:"มรภ.บ้านสมเด็จ (BSRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กรุงเทพ", 
+        tags:["ครุศาสตร์","นิติ","มนุษย์ศาสตร์"],    
+        note:"เน้นสายครู รับ ปวส. เทียบโอน ทุกปีการศึกษา",            
+        link:"bsru.html", 
+        imgSrc:"bsru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏธนบุรี",               
+        short:"มรภ.ธนบุรี (DRU)",       
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กรุงเทพ", 
+        tags:["บริหาร","ครุศาสตร์","วิทยาศาสตร์"],  
+        note:"รับ ปวส. เทียบโอน ป.ตรี ทั้งภาคปกติและภาคอาทิตย์ ไม่ต้องสอบ", 
+        link:"dru.html", 
+        imgSrc:"dru.png" 
+        },
+        //กรุงเทพฯ 5 แห่งเสร็จแล้ว
+
+        // -- ภาคกลาง 3 แห่ง --
+        
+        { 
+        name:"มหาวิทยาลัยราชภัฏวไลยอลงกรณ์",        
+        short:"มรภ.วไลยอลงกรณ์ (VRU)", 
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กลาง", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"], 
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ. รองรับ",         
+        link:"vru.html", 
+        imgSrc:"vru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏพระนครศรีอยุธยา",    
+        short:"มรภ.อยุธยา (ARU)",      
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กลาง", 
+        tags:["ครุศาสตร์","มนุษยศาสตร์","บริหาร"],  
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด",           
+        link:"aru.html", 
+        imgSrc:"aru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏเทพสตรี",             
+        short:"มรภ.เทพสตรี (TRU)",     
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"กลาง", 
+        tags:["ครุศาสตร์","วิทยาศาสตร์","บริหาร"],  
+        note:"รับ ปวส. ต่อ ป.ตรี มีทุน กยศ. และทุนเรียนดี", 
+        link:"tru.html", 
+        imgSrc:"tru.png" 
+        },
+        //ภาคกลาง 3 แห่งเสร็จแล้ว
+
+        // -- ภาคตะวันตก 4 แห่ง --
+        { 
+        name:"มหาวิทยาลัยราชภัฏกาญจนบุรี",      
+        short:"มรภ.กาญจนบุรี (KRU)",  
+        type:"ราชภัฏ", typeClass:"type-rajabhat", 
+        region:"ตะวันตก", 
+        tags:["ครุศาสตร์","บริหาร","เทคโนโลยี"],   
+        note:"รับ ปวส. เทียบโอน ค่าเรียนราคาประหยัด",        
+        link:"kru.html",  
+        imgSrc:"kru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏนครปฐม",         
+        short:"มรภ.นครปฐม (NPRU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันตก", 
+        tags:["ครุศาสตร์","วิทยาศาสตร์","บริหาร"],
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ. รองรับ",          
+        link:"npru.html", 
+        imgSrc:"npru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏหมู่บ้านจอมบึง", 
+        short:"มรภ.จอมบึง (MCRU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันตก", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],
+        note:"รับ ปวส. ต่อ ป.ตรี ค่าเรียนประหยัด",            
+        link:"mcru.html", 
+        imgSrc:"mcru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏเพชรบุรี",        
+        short:"มรภ.เพชรบุรี (PBRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันตก", 
+        tags:["ครุศาสตร์","ท่องเที่ยว","บริหาร"],  
+        note:"รับ ปวส. เทียบโอน เน้นสายท่องเที่ยวและบริหาร", 
+        link:"pbru.html", 
+        imgSrc:"pbru.png" 
+        },
+        //ภาคตะวันตก 4 แห่งเสร็จแล้ว
+
+        // -- ภาคตะวันออก 2 แห่ง --
+        
+        { 
+        name:"มหาวิทยาลัยราชภัฏราชนครินทร์", 
+        short:"มรภ.ราชนครินทร์ (RRU)", 
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออก", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"], 
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ. รองรับ",         
+        link:"rru.html",  
+        imgSrc:"rru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏรำไพพรรณี",   
+        short:"มรภ.รำไพพรรณี (RBRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออก", 
+        tags:["ครุศาสตร์","เกษตร","บริหาร"],       
+        note:"รับ ปวส. เทียบโอน เหมาะสายเกษตรและบริหาร",    
+        link:"rbru.html", 
+        imgSrc:"rbru.png" 
+        },
+        //ภาคตะวันออก 2 แห่งเสร็จแล้ว
+
+        // -- ภาคอีสาน 10 แห่ง --
+        { 
+        name:"มหาวิทยาลัยราชภัฏอุดรธานี",    
+        short:"มรภ.อุดรธานี (UDRU)",   
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["บริหาร","ครุศาสตร์","เทคโนโลยี"],    
+        note:"รับ ปวส. ต่อยอด ป.ตรี ค่าเรียนราคาประหยัด",            
+        link:"udru.html",  
+        imgSrc:"udru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏสกลนคร",      
+        short:"มรภ.สกลนคร (SNRU)",     
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","วิทยาศาสตร์","เกษตร"],  
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด",                    
+        link:"snru.html",  
+        imgSrc:"snru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏเลย",          
+        short:"มรภ.เลย (LRU)",          
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ. รองรับ",                   
+        link:"lru.html",   
+        imgSrc:"lru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏมหาสารคาม",   
+        short:"มรภ.มหาสารคาม (RMU)",
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],
+        note:"รับ ปวส. ต่อ ป.ตรี มีทุนสนับสนุน",                       
+        link:"rmu.html",  
+        imgSrc:"rmu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏร้อยเอ็ด",    
+        short:"มรภ.ร้อยเอ็ด (RER)",     
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","นิติ"],        
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด มีทุน กยศ.",          
+        link:"rer.html",   
+        imgSrc:"rer.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏอุบลราชธานี", 
+        short:"มรภ.อุบลราชธานี (UBRU)", 
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"],
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด",                      
+        link:"ubru.html",  
+        imgSrc:"ubru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏศรีสะเกษ",    
+        short:"มรภ.ศรีสะเกษ (SSKRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","สาธารณสุข"],   
+        note:"รับ ปวส. เทียบโอน มีทุน กยศ.",                          
+        link:"sskru.html", 
+        imgSrc:"sskru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏบุรีรัมย์",   
+        short:"มรภ.บุรีรัมย์ (BRU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","เทคโนโลยี"],   
+        note:"รับ ปวส. เทียบโอน มีทุนการศึกษา",                       
+        link:"bru.html",   
+        imgSrc:"bru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏสุรินทร์",    
+        short:"มรภ.สุรินทร์ (SRRU)",    
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","เกษตร"],       
+        note:"รับ ปวส. ต่อ ป.ตรี ค่าเรียนประหยัด",                    
+        link:"srru.html",  
+        imgSrc:"srru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏนครราชสีมา",  
+        short:"มรภ.นครราชสีมา (NRRU)", 
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ตะวันออกเฉียงเหนือ", 
+        tags:["ครุศาสตร์","บริหาร","วิศวกรรม"],    
+        note:"รับ ปวส. เทียบโอน ป.ตรี มีทุน กยศ. รองรับ ราชภัฏโคราช",
+        link:"nrru.html",  
+        imgSrc:"nrru.png" 
+        },
+        //ภาคอีสาน 10 แห่งเสร็จแล้ว
+
+        // -- ภาคใต้ 5 แห่ง --
+        
+        { 
+        name:"มหาวิทยาลัยราชภัฏสุราษฎร์ธานี",  
+        short:"มรภ.สุราษฎร์ธานี (SRU)",  
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ใต้", 
+        tags:["บริหาร","นิติ","ศิลปศาสตร์"],       
+        note:"รับ ปวส. เทียบโอน เน้นสายบริหารและกฎหมาย",          
+        link:"sru.html",   
+        imgSrc:"sru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏนครศรีธรรมราช",
+        short:"มรภ.นครศรีธรรมราช (NSTRU)",
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ใต้", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"], 
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด มีทุน กยศ.",     
+        link:"nstru.html", 
+        imgSrc:"nstru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏภูเก็ต",         
+        short:"มรภ.ภูเก็ต (PKRU)",          
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ใต้", 
+        tags:["ท่องเที่ยว","บริหาร","ครุศาสตร์"], 
+        note:"เด่นสายท่องเที่ยว รับ ปวส. เทียบโอน มีทุน กยศ.",   
+        link:"pkru.html",  
+        imgSrc:"pkru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏยะลา",           
+        short:"มรภ.ยะลา (YRU)",             
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ใต้", 
+        tags:["ครุศาสตร์","บริหาร","วิทยาศาสตร์"], 
+        note:"รับ ปวส. เทียบโอน มีทุนสนับสนุนพิเศษ",              
+        link:"yru.html",   
+        imgSrc:"yru.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชภัฏสงขลา",          
+        short:"มรภ.สงขลา (SKRU)",           
+        type:"ราชภัฏ", 
+        typeClass:"type-rajabhat", 
+        region:"ใต้", 
+        tags:["ครุศาสตร์","บริหาร","เกษตร"],       
+        note:"รับ ปวส. เทียบโอน ค่าเรียนประหยัด ภาคใต้",          
+        link:"skru.html",  
+        imgSrc:"skru.png" 
+        },
+        //ใต้ 5 แห่งเสร็จแล้ว
+
+
+        // ==================== รัฐบาล 9 แห่ง ====================
+
+        {
+            name:"มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี",
+            short:"มจธ. (KMUTT)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กรุงเทพ",
+            tags:["วิศวกรรม","เทคโนโลยี","วิทยาศาสตร์"],
+            note:"มีโครงการรับ ปวส. สายวิศวกรรม (สหกิจศึกษา) เทียบโอนได้",
+            link:"kmutt.html", 
+            imgSrc:"kmutt.png"
+        },
+        {
+            name:"มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ",
+            short:"มจพ. (KMUTNB)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กรุงเทพ",
+            tags:["วิศวกรรม","อุตสาหกรรม","เทคนิค"],
+            note:"รับ ปวส. ต่อเนื่องสู่ ป.ตรี สายวิศวกรรม โดยตรง",
+            link:"kmutnb.html", 
+            imgSrc:"kmutnb.png"
+        },
+        {
+            name:"มหาวิทยาลัยพระจอมเกล้าลาดกระบัง",
+            short:"สจล. (KMITL)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กรุงเทพ",
+            tags:["IT","วิศวกรรม","สถาปัตย์"],
+            note:"วิทยาเขตชุมพรเปิดรับ ปวส. ต่อ ป.ตรี สายวิศวฯ-เกษตรโดยตรง",
+            link:"kmitl.html", 
+            imgSrc:"kmitl.png"
+        },
+        {
+            name:"มหาวิทยาลัยเกษตรศาสตร์",
+            short:"มก. (KU)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กรุงเทพ",
+            tags:["เกษตร","วิทยาศาสตร์","วิศวกรรม"],
+            note:"รับ ปวส. สายเกษตร-อุตสาหกรรม ผ่าน TCAS โควตาสายอาชีวะ",
+            link:"ku.html", 
+            imgSrc:"ku.png"   // ← มีรูปแล้ว
+        },
+        {
+            name:"มหาวิทยาลัยวลัยลักษณ์",
+            short:"มวล. (WU)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"ใต้",
+            tags:["วิทยาศาสตร์","สุขภาพ","เทคโนโลยี"],
+            note:"มหาวิทยาลัยรัฐภาคใต้ รับ ปวส. ต่อเนื่อง มีทุนสายอาชีวะ",
+            link:"wu.html", 
+            imgSrc:"wu.png"   // ← มีรูปแล้ว
+        },
+        {
+            name:"มหาวิทยาลัยแม่ฟ้าหลวง",
+            short:"มฟล. (MFU)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"เหนือ",
+            tags:["ภาษา","สุขภาพ","อุตสาหกรรม"],
+            note:"มหาวิทยาลัยรัฐภาคเหนือ รับ ปวส. สาขาอุตสาหกรรมและสุขภาพ",
+            link:"fmu.HTML", 
+            imgSrc:"fmu.png"  // ← มีรูปแล้ว
+        },
+        {
+            name:"มหาวิทยาลัยรามคำแหง",
+            short:"ม.ราม (RU)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กรุงเทพ",
+            tags:["นิติ","บริหาร","รัฐศาสตร์"],
+            note:"ระบบเปิด รับ ปวส. เทียบโอนได้ประมาณ 27 หน่วยกิต ลดเวลาเรียน",
+            link:"ru.html", 
+            imgSrc:"ru.png"
+        },
+        {
+            name:"มหาวิทยาลัยสุโขทัยธรรมาธิราช",
+            short:"มสธ. (STOU)", 
+            type:"รัฐบาล", 
+            typeClass:"type-gov", 
+            region:"กลาง",
+            tags:["เรียนทางไกล","บริหาร","สุขภาพ"],
+            note:"เรียนทางไกล 100% รับ ปวส. เทียบโอน เหมาะคนทำงานแล้ว",
+            link:"stou.html", 
+            imgSrc:"stou.png"
+        },
+        {
+            name:"มหาวิทยาลัยกาฬสินธุ์",
+            short:"มกส. (KSU)",   
+            type:"รัฐบาล",
+            typeClass:"type-gov", 
+            region:"ตะวันออกเฉียงเหนือ", 
+            tags:["ครุศาสตร์","เกษตร","บริหาร"],       
+            note:"รับ ปวส. เทียบโอน เน้นสายเกษตรและบริหาร",               
+            link:"ksu.html",   
+            imgSrc:"ksu.png" 
+        },
+        //รัฐบาล 9 แห่งเสร็จแล้ว
+
+        // ==================== เอกชน 20 แห่ง ====================
+
+        { 
+        name:"มหาวิทยาลัยธนบุรี",                 
+        short:"ม.ธนบุรี (TRU)",       
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["วิศวกรรม","บริหาร","เทคโนโลยี"],      
+        note:"เทียบโอนได้ 51-60 หน่วยกิต เรียนจบใน 2 ปี ค่าแรกเข้าเพียง 2,000 บาท",      
+        link:"thonburiu.html",  
+        imgSrc:"thonburiu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยกรุงเทพธนบุรี",          
+        short:"มกธ. (BTU)",           
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","กฎหมาย","วิทยาศาสตร์"],      
+        note:"เปิดหลักสูตรเทียบโอน ปวส. สู่ ป.ตรี ทั้งภาคปกติและเสาร์-อาทิตย์",          
+        link:"btu.html",  
+        imgSrc:"btu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยเทคโนโลยีมหานคร",        
+        short:"มทม. (MUT)",           
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["วิศวกรรม","IT","บริหาร"],              
+        note:"รับ ปวส. รับตรงไม่ต้องสอบ คณะวิศวฯและบริหารทุกสาขา มีแผนเสาร์-อาทิตย์",   
+        link:"mut.html",  
+        imgSrc:"mut.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยรังสิต",                  
+        short:"ม.รังสิต (RSU)",       
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กลาง",                  
+        tags:["วิศวกรรม","นิเทศ","เภสัช"],           
+        note:"เอกชนชั้นนำ รับ ปวส. เทียบโอนหลายสาขา มีทุนต่อเนื่อง",                      
+        link:"rsu.html",  
+        imgSrc:"rsu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยศรีปทุม",                 
+        short:"มศป. (SPU)",           
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["IT","บริหาร","บัญชี"],                 
+        note:"รับ ปวส.2 เทียบโอน ป.ตรี โดยตรง หลายสาขา กู้ กยศ. ได้",                    
+        link:"spu.html",  
+        imgSrc:"spu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยกรุงเทพ",                
+        short:"ม.กรุงเทพ (BU)",       
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["ออกแบบ","นิเทศ","บริหาร"],            
+        note:"มีหลักสูตรเทียบโอน ปวส. เรียนต่อ ป.ตรี รับสมัครปี 2569 แล้ว",              
+        link:"bu.html",   
+        imgSrc:"bu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยสยาม",                    
+        short:"ม.สยาม (SU)",          
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["นิติ","วิศวกรรม","เภสัช"],            
+        note:"ค่าเรียนประหยัด มีระบบเทียบโอนจาก ปวส. ชัดเจน กู้ กยศ. ได้",               
+        link:"su.html", 
+        imgSrc:"su.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยธุรกิจบัณฑิตย์",         
+        short:"มธบ. (DPU)",           
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","กฎหมาย","นิเทศ"],            
+        note:"เน้นสายธุรกิจและกฎหมาย รับ ปวส. เทียบโอน มีทุนให้เลือก",                    
+        link:"dpu.html",  
+        imgSrc:"dpu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยเกษมบัณฑิต",             
+        short:"ม.เกษมบัณฑิต (KBU)",  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["การบิน","กฎหมาย","บริหาร"],           
+        note:"เด่นด้านการบินและกฎหมาย รับ ปวส. เทียบโอน ทุกปี",                           
+        link:"kbu.html",  
+        imgSrc:"kbu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยอัสสัมชัญ",               
+        short:"มอช. (ABAC)",                 
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","อินเตอร์","IT"],              
+        note:"หลักสูตรนานาชาติ รับ ปวส. สาขาบริหาร เทียบโอนหน่วยกิตได้",                  
+        link:"abac.html", 
+        imgSrc:"abac.png" 
+        },
+        { 
+        name:"สถาบันการจัดการปัญญาภิวัฒน์",        
+        short:"สปภ. (PIM)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","IT","โลจิสติกส์"],           
+        note:"รับ ปวส. ทุกสาขา เทียบโอน ป.ตรี มีทุน 30-50% เรียนไปทำงานไปได้",           
+        link:"pim.html",  
+        imgSrc:"pim.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยหอการค้าไทย",             
+        short:"(UTCC)",                 
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","บัญชี","เศรษฐศาสตร์"],       
+        note:"รับ ปวส. เทียบโอน ป.ตรี เน้นสายธุรกิจและบัญชี มีทุน กยศ.",                 
+        link:"utcc.html", 
+        imgSrc:"utcc.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยอีสเทิร์นเอเชีย",         
+        short:"ม.อีสเทิร์น (EAU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กลาง",                  
+        tags:["สาธารณสุข","บริหาร","วิศวกรรม"],      
+        note:"รับ ปวส. เทียบโอน ป.ตรี มี MOU กับสภาอุตสาหกรรมแห่งประเทศไทย",             
+        link:"eau.html",  
+        imgSrc:"eau.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยเวสเทิร์น",               
+        short:"ม.เวสเทิร์น (WTU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กลาง",                  
+        tags:["สาธารณสุข","บริหาร","นิติ"],          
+        note:"รับ ปวส. เทียบโอน เรียนออนไลน์ได้ จบใน 1.5-3 ปี เหมาะคนทำงาน",            
+        link:"wtu.html",  
+        imgSrc:"wtu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยเอเชียอาคเนย์",           
+        short:"ม.อ.อ. (SAU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["วิศวกรรม","บริหาร","นิติ"],           
+        note:"ค่าเรียนประหยัด รับ ปวส. เทียบโอน มีทุนพิเศษสำหรับผู้จบ ปวส.",             
+        link:"sau.html",  
+        imgSrc:"sau.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยนอร์ทกรุงเทพ",            
+        short:"ม.น.ก. (NBU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["บริหาร","IT","นิเทศ"],                 
+        note:"รับ ปวส. เทียบโอน มีห้องปฏิบัติการครบครัน เรียนได้ทั้งภาคปกติและสมทบ",     
+        link:"nbu.html",  
+        imgSrc:"nbu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยราชพฤกษ์",                
+        short:"ม.ราชพฤกษ์ (RPU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กลาง",                  
+        tags:["บริหาร","ครุศาสตร์","IT"],            
+        note:"รับ ปวส. เทียบโอน ป.ตรี ค่าเรียนประหยัด มีทุน กยศ. รองรับ",                
+        link:"rpu.html",  
+        imgSrc:"rpu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยพายัพ",                   
+        short:"มพย. (PYU)",           
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"เหนือ",                 
+        tags:["บริหาร","นิเทศ","เทคโนโลยี"],         
+        note:"เอกชนชั้นนำภาคเหนือ รับ ปวส. เทียบโอน มีทุนการศึกษา",                       
+        link:"pyu.html",  
+        imgSrc:"pyu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ",
+        short:"มฉก. (HCU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"กรุงเทพ",               
+        tags:["เภสัช","บริหาร","สาธารณสุข"],         
+        note:"รับ ปวส. เทียบโอน เน้นสายสุขภาพและบริหาร มีทุน กยศ.",                       
+        link:"hcu.html",  
+        imgSrc:"hcu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยวงษ์ชวลิตกุล",           
+        short:"มว. (VU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"ตะวันออกเฉียงเหนือ",   
+        tags:["บริหาร","วิศวกรรม","สาธารณสุข"],      
+        note:"เอกชนชั้นนำภาคอีสาน รับ ปวส. เทียบโอน ป.ตรี ทุกสาขา",                      
+        link:"vu.html",  
+        imgSrc:"vu.png" 
+        },
+        { 
+        name:"มหาวิทยาลัยภาคตะวันออกเฉียงเหนือ",  
+        short:"ม.ภ.น. (NEU)",                  
+        type:"เอกชน", 
+        typeClass:"type-private", 
+        region:"ตะวันออกเฉียงเหนือ",   
+        tags:["บริหาร","นิติ","วิทยาศาสตร์"],        
+        note:"รับ ปวส. เทียบโอน ป.ตรี ค่าเรียนประหยัด ภาคอีสาน",                         
+        link:"neu.html",  
+        imgSrc:"neu.png" 
+        }
+
+    ]; // จบ universities array
+
+
+    /* ============================================================
+       State ของ filter และ search
+    ============================================================ */
+    let currentType   = 'all';
+    let currentRegion = 'all';
+    let currentQuery  = '';
+
+
+    /* ============================================================
+       getFiltered() — กรองตาม type, region, และ keyword
+    ============================================================ */
+    function getFiltered() {
+    return universities.filter(u => {
+        const matchType   = currentType   === 'all' || u.type   === currentType;
+        const matchRegion = currentRegion === 'all' || u.region === currentRegion;
+        const q           = currentQuery.toLowerCase();
+
+        const matchBasic = !q
+            || u.name.toLowerCase().includes(q)
+            || u.short.toLowerCase().includes(q)
+            || u.type.toLowerCase().includes(q)
+            || (u.region || '').includes(q)
+            || u.tags.some(t => t.toLowerCase().includes(q))
+            || u.note.toLowerCase().includes(q);
+
+        // ค้นหาเพิ่มจากข้อมูลสาขา/คณะที่โหลดมาจากหน้า Page จริง
+        const faculties = facultyCache[u.link] || [];
+        const matchFaculty = !q || faculties.some(f => f.toLowerCase().includes(q));
+
+        return matchType && matchRegion && (matchBasic || matchFaculty);
+    });
+}
+
+
+    /* ============================================================
+       updateStatsBar() — อัพเดท pill นับจำนวนแต่ละประเภท
+    ============================================================ */
+    function updateStatsBar(filtered) {
+        const counts = { ราชภัฏ: 0, ราชมงคล: 0, รัฐบาล: 0, เอกชน: 0 };
+        filtered.forEach(u => {
+            if (counts[u.type] !== undefined) counts[u.type]++;
+        });
+        document.getElementById('statsBar').innerHTML = `
+            <span class="stat-pill stat-rajabhat">ราชภัฏ ${counts['ราชภัฏ']} แห่ง</span>
+            <span class="stat-pill stat-rajamongkol">ราชมงคล ${counts['ราชมงคล']} แห่ง</span>
+            <span class="stat-pill stat-gov">รัฐบาล ${counts['รัฐบาล']} แห่ง</span>
+            <span class="stat-pill stat-private">เอกชน ${counts['เอกชน']} แห่ง</span>
+        `;
+    }
+
+/* ============================================================
+   ระบบดึงข้อมูลสาขา/คณะจากหน้า Page จริง (สำหรับค้นหา)
+============================================================ */
+const facultyCache = {};   // เก็บผลลัพธ์ไว้ ไม่โหลดซ้ำ
+let facultyDataReady = false;
+
+// ดึงข้อความสาขา/คณะจากไฟล์ HTML ของมหาวิทยาลัยแห่งหนึ่ง
+async function fetchFaculties(link) {
+    if (facultyCache[link]) return facultyCache[link];   // มี cache แล้ว ไม่ต้องโหลดใหม่
+
+    try {
+        const res = await fetch(link);
+        if (!res.ok) throw new Error('โหลดไม่สำเร็จ');
+        const html = await res.text();
+
+        // แปลง HTML string เป็น DOM เพื่อดึงข้อความ
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // ดึงข้อความจาก .schools-list span (ตามโครงสร้างหน้า Page)
+        const spans = doc.querySelectorAll('.schools-list span');
+        const faculties = Array.from(spans).map(s => s.textContent.trim());
+
+        facultyCache[link] = faculties;
+        return faculties;
+    } catch (err) {
+        console.warn(`โหลดข้อมูลสาขาจาก ${link} ไม่สำเร็จ:`, err);
+        facultyCache[link] = [];   // เก็บเป็น array ว่าง ป้องกันโหลดซ้ำที่ fail
+        return [];
+    }
+            // ใน function fetchFaculties
+        const html = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // เพิ่มบรรทัดนี้เพื่อ debug ดูว่าเนื้อหาในไฟล์คืออะไร
+        console.log(`ตรวจสอบไฟล์: ${link}`, doc.body.innerText.substring(0, 200)); 
+
+        const spans = doc.querySelectorAll('.schools-list span');
+        // เปลี่ยนเป็นหาหลายๆ แบบที่พบบ่อย
+        const selectors = ['.schools-list span', '.faculty-list', 'ul.list-group li', '.department-item'];
+
+        // ภายใน fetchFaculties
+        let elements = [];
+        for(let s of selectors) {
+            elements = doc.querySelectorAll(s);
+            if(elements.length > 0) break; 
+        }
+        const faculties = Array.from(elements).map(el => el.textContent.trim()).filter(text => text.length > 2);
+    }
+
+// โหลดข้อมูลสาขาทุกมหาวิทยาลัยล่วงหน้า (ทำงานเบื้องหลัง ไม่บล็อก UI)
+async function preloadAllFaculties() {
+    const countEl = document.getElementById('uniCount');
+    let loaded = 0;
+
+    // โหลดทีละ 5 แห่งพร้อมกัน เพื่อไม่ให้ยิง request พร้อมกันทั้งหมด
+    const BATCH_SIZE = 5;
+    for (let i = 0; i < universities.length; i += BATCH_SIZE) {
+        const batch = universities.slice(i, i + BATCH_SIZE);
+        await Promise.all(batch.map(u => fetchFaculties(u.link)));
+        loaded += batch.length;
+    }
+
+    facultyDataReady = true;
+    console.log(`โหลดข้อมูลสาขาสำเร็จ ${loaded}/${universities.length} แห่ง`);
+
+    // re-render เผื่อมีคนกำลังค้นหาอยู่ตอนโหลดเสร็จพอดี
+    renderCards();
+}
+    /* ============================================================
+       renderCards() — สร้างและแสดง card ทั้งหมด
+    ============================================================ */
+    function renderCards() {
+        const track    = document.getElementById('uniCardsTrack');
+        const countEl  = document.getElementById('uniCount');
+        const filtered = getFiltered();
+
+        countEl.textContent = `แสดง ${filtered.length} มหาวิทยาลัย`;
+        updateStatsBar(filtered);
+        track.innerHTML = '';
+
+        if (filtered.length === 0) {
+            track.style.width = '100%';
+            track.innerHTML   = '<div class="empty-state">😕 ไม่พบมหาวิทยาลัยที่ตรงกับการค้นหา</div>';
+            return;
+        }
+
+        track.style.width = 'max-content';
+
+        filtered.forEach(u => {
+            const card = document.createElement('a');
+            card.href      = u.link;
+            card.className = 'uni-card';
+
+            // รูปภาพ: ถ้ามี imgSrc ใช้ <img> / ถ้าไม่มีใช้ placeholder
+            const imgHtml = u.imgSrc
+                ? `<img src="${u.imgSrc}" alt="${u.name}" class="uni-card-img">`
+                : `<div class="uni-card-img-placeholder">ตรามหาลัย<br>(${u.short.split(' ')[0]})</div>`;
+
+            const tagsHtml   = u.tags.map(t => `<span class="uni-tag">${t}</span>`).join('');
+            const regionHtml = u.region ? `<div class="uni-card-region">📍 ภาค${u.region}</div>` : '';
+
+            card.innerHTML = `
+                ${imgHtml}
+                <div class="uni-card-body">
+                    <span class="uni-card-type-badge ${u.typeClass}">${u.type}</span>
+                    <div class="uni-card-name">${u.name}</div>
+                    <div class="uni-card-short">${u.short}</div>
+                    ${regionHtml}
+                    <div class="uni-card-tags">${tagsHtml}</div>
+                    <div class="uni-card-note">${u.note}</div>
+                </div>
+            `;
+            track.appendChild(card);
+        });
+    }
+
+
+    /* ============================================================
+       Event Listeners
+    ============================================================ */
+
+    // กดปุ่มประเภทมหาวิทยาลัย
+    document.getElementById('filterButtons').addEventListener('click', function (e) {
+        if (!e.target.matches('.filter-btn')) return;
+
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentType   = e.target.dataset.type;
+        currentRegion = 'all';
+
+        // แสดง region sub-filter เฉพาะตอนเลือก ราชภัฏ
+        const regionDiv = document.getElementById('regionFilter');
+        if (currentType === 'ราชภัฏ') {
+            regionDiv.classList.add('visible');
+        } else {
+            regionDiv.classList.remove('visible');
+            document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.region-btn[data-region="all"]').classList.add('active');
+        }
+
+        renderCards();
+    });
+
+    // กดปุ่มภูมิภาค (ใต้ ราชภัฏ)
+    document.getElementById('regionFilter').addEventListener('click', function (e) {
+        if (!e.target.matches('.region-btn')) return;
+        document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentRegion = e.target.dataset.region;
+        renderCards();
+    });
+
+    // พิมพ์ในช่องค้นหา
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+
+    searchInput.addEventListener('input', function () {
+        currentQuery = this.value.trim();
+        searchClear.classList.toggle('visible', currentQuery.length > 0);
+        renderCards();
+    });
+
+    // ปุ่มล้างคำค้นหา
+    window.clearSearch = function () {
+        searchInput.value = '';
+        currentQuery      = '';
+        searchClear.classList.remove('visible');
+        renderCards();
+    };
+
+    /* ============================================================
+       เริ่มแสดงผลครั้งแรก
+    ============================================================ */
+   renderCards();
+    // โหลดข้อมูลสาขาเบื้องหลัง ไม่บล็อกหน้าเว็บ
+    preloadAllFaculties().then(() => {
+    const label = document.getElementById('facultyLoadingLabel');
+    if (label) label.classList.add('done');
+    });
+    </script>
+</body>
+</html>

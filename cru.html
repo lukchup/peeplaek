@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏจันทรเกษม - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "cru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="cru.png" alt="โลโก้ มรภ.จันทรเกษม" class="cru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏจันทรเกษม</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สถาบันอุดมศึกษาชั้นนำด้านวิชาชีพและเทคโนโลยี มุ่งมั่นพัฒนาท้องถิ่นและสังคมสู่สากล" — มหาวิทยาลัยรัฐใจกลางกรุงเทพมหานคร ย่านรัชดา-ลาดพร้าว ตอบโจทย์ไลฟ์สไตล์คนเมือง พร้อมเปิดโอกาสให้ผู้สำเร็จการศึกษา ปวส. เทียบโอนรายวิชาเข้าศึกษาต่อระดับปริญญาตรีอย่างมีคุณภาพและยืดหยุ่น
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-map-marked-alt"></i> ที่ตั้งและพื้นที่จัดการศึกษา</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr; margin-bottom: 50px;">
+            <section class="info-card address-section" style="margin: 0;">
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="address-content">
+                    <h3>วิทยาเขตหลัก (ถนนรัชดาภิเษก เขตจตุจักร)</h3>
+                    <p>39/1 ถนนรัชดาภิเษก แขวงจันทรเกษม เขตจตุจักร กรุงเทพมหานคร 10900</p>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        <i class="fas fa-subway"></i> <strong>การเดินทาง:</strong> ตั้งอยู่ริมถนนรัชดาภิเษก (ใกล้แยกรัชดา-ลาดพร้าว และศาลอาญา) สามารถเดินทางมาได้สะดวกด้วยรถไฟฟ้า **MRT สายสีน้ำเงิน (สถานีลาดพร้าว)** และรถไฟฟ้า **สายสีเหลือง (สถานีลาดพร้าว)** มีรถประจำทางผ่านหน้าสถาบันหลากหลายสาย
+                    </small>
+                </div>
+            </section>
+        </div>
+
+        <section class="facts-section" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏจันทรเกษม (Chandrakasem Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.จก. / CRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา / อัตลักษณ์</strong></td>
+                            <td>"เรียนดี มีวินัย ใฝ่หาความรู้ คู่คุณธรรม นำสังคมพัฒนา"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot cru-orange"></span> สีแสด - <span class="color-dot cru-yellow"></span> จันทน์ (เหลืองนวล)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นจันทน์คา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยของรัฐ ในกลุ่มมหาวิทยาลัยราชภัฏเพื่อการพัฒนาวิชาชีพและชุมชนเมือง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบรับวุฒิ ปวส.</strong></td>
+                            <td>เปิดรับสมัครผู้สำเร็จการศึกษา ปวส. ทุกสายวิชาในหลักสูตรปริญญาตรีเทียบโอน (ภาคปกติ และภาคพิเศษสำหรับคนทำงาน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>เริ่มต้นประมาณ 10,000 - 15,000 บาท / เทอม (ระบบเหมาจ่ายตามนโยบายสนับสนุนค่าครองชีพนักศึกษาของรัฐ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section" style="margin-top: 40px;">
+            <div class="desc-box">
+                <h3><i class="fas fa-star"></i> จุดเด่นและระบบการเรียนสำหรับสายอาชีพ</h3>
+                <p>
+                    มรภ.จันทรเกษม ตั้งอยู่ใกล้เขตศูนย์กลางธุรกิจและคมนาคมสายหลัก จึงให้ความสำคัญกับการตอบโจทย์ผู้เรียนสายอาชีพ (ปวส.) และคนทำงานในเมืองหลวง ระบบการเทียบโอนหน่วยกิตมีโครงสร้างที่ชัดเจนและเอื้อประโยชน์เพื่อให้นักศึกษาสามารถนำความรู้และชั่วโมงปฏิบัติเดิมมาหักลบวิชาเรียนได้อย่างคุ้มค่า ช่วยลดเวลาเรียนต่อปริญญาตรีให้เหลือเพียงประมาณ 2 ปีจบ
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid var(--cru-orange); padding-left: 15px; background: var(--cru-orange-light); padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong style="color: var(--cru-orange-dark);">โอกาสขยายศักยภาพสำหรับคนทำงานประจำ:</strong> มหาวิทยาลัยเปิดสอน **ภาคพิเศษ (เรียนวันเสาร์-อาทิตย์ หรือวันอาทิตย์วันเดียว)** ในกลุ่มสาขาวิชาบริหารธุรกิจ บัญชี และเทคโนโลยี เพื่ออำนวยความสะดวกให้ผู้ที่ทำงานในบริษัทเอกชนหรือหน่วยงานราชการย่านรัชดา ลาดพร้าว พหลโยธิน สามารถพัฒนาคุณวุฒิควบคู่กับการทำงานได้ทันทีครับ
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอน (แบ่งตามกลุ่มสาขาหลัก)</h2>
+            
+            <h4 style="margin: 15px 0 5px 0; color: var(--cru-orange-dark);"><i class="fas fa-chart-line"></i> กลุ่มบริหารธุรกิจและการบัญชี</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (สาขาวิชาการบัญชี, บริหารธุรกิจ, การตลาดดิจิทัล, คอมพิวเตอร์ธุรกิจ, การจัดการโลจิสติกส์และโซ่อุปทาน)</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--cru-orange-dark);"><i class="fas fa-laptop-code"></i> กลุ่มเทคโนโลยีอุตสาหกรรมและวิทยาศาสตร์นวัตกรรม</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีอุตสาหกรรม (สาขาวิชาเทคโนโลยีไฟฟ้าและอิเล็กทรอนิกส์, การจัดการวิศวกรรมและการผลิต, การออกแบบผลิตภัณฑ์นวัตกรรม)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์ (สาขาวิชาเทคโนโลยีสารสนเทศ, วิทยาการคอมพิวเตอร์)</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--cru-orange-dark);"><i class="fas fa-balance-scale"></i> กลุ่มมนุษยศาสตร์ สังคมศาสตร์ และครุศาสตร์</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์ (นิติศาสตร์, รัฐประศาสนศาสตร์, นวัตกรรมการสื่อสาร)</span>
+                <span><i class="fas fa-check-circle"></i> คณะศึกษาศาสตร์ (หลักสูตรครูวิชาชีพและเทคโนโลยีทางการศึกษา)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            
+            <a href="https://www.chandra.ac.th/" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.จันทรเกษม
+            </a>
+
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏจันทรเกษม | สถาบันอุดมศึกษาเพื่อการพัฒนาวิชาชีพและชุมชนเมือง</p>
+    </footer>
+
+</body>
+</html>

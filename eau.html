@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยอีสเทิร์นเอเชีย (EAU) - Eastern Asia University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="eau.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "eau";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า eau.png ตามมาตรฐานโปรเจกต์ -->
+                <img src="eau.png" alt="โลโก้ มหาวิทยาลัยอีสเทิร์นเอเชีย" style="max-width: 80px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยอีสเทิร์นเอเชีย</h1>
+            <h2>EASTERN ASIA UNIVERSITY</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "ปัญญา คุณธรรม นำไปสู่สากล" — มุ่งมั่นผลิตบัณฑิตให้เพียบพร้อมด้วยวิชาการ เทคโนโลยี และทักษะวิชาชีพชั้นสูงเพื่อตอบโจทย์ตลาดแรงงานระดับนานาชาติ
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งสถาบัน (วิทยาเขตรังสิต)</h3>
+                <p>200 หมู่ 5 ถนนรังสิต-นครนายก (คลอง 5) ตำบลบางความ อำเภอธัญบุรี จังหวัดปทุมธานี 12110</p>
+                <small>
+                    <i class="fas fa-car"></i> <strong>การเดินทางและจุดสังเกต:</strong> ตั้งอยู่ริมถนนรังสิต-นครนายก บริเวณคลอง 5 ฝั่งขาเข้ากรุงเทพฯ ใกล้กับจุดขึ้น-ลงทางด่วนกาญจนาภิเษก (วงแหวนรอบนอกตะวันออก) การเดินทางสะดวกด้วยรถตู้และรถประจำทางสายรังสิต-นครนายก (เช่น สาย 538, 1156) รวมถึงมีรถตู้บริการรับ-ส่งนักศึกษาตามจุดเชื่อมต่อสำคัญ
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยอีสเทิร์นเอเชีย (Eastern Asia University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มอี. / EAU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นด้านหลักสูตร</strong></td>
+                            <td>มีชื่อเสียงโดดเด่นมากใน **กลุ่มคณะวิทยาศาสตร์สุขภาพ** โดยเฉพาะคณะพยาบาลศาสตร์ และคณะสาธารณสุขศาสตร์ ที่ผลิตบุคลากรป้อนเข้าสู่โรงพยาบาลชั้นนำทั่วประเทศ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot eau-blue"></span> สีน้ำเงิน และ 
+                                <span class="color-dot eau-white"></span> สีขาว (สีน้ำเงินแทนความรอบรู้และความหนักแน่นมั่นคง สีขาวแทนคุณธรรมและความบริสุทธิ์)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นกัลปพฤกษ์ (ออกดอกสีชมพูขาวบานสะพรั่งในช่วงต้นปี สื่อถึงความงดงามและเจริญก้าวหน้า)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>บรรยากาศภายในมอ</strong></td>
+                            <td>ร่มรื่นด้วยพื้นที่สีเขียวขนาดใหญ่ มีทะเลสาบและสถาปัตยกรรมอาคารสไตล์ตะวันตก ผสมผสานอย่างลงตัว เหมาะแก่การเรียนรู้และพักผ่อน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>คณะทั่วไปประมาณ 30,000 - 45,000 บาทต่อเทอม ส่วนกลุ่มวิทยาศาสตร์สุขภาพและพยาบาลศาสตร์จะเริ่มต้นที่ประมาณ 55,000 - 75,000+ บาทต่อเทอม (สามารถกู้ยืม กยศ. และมีทุนส่วนลดจากมหาวิทยาลัยช่วยเหลือ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- โอกาสเรียนต่อของผู้จบ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> โอกาสการเรียนต่อปริญญาตรีสำหรับกลุ่มผู้จบ ปวส.</h3>
+                <p>
+                    EAU เล็งเห็นถึงความสำคัญของนักศึกษาสายวิชาชีพ จึงออกแบบทางเลือกในการเรียนต่อปริญญาตรีที่ยืดหยุ่น เพื่อให้นักศึกษาที่จบระดับ ปวส. สามารถต่อยอดทักษะเดิมและยกระดับสู่วุฒิปริญญาตรีได้อย่างรวดเร็ว
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-exchange-alt"></i> โครงการเทียบโอนหน่วยกิต (ปวส. ต่อเนื่องปริญญาตรี)</strong>
+                        เปิดรับผู้สำเร็จการศึกษา **ระดับ ปวส. ทุกสาขาวิชา** เข้าศึกษาต่อปริญญาตรีแบบเทียบโอนใน **คณะบริหารธุรกิจ (สาขาการจัดการ, การตลาด, คอมพิวเตอร์ธุรกิจ), คณะวิศวกรรมศาสตร์ และคณะเทคโนโลยีสารสนเทศ** มีหลักสูตรที่สามารถเรียนจบได้ภายใน 2 ปี และบางสาขาเปิดสอนใน **ภาคพิเศษ (วันเสาร์-อาทิตย์)** เพื่อตอบโจทย์กลุ่มคนที่ทำงานไปด้วยและต้องการอัปเกรดวุฒิการศึกษาไปพร้อมกันครับ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะที่เปิดสอน -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสาขาวิชาที่น่าสนใจ</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-heartbeat"></i> กลุ่มวิทยาศาสตร์สุขภาพ (โดดเด่นที่สุด)</h4>
+                    <ul>
+                        <li>คณะพยาบาลศาสตร์ (หลักสูตรพยาบาลศาสตรบัณฑิตยอดนิยม)</li>
+                        <li>คณะสาธารณสุขศาสตร์ (สาขาอนามัยสิ่งแวดล้อม, อาชีวอนามัยและความปลอดภัย)</li>
+                        <li>คณะเภสัชศาสตร์ / คณะการแพทย์แผนไทย</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-chart-line"></i> กลุ่มสังคมศาสตร์และบริหารธุรกิจ</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การจัดการนวัตกรรมธุรกิจ, การบัญชี, การตลาดดิจิทัล)</li>
+                        <li>คณะนิติศาสตร์ / คณะรัฐศาสตร์ (รัฐประศาสนศาสตร์)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-cogs"></i> กลุ่มวิศวกรรมศาสตร์และเทคโนโลยี</h4>
+                    <ul>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมการจัดการอุตสาหกรรม, วิศวกรรมโยธา)</li>
+                        <li>คณะเทคโนโลยีสารสนเทศ (วิทยาการคอมพิวเตอร์และเทคโนโลยีดิจิทัล)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop"></i> กลุ่มนิเทศศาสตร์และศิลปศาสตร์</h4>
+                    <ul>
+                        <li>คณะนิเทศศาสตร์ (การสื่อสารดิจิทัล, มัลติมีเดียและภาพยนตร์)</li>
+                        <li>คณะศิลปศาสตร์ (ภาษาอังกฤษเพื่อการสื่อสาร, ภาษาจีนธุรกิจ)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.eau.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยอีสเทิร์นเอเชีย
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยอีสเทิร์นเอเชีย (EAU) | สร้างปัญญา พัฒนาคุณธรรม สู่ความสำเร็จในระดับสากล</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏอุดรธานี - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="udru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "udru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="udru.png" alt="โลโก้ มรภ.อด." class="udru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏอุดรธานี</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สถาบันอุดมศึกษาชั้นนำเพื่อการพัฒนาท้องถิ่นและภูมิภาคลุ่มน้ำโขง" — มุ่งมั่นสร้างสรรค์ภูมิปัญญา ผลิตบัณฑิตที่มีทักษะพร้อมปฏิบัติงาน และขับเคลื่อนนวัตกรรมเพื่อความยั่งยืนของชุมชน
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>พื้นที่การศึกษาและวิทยาเขต</h3>
+                <p><strong>วิทยาเขตหลัก (ในเมือง):</strong> 64 ถ.ทหาร ต.หมากแข้ง อ.เมือง จ.อุดรธานี 41000</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-university"></i> <strong>ศูนย์การศึกษาหลักอื่น ๆ:</strong> ศูนย์การศึกษาสามพร้าว (ต.สามพร้าว แหล่งรวมคณะเทคโนโลยีและพื้นที่ทดลองนวัตกรรมขนาดใหญ่กว่า 800 ไร่) และ ศูนย์การศึกษาบึงกาฬ จ.บึงกาฬ
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏอุดรธานี (Udon Thani Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.อด. / UDRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot udru-green"></span> สีเขียว และ 
+                                <span class="color-dot udru-yellow"></span> สีเหลือง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ดอกไม้ประจำสถาบัน</strong></td>
+                            <td>ดอกจาน (สื่อถึงความอดทนและจิตวิญญาณของชาวอีสาน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นด้านภูมิศาสตร์</strong></td>
+                            <td>เป็นศูนย์กลางทางการศึกษาของอีสานตอนบน เชื่อมต่อระเบียงเศรษฐกิจชายแดน (หนองคาย-บึงกาฬ) และ สปป.ลาว</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประวัติศาสตร์สถาบัน</strong></td>
+                            <td>มีรากฐานยาวนานจากการเป็นโรงเรียนฝึกหัดครูกสิกรรมมณฑลอุดร ตั้งแต่ปี พ.ศ. 2466 (อายุครบ 100 ปี)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> โอกาสการต่อยอดสำหรับผู้สำเร็จการศึกษา ปวส.</h3>
+                <p>
+                    มรภ.อุดรธานี ขับเคลื่อนนโยบายการเรียนรู้ตลอดชีวิต โดยใน **คณะเทคโนโลยี คณะวิทยาศาสตร์ และคณะวิทยาการจัดการ** มีการเปิดรับผู้จบการศึกษาระดับ ปวส. เข้าศึกษาต่อในหลักสูตรระดับปริญญาตรี (หลักสูตรเทียบโอน) ทั้งภาคปกติและภาคพิเศษ (เสาร์-อาทิตย์) เพื่ออำนวยความสะดวกให้ผู้ที่ต้องการทำงานไปด้วยและเรียนเพิ่มวุฒิไปด้วย
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid #006400; padding-left: 15px; background: #e8f5e9; padding-top: 10px; padding-bottom: 10px;">
+                    💡  <strong>สาขาฮิตสาย ปวส.:</strong> หลักสูตรเทคโนโลยีบัณฑิต (ทล.บ.) เช่น สาขาวิชาเทคโนโลยีเครื่องกล, เทคโนโลยีไฟฟ้า, การจัดการอุตสาหกรรม รวมถึงสาขาการบัญชี และคอมพิวเตอร์ธุรกิจ ซึ่งเน้นส่งเสริมให้ผู้เรียนนำประสบการณ์จากการทำงานมาต่อยอดวิจัยเชิงพื้นที่ได้ทันที
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอน</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะครุศาสตร์ (สร้างครูมืออาชีพคู่ท้องถิ่น)</span>
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยี (ศูนย์กลางอุตสาหกรรมและวิศวกรรมที่สามพร้าว)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (บริหารธุรกิจ บัญชี โลจิสติกส์)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะพยาบาลศาสตร์</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.udru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.อด.
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏอุดรธานี | สถาบันอุดมศึกษาเพื่อการพัฒนาท้องถิ่นอย่างยั่งยืน</p>
+    </footer>
+
+</body>
+</html>

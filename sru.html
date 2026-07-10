@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏสุราษฎร์ธานี - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "sru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="sru.png" alt="โลโก้ มรภ.สุราษฎร์ธานี" class="sru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏสุราษฎร์ธานี</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สร้างสรรค์ปัญญาเพื่อพัฒนาท้องถิ่น" — ศูนย์กลางแห่งโอกาสทางการศึกษาของภาคใต้ตอนบน มุ่งขับเคลื่อนนวัตกรรมการท่องเที่ยวและการบริการระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งแคมพัสหลัก</h3>
+                <p>272 หมู่ 9 ถนนชลเกษม ต.ขุนทะเล อ.เมือง จ.สุราษฎร์ธานี 84100</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> อยู่ห่างจากตัวเมืองสุราษฎร์ธานีประมาณ 10 กิโลเมตร มีรถตุ๊กตุ๊ก รถสองแถวสายตลาด-ขุนทะเล และรถเมล์ประจำทางวิ่งผ่านตลอดวัน
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานสถาบัน</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏสุราษฎร์ธานี (Suratthani Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.สฎ. / SRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot sru-blue"></span> สีน้ำเงิน และ 
+                                <span class="color-dot sru-yellow"></span> สีเหลือง
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นจันทน์กะพ้อ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ความเป็นเลิศเด่น</strong></td>
+                            <td>ธุรกิจการบินและการท่องเที่ยว, การจัดการระบบโลจิสติกส์, พยาบาลศาสตร์ และนวัตกรรมการเกษตร</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> เรียนต่อปริญญาตรี: หลักสูตรเทียบโอน ปวส. เข้าสู่รั้ว SRU</h3>
+                <p>
+                    มรภ.สุราษฎร์ธานี เปิดรับสมัครผู้สำเร็จการศึกษาระดับ **ปวส.** เข้าศึกษาต่อระดับปริญญาตรี (หลักสูตรเทียบโอนความรู้/ต่อเนื่อง) มุ่งเน้นการสร้างบัณฑิตนักปฏิบัติการพร้อมทำงานในอุตสาหกรรมภาคใต้ โดยมีอัตราค่าเล่าเรียนดังนี้:
+                </p>
+                <ul style="margin-top: 10px; padding-left: 20px; color: var(--text-dark);">
+                    <li><strong>ภาคปกติ (เรียนจันทร์-ศุกร์):</strong> อัตราค่าเล่าเรียนระบบเหมาจ่ายประมาณ <strong>9,000 - 13,000 บาท / ภาคการศึกษา</strong> (ยกเว้นกลุ่มวิชาชีพเฉพาะ)</li>
+                    <li><strong>ภาคพิเศษ (เรียนเสาร์-อาทิตย์ สำหรับวัยทำงาน):</strong> อัตราค่าเล่าเรียนระบบเหมาจ่ายประมาณ <strong>11,000 - 15,000 บาท / ภาคการศึกษา</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอนและรับสมัคร ปวส.</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (การบัญชี, คอมพิวเตอร์ธุรกิจ, การจัดการโลจิสติกส์)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์และเทคโนโลยี (เทคโนโลยีสารสนเทศ, นวัตกรรมอาหาร)</span>
+                <span><i class="fas fa-check-circle"></i> วิทยาลัยนานาชาติการท่องเที่ยว (การจัดการอุตสาหกรรมบริการและการท่องเที่ยว)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.sru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.สุราษฎร์ธานี
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏสุราษฎร์ธานี | พลังปัญญาและนวัตกรรมเพื่อการพัฒนาภาคใต้ตอนบน</p>
+    </footer>
+
+</body>
+</html>

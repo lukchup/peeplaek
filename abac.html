@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยอัสสัมชัญ (ABAC) - Assumption University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="abac.css">
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "abac";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</script>
+        <a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า abac.png ตามโครงสร้างโปรเจกต์ -->
+                <img src="abac.png" alt="โลโก้ มหาวิทยาลัยอัสสัมชัญ" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยอัสสัมชัญ</h1>
+            <h2>ASSUMPTION UNIVERSITY (ABAC)</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "Labor Omnia Vincit" (ความวิริยะอุตสาหะย่อมชนะทุกสิ่ง) — มหาวิทยาลัยนานาชาติแห่งแรกของประเทศไทย ผู้นำด้านการศึกษาระดับสากลและระบบนิเวศการเรียนรู้ทางธุรกิจที่ทันสมัย
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตสุวรรณภูมิ (วิทยาเขตหลัก)</h3>
+                <p>88 หมู่ 8 ถนนบางนา-ตราด กม. 26 ตำบลบางเสาธง อำเภอบางเสาธง จังหวัดสมุทรปราการ 10540</p>
+                <small>
+                    <i class="fas fa-car"></i> <strong>การเดินทางและจุดสังเกต:</strong> ตั้งอยู่บริเวณ กม. 26 บนถนนบางนา-ตราด เลี้ยวเข้าซอยวัดศิริเสาธง เดินทางสะดวกด้วยรถยนต์ส่วนตัวผ่านทางด่วนบูรพาวิถี หรือใช้บริการรถตู้โดยสารประจำทาง (AU Loop) ที่รับ-ส่งระหว่างวิทยาเขตหัวหมาก (รามคำแหง 24) และวิทยาเขตสุวรรณภูมิอย่างเป็นเวลา
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยอัสสัมชัญ (Assumption University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อเดิม/ชื่อสามัญ</strong></td>
+                            <td>เอแบค / ABAC (Assumption Business Administration College)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภาษาที่ใช้ในการสอน</strong></td>
+                            <td>ภาษาอังกฤษ 100% ทุกหลักสูตร (ยกเว้นคณะนิติศาสตร์ที่มีวิชากฎหมายไทย)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot au-blue"></span> สีน้ำเงิน และ 
+                                <span class="color-dot au-white"></span> สีขาว 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นอโศกเซนต์คาเบรียล</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นด้านกายภาพ</strong></td>
+                            <td>วิทยาเขตสุวรรณภูมิได้รับการออกแบบอย่างประณีตด้วยสถาปัตยกรรมแบบคลาสสิก ล้อมรอบด้วยทะเลสาบ สวนหย่อม และอาคารมหาวิหาร Cathedral of Learning ที่สูงเด่นเป็นสง่า เป็นหนึ่งในมหาวิทยาลัยที่สวยที่สุดในเอเชีย</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สิ่งอำนวยความสะดวก</strong></td>
+                            <td>มีหอพักนักศึกษาภายในแคมปัสขนาดใหญ่, ศูนย์กีฬาในร่มและกลางแจ้งระดับมาตรฐานโอลิมปิก (AU Aquatics Center, ยิมเนเซียม), และห้องสมุดที่ทันสมัยในตึกสุวรรณภูมิ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติเริ่มต้นประมาณ 60,000 - 95,000+ บาท (ขึ้นอยู่กับคณะและจำนวนหน่วยกิตที่ลงทะเบียน มีระบบทุนการศึกษาเรียนดีและทุนสนับสนุนหลากหลายรูปแบบ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-globe"></i> สภาพแวดล้อมระดับนานาชาติและความเป็นเลิศทางธุรกิจ</h3>
+                <p>
+                    ABAC ได้รับการยอมรับอย่างสูงในภาคอุตสาหกรรม โดยเฉพาะกลุ่มบริษัทข้ามชาติ (Multinational Corporations) บัณฑิตที่จบจากที่นี่จะมีความเชี่ยวชาญด้านการสื่อสารภาษาอังกฤษควบคู่กับความเข้าใจในบริบทธุรกิจระดับโลก การเรียนการสอนเน้น Case Study และการระดมสมองเพื่อแก้ปัญหาทางธุรกิจจริง
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-user-graduate"></i> โอกาสสำหรับผู้จบ ปวส. เรียนต่อ ปริญญาตรี</strong>
+                        สำหรับผู้ที่สำเร็จการศึกษาระดับ **ปวส. (โดยเฉพาะสาขาด้านบริหารธุรกิจ คอมพิวเตอร์ธุรกิจ หรือภาษาต่างประเทศ)** ABAC มีระบบเปิดรับเข้าศึกษาต่อและสามารถยื่นพิจารณา **เทียบโอนหน่วยกิต (Credit Transfer)** ได้ตามข้อกำหนดของมหาวิทยาลัย โดยจะพิจารณาจากคำอธิบายรายวิชา (Course Description) ที่ตรงกัน ซึ่งจะช่วยย่นระยะเวลาเรียนลงได้อย่างมาก ทั้งนี้ผู้เข้าเรียนจะต้องผ่านการเตรียมความพร้อมด้านภาษาอังกฤษ (Intensive English) เพื่อปรับพื้นฐานให้พร้อมสำหรับการเรียนระบบอินเตอร์ครับ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะที่โดดเด่น -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสถาบันวิชาชั้นนำ</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-chart-line"></i> MSME Business School</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (สาขายอดนิยม: การตลาด, การเงิน, การจัดการโลจิสติกส์, ธุรกิจระหว่างประเทศ) *คณะที่สร้างชื่อเสียงที่สุดของเอแบค</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop-code"></i> Vincent Mary School of Science & Tech</h4>
+                    <ul>
+                        <li>คณะวิทยาศาสตร์และเทคโนโลยี (วิทยาการคอมพิวเตอร์, เทคโนโลยีสารสนเทศ)</li>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมการบิน, วิศวกรรมคอมพิวเตอร์)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-language"></i> School of Arts & Communication</h4>
+                    <ul>
+                        <li>คณะศิลปศาสตร์ (ภาษาอังกฤษธุรกิจ, ภาษาจีนธุรกิจ, ภาษาญี่ปุ่นธุรกิจ)</li>
+                        <li>คณะนิเทศศาสตร์ (การโฆษณา, การประชาสัมพันธ์, สื่อสารการตลาดดิจิทัล)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-balance-scale"></i> School of Law & Nursing</h4>
+                    <ul>
+                        <li>คณะนิติศาสตร์ (เน้นกฎหมายธุรกิจและกฎหมายระหว่างประเทศ)</li>
+                        <li>คณะพยาบาลศาสตร์ (หลักสูตรนานาชาติ รองรับการทำงานในรพ.ชั้นนำทั่วโลก)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.au.edu" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยอัสสัมชัญ
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยอัสสัมชัญ (ABAC) | มุ่งมั่นสู่ความเป็นเลิศทางวิชาการระดับสากลและคุณธรรม</p>
+    </footer>
+</body>
+</html>

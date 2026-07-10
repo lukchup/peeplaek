@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ - HCU</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="hcu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "hcu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!DOCTYPE html>
+<html lang="th">
+<header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper" style="margin-bottom: 20px;">
+                <img src="hcu.png" alt="โลโก้ มหาวิทยาลัยหัวเฉียว" style="max-width: 120px; height: auto;">
+            </div>
+            
+            <h1>มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "เรียนรู้เพื่อรับใช้สังคม" — มหาวิทยาลัยเอกชนชั้นนำที่น้อมเกล้าฯ ถวายชื่อเพื่อเฉลิมพระเกียรติพระบาทสมเด็จพระบรมชนกาธิเบศร มหาภูมิพลอดุลยเดชมหาราช บรมนาถบพิตร
+            </p>
+        </div>
+    </header>
+<body>
+    <main class="container">
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <tbody>
+                        <tr><td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ (Huachiew Chalermprakiet University)</td></tr>
+                        <tr><td><strong>ชื่อย่อ</strong></td>
+                            <td>มฉก. / HCU</td></tr>
+                        <tr><td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>สีทอง</td></tr>
+                        <tr><td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong>
+                        </td><td>ต้นโพธิ์</td></tr>
+                        <tr><td><strong>คติพจน์</strong></td>
+                            <td>เรียนรู้เพื่อรับใช้สังคม</td></tr>
+                        <tr><td><strong>ชื่อเสียงและความเป็นเลิศ</strong></td>
+                            <td>โดดเด่นด้านวิทยาศาสตร์สุขภาพ (โดยเฉพาะการแพทย์แผนจีนแห่งแรกของไทย), พยาบาลศาสตร์, เภสัชศาสตร์ และบริหารธุรกิจ</td></tr>
+                        <tr><td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>เริ่มต้นประมาณ 25,000 - 70,000 บาท ต่อภาคการศึกษา (ขึ้นอยู่กับหลักสูตร)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-heartbeat"></i> อัตลักษณ์แห่งการเรียนรู้</h3>
+                <p>มหาวิทยาลัยหัวเฉียวฯ ให้ความสำคัญกับการสร้างคนให้เป็น "คนดีและคนเก่ง" ผ่านการปลูกฝังคุณธรรมจริยธรรมตามแนวทางของมูลนิธิป่อเต็กตึ๊ง มีศูนย์ปฏิบัติการวิชาชีพที่ได้มาตรฐานสากล โดยเฉพาะศูนย์การแพทย์แผนจีนที่ใหญ่และทันสมัยที่สุดในไทย</p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+    <h2 class="section-title"><i class="fas fa-university"></i> คณะและสาขาวิชาที่เปิดสอน</h2>
+    <div class="schools-list">
+        
+        <div class="school-card">
+            <h4><i class="fas fa-notes-medical"></i> คณะวิทยาศาสตร์สุขภาพ</h4>
+            <ul>
+                <li><strong>สาขาการแพทย์แผนจีน:</strong> (หลักสูตร 5 ปี ความร่วมมือกับมหาวิทยาลัยในจีน)</li>
+                <li><strong>สาขาพยาบาลศาสตร์:</strong> (เน้นการปฏิบัติงานจริงในศูนย์สุขภาพชั้นนำ)</li>
+                <li><strong>สาขาเภสัชศาสตร์:</strong> (การผลิตและบริบาลทางเภสัชกรรม)</li>
+                <li><strong>สาขาเทคนิคการแพทย์:</strong> (วิทยาศาสตร์การแพทย์คลินิก)</li>
+                <li><strong>สาขากายภาพบำบัด:</strong> (การฟื้นฟูสมรรถภาพ)</li>
+            </ul>
+        </div>
+
+        <div class="school-card">
+            <h4><i class="fas fa-briefcase"></i> คณะบริหารธุรกิจ</h4>
+            <ul>
+                <li><strong>สาขาการจัดการ:</strong> (การจัดการธุรกิจสมัยใหม่)</li>
+                <li><strong>สาขาการตลาด:</strong> (Digital Marketing)</li>
+                <li><strong>สาขาการเงินและการธนาคาร:</strong></li>
+                <li><strong>สาขาโลจิสติกส์และโซ่อุปทาน:</strong></li>
+            </ul>
+        </div>
+
+        <div class="school-card">
+            <h4><i class="fas fa-language"></i> คณะศิลปศาสตร์</h4>
+            <ul>
+                <li><strong>สาขาภาษาจีนธุรกิจ:</strong> (หลักสูตรเข้มข้นเพื่อการทำงาน)</li>
+                <li><strong>สาขาภาษาอังกฤษธุรกิจ:</strong></li>
+                <li><strong>สาขาภาษาญี่ปุ่นธุรกิจ:</strong></li>
+            </ul>
+        </div>
+
+        <div class="school-card">
+            <h4><i class="fas fa-hands-helping"></i> คณะสังคมสงเคราะห์ศาสตร์ฯ</h4>
+            <ul>
+                <li><strong>สาขาสังคมสงเคราะห์ศาสตร์:</strong> (เน้นการช่วยเหลือและพัฒนาสังคม)</li>
+                <li><strong>สาขาจิตวิทยา:</strong> (จิตวิทยาการปรึกษาและแนะแนว)</li>
+            </ul>
+        </div>
+
+        <div class="school-card">
+            <h4><i class="fas fa-laptop-code"></i> คณะวิทยาการจัดการและสารสนเทศ</h4>
+            <ul>
+                <li><strong>สาขาวิทยาการคอมพิวเตอร์:</strong> (Data Science / Software Dev)</li>
+                <li><strong>สาขาเทคโนโลยีสารสนเทศธุรกิจ:</strong></li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+        <div class="btn-container">
+            <a href="https://www.hcu.ac.th" target="_blank" class="btn-visit"><i class="fas fa-external-link-alt"></i> เว็บไซต์หลัก ม.หัวเฉียว</a>
+            <a href="index.html" class="btn-back"><i class="fas fa-home"></i> กลับสู่หน้าหลัก</a>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026มหาวิทยาลัยหัวเฉียวเฉลิมพระเกียรติ - HCU | เรียนรู้เพื่อรับใช้สังคม</p>
+    </footer>
+</body>
+</html>

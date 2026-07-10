@@ -1,0 +1,216 @@
+/* --- 1. Global Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    /* โทนสี เทา - แสด ของ มรภ.เชียงราย */
+    --crru-gray: #4a5568;          /* สีเทาเข้มสุขุม */
+    --crru-orange: #ff6b6b;        /* สีส้มแสดสดใสเด่นชัด */
+    --crru-orange-light: #fff0f0;  /* สีส้ม/แดงอ่อนมาก สำหรับพื้นหลังเน้นข้อความ */
+    --text-dark: #1a202c;
+    --text-muted: #718096;
+    --white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px; margin: 0 auto; padding: 0 20px;
+}
+
+/* --- 2. Hero Section --- */
+.hero-section {
+    padding: 60px 0; text-align: center;
+    background: linear-gradient(135deg, var(--crru-gray) 0%, #2d3748 100%);
+    color: var(--white);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom: 5px solid var(--crru-orange); /* เส้นขอบล่างสีแสดเน้นอัตลักษณ์ */
+}
+
+.hero-section h1 {
+    color: var(--white) !important;
+}
+
+.crru-logo { 
+    width: 135px; height: auto;
+    filter: drop-shadow(0 6px 15px rgba(255, 107, 107, 0.2));
+}
+
+h1 {
+    font-family: 'Prompt', sans-serif;
+    font-size: 2.5rem; 
+    font-weight: 600;
+    color: var(--crru-gray); 
+    margin: 20px 0 10px;
+}
+
+.divider {
+    width: 80px; height: 4px;
+    background: var(--crru-orange); /* เส้นคั่นสีส้มแสด */
+    margin: 0 auto 25px; border-radius: 2px;
+}
+
+.intro-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    font-weight: 300;
+    opacity: 0.9;
+    padding: 0 15px;
+}
+
+/* --- 3. Info Cards & Tables --- */
+.info-card {
+    background: var(--white); padding: 25px; border-radius: 24px;
+    display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    margin-bottom: 40px; border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icon-box {
+    width: 60px; height: 60px;
+    background: var(--crru-orange-light); 
+    color: #e03131; /* สีส้มอมแดงเข้มให้อ่านง่ายบนพื้นหลังอ่อน */
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px; font-size: 1.5rem;
+}
+
+.address-content h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Prompt', sans-serif;
+    color: var(--crru-gray);
+}
+
+.section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.6rem;
+    color: var(--crru-gray);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.table-responsive {
+    background: var(--white); border-radius: 20px;
+    overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
+}
+
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { 
+    background-color: var(--crru-gray); 
+    color: var(--white); 
+    text-align: left;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    border-bottom: 3px solid var(--crru-orange);
+}
+.facts-table th, .facts-table td { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; }
+.facts-table tr:last-child td { border-bottom: none; }
+
+/* Color Dots สำหรับ มรภ.เชียงราย */
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
+.color-dot.crru-gray { background: var(--crru-gray); box-shadow: 0 0 8px rgba(74, 85, 104, 0.4); }
+.color-dot.crru-orange { background: var(--crru-orange); box-shadow: 0 0 8px rgba(255, 107, 107, 0.5); }
+
+/* --- 4. Description & Schools Grid --- */
+.desc-box {
+    background: var(--white); padding: 30px; border-radius: 24px;
+    border-left: 6px solid var(--crru-orange); /* เส้นขอบข้างสีแสดเด่น */
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+}
+
+.desc-box h3 {
+    font-family: 'Prompt', sans-serif;
+    color: var(--crru-gray);
+    margin-top: 0;
+}
+
+.schools-grid {
+    margin-bottom: 40px;
+}
+.schools-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+.schools-list span {
+    background: var(--white);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+}
+.schools-list i {
+    color: var(--crru-orange); /* ไอคอนติ๊กถูกสีแสด */
+    margin-right: 8px;
+}
+
+/* --- 5. Buttons & Footer --- */
+.btn-container {
+    display: flex;          
+    justify-content: center; 
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin: 50px 0;
+    flex-wrap: wrap;
+}
+
+.btn-visit, .btn-back {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-visit {
+    background: var(--crru-gray);
+    color: var(--white);
+    box-shadow: 0 8px 20px rgba(74, 85, 104, 0.2);
+    border: 1px solid var(--crru-gray);
+}
+.btn-visit:hover {
+    background: #2d3748;
+    border-color: var(--crru-orange);
+    transform: translateY(-3px);
+}
+
+.btn-back {
+    background: var(--white);
+    color: #4a5568;
+    border: 1px solid #cbd5e1;
+}
+.btn-back:hover {
+    background: #f8fafc;
+    color: var(--crru-gray);
+    border-color: var(--crru-gray);
+    transform: translateY(-3px);
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid #e2e8f0;
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยนอร์ทกรุงเทพ (NBU) - North Bangkok University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="nbu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "nbu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="nbu.png" alt="โลโก้ มหาวิทยาลัยนอร์ทกรุงเทพ" style="max-width: 75px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยนอร์ทกรุงเทพ</h1>
+            <h2>NORTH BANGKOK UNIVERSITY</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "ด้วยวิทยาการและเทคโนโลยีที่ทันสมัย" — สถาบันอุดมศึกษาเอกชนชั้นนำที่มุ่งเน้นนวัตกรรมดิจิทัล การสร้างสรรค์ทางธุรกิจ และวิทยาศาสตร์การกีฬาระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-layer-group"></i></div>
+            <div class="address-content">
+                <h3>วิทยาเขตที่เปิดทำการ</h3>
+                <p><strong>1. วิทยาเขตสะพานใหม่:</strong> 52 ซอยพหลโยธิน 52 แขวงคลองถนน เขตสายไหม กรุงเทพฯ 10220</p>
+                <p style="margin-top: 5px;"><strong>2. วิทยาเขตรังสิต:</strong> 59 หมู่ 2 ถนนรังสิต-นครนายก (คลองสาม) ตำบลบึงยี่โถ อำเภอธัญบุรี ปทุมธานี 12130</p>
+                <small>
+                    <i class="fas fa-train"></i> <strong>การเดินทาง (สะพานใหม่):</strong> เดินทางสะดวกสุด ๆ ด้วยรถไฟฟ้า **BTS สายสีเขียว ลงสถานีสะพานใหม่** (ทางออก 1) แล้วต่อรถจักรยานยนต์รับจ้างหรือรถซูบารุเข้าซอยพหลโยธิน 52 เพียง 5 นาทีก็ถึงหน้ามหาวิทยาลัยครับ
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-database"></i> ข้อมูลพื้นฐานสถาบัน</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยนอร์ทกรุงเทพ (North Bangkok University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มนบ. / NBU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นเฉพาะทาง</strong></td>
+                            <td>โดดเด่นมากในเรื่องการนำนวัตกรรมไอทีมาปรับใช้กับการเรียนการสอน มีศูนย์ภาษาและคอมพิวเตอร์ที่ทันสมัย และมีชื่อเสียงระดับประเทศในสาขาวิทยาศาสตร์การกีฬาและการจัดการธุรกิจดิจิทัล</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot nbu-blue"></span> สีน้ำเงิน และ 
+                                <span class="color-dot nbu-white"></span> สีขาว (สะท้อนถึงความเก่งกาจทางวิทยาการ ปัญญา และความสะอาดบริสุทธิ์ของคุณธรรม)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นไทร (สื่อถึงความยั่งยืน ความร่มเย็นเป็นสุข และความเป็นปึกแผ่นของสถาบัน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างพื้นฐาน</strong></td>
+                            <td>มีห้องปฏิบัติการ iMac Studio, ห้องส่งและสตูดิโอดิจิทัลมีเดีย, ศูนย์ฝึกปฏิบัติการธุรกิจการบิน, และศูนย์กีฬาในร่มขนาดใหญ่ (NBU Sport Complex) ที่รองรับการแข่งขันทัวร์นาเมนต์ระดับชาติ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเทอมโดยประมาณ</strong></td>
+                            <td>เริ่มต้นที่ประมาณ 25,000 - 38,000 บาทต่อภาคเรียน (ขึ้นอยู่กับสาขาวิชาและภาควิทยาเขต) มีทุนการศึกษาสำหรับนักกิจกรรม นักกีฬา และสิทธิ์การกู้ยืม กยศ. ครบถ้วน</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-id-card-alt"></i> โครงสร้างการเทียบโอนวุฒิ ปวส. เข้าศึกษาต่อปริญญาตรี</h3>
+                <p>
+                    NBU ออกแบบระบบการเรียนการสอนเพื่อเปิดรับศิษย์เก่าสายวิชาชีพ (ปวส.) เข้ามาต่อยอดวุฒิการศึกษาปริญญาตรีอย่างเป็นระบบและเรียนจบได้ไว
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-bolt"></i> หลักสูตรปริญญาตรีต่อเนื่องและเทียบโอน</strong>
+                        เปิดรับผู้จบ **ปวส. ทุกสาขา** เข้าเทียบโอนหน่วยกิตใน **คณะบริหารธุรกิจ** (คอมพิวเตอร์ธุรกิจ, การตลาดดิจิทัล, บัญชี, การจัดการโลจิสติกส์) และ **คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล** โดยสามารถเลือกเรียนได้ทั้งภาคปกติ หรือ **ภาคพิเศษ (เรียนนอกเวลาทำงาน/เสาร์-อาทิตย์)** มีการเทียบโอนรายวิชาพื้นฐานและวิชาชีพให้ตามเกณฑ์กระทรวง ทำให้สามารถเก็บรายวิชาที่เหลือและคว้าปริญญาตรีมาครองได้ภายในระยะเวลาประมาณ 2 ปีครับ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-th-large"></i> คณะและกลุ่มหลักสูตรเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop"></i> คณะเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล</h4>
+                    <ul>
+                        <li>สาขาวิทยาการคอมพิวเตอร์ (เน้น AI และ Data Science)</li>
+                        <li>สาขาเทคโนโลยีสารสนเทศและนวัตกรรมดิจิทัล</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-briefcase"></i> คณะบริหารธุรกิจ</h4>
+                    <ul>
+                        <li>สาขาการจัดการธุรกิจดิจิทัลและแชทบอท</li>
+                        <li>สาขาการจัดการโลจิสติกส์และโซ่อุปทาน</li>
+                        <li>สาขาการบัญชี / การตลาดเชิงสร้างสรรค์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-photo-film"></i> คณะนิเทศศาสตร์</h4>
+                    <ul>
+                        <li>สาขาดิจิทัลมีเดียและภาพยนตร์</li>
+                        <li>สาขาการสื่อสารการตลาดและการสร้างแบรนด์อินฟลูเอนเซอร์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-running"></i> คณะวิทยาศาสตร์การกีฬา / ศิลปศาสตร์</h4>
+                    <ul>
+                        <li>สาขาการจัดการกีฬาและนันทนาการ</li>
+                        <li>คณะศิลปะศาสตร์ (ภาษาอังกฤษธุรกิจ, ภาษาจีนธุรกิจ)</li>
+                        <li>คณะนิติศาสตร์ / คณะรัฐศาสตร์</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.northbkk.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยนอร์ทกรุงเทพ
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยนอร์ทกรุงเทพ (NBU) | พัฒนาบุคลากรด้วยวิทยาการและนวัตกรรมสู่มาตรฐานสากล</p>
+    </footer>
+
+</body>
+</html>

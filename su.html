@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยสยาม - Siam University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="su.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "su";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า siam.png ตามมาตรฐานโครงสร้างโปรเจกต์ -->
+                <img src="su.png" alt="โลโก้ มหาวิทยาลัยสยาม" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยสยาม</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "Sustainability & Professionalism" — มุ่งสร้างปัญญาผ่านการเรียนรู้ลงมือปฏิบัติจริง เป็นผู้นำมหาวิทยาลัยยั่งยืนในระดับสากล และรองรับการเติบโตของเศรษฐกิจและเทคโนโลยีอนาคต
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตหลัก (ถนนเพชรเกษม)</h3>
+                <p>235 ถนนเพชรเกษม แขวงบางหว้า เขตภาษีเจริญ กรุงเทพมหานคร 10160</p>
+                <small>
+                    <i class="fas fa-subway"></i> <strong>การเดินทางสะดวกสบายสูงสุด:</strong> ตัวมหาวิทยาลัยตั้งอยู่ติดริมถนนใหญ่เพชรเกษม เดินทางง่ายมากด้วยรถไฟฟ้า โดยอยู่ใกล้กับ **สถานีบางหว้า (Interchange Station)** ซึ่งเป็นจุดเชื่อมต่อของทั้งรถไฟฟ้า BTS สายสีสีลม และรถไฟฟ้า MRT สายสีน้ำเงิน นักศึกษาสามารถเดินเท้าเข้าสถาบันได้อย่างปลอดภัย หรือเลือกเดินทางด้วยรถประจำทางสาย 7, 80, 84, 91, 101, 147 และ 509
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยสยาม (Siam University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>ม.สยาม / SU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประวัติความเป็นมา</strong></td>
+                            <td>ก่อตั้งขึ้นในปี พ.ศ. 2516 โดยเริ่มต้นจากการเป็น "โรงเรียนเทคโนโลยีสยาม" ก่อนจะพัฒนาเป็นวิทยาลัยและยกฐานะขึ้นเป็นมหาวิทยาลัยเอกชนที่ครบวงจร มีความเชี่ยวชาญด้านวิศวกรรมศาสตร์และเทคโนโลยีมายาวนาน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot su-yellow"></span> สีเหลือง และ 
+                                <span class="color-dot su-coppers"></span> สีทองแดง (สีเหลืองสะท้อนถึงปัญญาและคุณธรรม สีทองแดงสะท้อนถึงอุตสาหกรรม ความแข็งแกร่ง และวิทยาศาสตร์เทคโนโลยี)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นราชพฤกษ์ (ต้นคูน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ความโดดเด่นเฉพาะตัว</strong></td>
+                            <td>เป็นมหาวิทยาลัยเอกชนแห่งแรกๆ ของไทยที่เปิดสอนคณะแพทยศาสตร์ คณะพยาบาลศาสตร์ และคณะเภสัชศาสตร์ รวมทั้งได้รับการจัดอันดับให้เป็นมหาวิทยาลัยสีเขียวยั่งยืน (UI GreenMetric World University Rankings) ในอันดับต้นๆ ของประเทศ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โครงสร้างระบบการเรียน</strong></td>
+                            <td>ระบบ 2 ภาคการศึกษาหลัก พร้อมระบบสนับสนุนไอทีและเครือข่ายสมาคมศิษย์เก่าที่เข้มแข็งในภาคธุรกิจอุตสาหกรรม ย่านฝั่งธนบุรีและระดับประเทศ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติสำหรับกลุ่มคณะทั่วไปเริ่มต้นประมาณ 38,000 - 55,000 บาท (สำหรับกลุ่มวิทยาศาสตร์สุขภาพจะมีโครงสร้างค่าใช้จ่ายเฉพาะ มีทุน กยศ. และกองทุนกู้ยืมรองรับ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-seedling"></i> ความยั่งยืนและวิชาชีพที่มั่นคง (Sustainable Professionalism)</h3>
+                <p>
+                    ม.สยาม ไม่เพียงแต่มุ่งเน้นความเป็นเลิศทางวิชาการ แต่ยังปลูกฝังแนวคิดการพัฒนาที่ยั่งยืน (SDGs) เข้าไปในทุกหลักสูตร ทำให้นักศึกษามีทักษะการแก้ปัญหาในโลกแห่งความเป็นจริง ได้ใช้อุปกรณ์ห้องปฏิบัติการที่ทันสมัย เชื่อมโยงเครือข่ายภาคอุตสาหกรรมเพื่อการฝึกงานและสร้างโอกาสได้งานทำทันทีหลังสำเร็จการศึกษา
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-user-graduate"></i> โอกาสพิเศษสำหรับผู้จบ ปวส. เรียนต่อ</strong>
+                        ม.สยาม ให้ความสำคัญกับผู้จบสายอาชีพเป็นอย่างยิ่ง มีหลักสูตรต่อเนื่องและหลักสูตรเทียบโอนปริญญาตรีสำหรับผู้จบ ปวส. โดยเฉพาะใน **คณะวิศวกรรมศาสตร์ คณะเทคโนโลยีสารสนเทศ และคณะบริหารธุรกิจ** โดยสามารถเทียบโอนหน่วยกิตได้มาก ทำให้เรียนต่ออีกเพียงประมาณ 2 ปี - 2 ปีครึ่ง ก็สามารถคว้าใบปริญญาตรีไปอัปเกรดสายงานได้ทันที
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะและกลุ่มสาขาวิชาอย่างละเอียด -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและกลุ่มสาขาวิชาที่เปิดสอน</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-cog"></i> กลุ่มวิศวกรรมศาสตร์และเทคโนโลยี</h4>
+                    <ul>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมไฟฟ้า, ยานยนต์, โยธา, คอมพิวเตอร์)</li>
+                        <li>คณะเทคโนโลยีสารสนเทศ (เทคโนโลยีสารสนเทศ, วิทยาการคอมพิวเตอร์)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-stethoscopes"></i> กลุ่มวิทยาศาสตร์สุขภาพ</h4>
+                    <ul>
+                        <li>คณะแพทยศาสตร์ / คณะพยาบาลศาสตร์</li>
+                        <li>คณะเภสัชศาสตร์ / คณะเทคนิคการแพทย์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-chart-line"></i> กลุ่มบริหารธุรกิจและสังคมศาสตร์</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การตลาด, การเงิน, การจัดการโลจิสติกส์)</li>
+                        <li>คณะบัญชี / คณะนิติศาสตร์ / คณะนิเทศศาสตร์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-passport"></i> กลุ่มนานาชาติและการท่องเที่ยว</h4>
+                    <ul>
+                        <li>คณะอุตสาหกรรมการท่องเที่ยวและการบริการ</li>
+                        <li>วิทยาลัยนานาชาติ (International Program)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://siam.edu" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยสยาม
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยสยาม | มหาวิทยาลัยแห่งความยั่งยืนและการสร้างมืออาชีพสู่อนาคต</p>
+    </footer>
+
+</body>
+</html>

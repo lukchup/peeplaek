@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏพิบูลสงคราม - ข้อมูลสถาบันและหลักสูตรเทียบโอน ปวส.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="psru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "psru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <img src="psru.png" alt="โลโก้ มรภ.พิบูลสงคราม" style="width: 100px; height: auto;">
+            <h1>มหาวิทยาลัยราชภัฏพิบูลสงคราม</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "ผลิตบัณฑิตนักปฏิบัติการ มุ่งเน้นนวัตกรรม พัฒนาท้องถิ่นสู่สากล" — มหาวิทยาลัยรัฐชั้นนำของจังหวัดพิษณุโลก เปิดรับผู้สำเร็จการศึกษา ปวส. เข้าเรียนต่อหลักสูตรปริญญาตรีแบบเทียบโอนประสบการณ์และรายวิชา มุ่งเน้นการใช้ห้องปฏิบัติการขั้นสูงและเทคโนโลยีอุตสาหกรรมที่ตอบโจทย์เศรษฐกิจยุคดิจิทัล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-map-marked-alt"></i> พื้นที่การจัดการศึกษาหลัก</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <section class="info-card" style="margin: 0; height: 100%;">
+                <div class="icon-box"><i class="fas fa-water"></i></div>
+                <div class="address-content">
+                    <h3>ส่วนทะเลแก้ว (วิทยาเขตหลัก)</h3>
+                    <p>156 หมู่ 5 ต.พลายชุมพล อ.เมือง จ.พิษณุโลก 65000</p>
+                    <small style="color: #555; display: block; margin-top: 8px;">
+                        <i class="fas fa-car-side"></i> <strong>การเดินทางและทำเล:</strong> ตั้งอยู่ริมถนนเลี่ยงเมืองพิษณุโลก (พลายชุมพล) เป็นศูนย์กลางการเรียนของคณะเทคโนโลยีอุตสาหกรรม, คณะวิทยาศาสตร์ และคณะวิทยาการจัดการ มีหอพักขนาดใหญ่และสิ่งอำนวยความสะดวกครบครัน
+                    </small>
+                </div>
+            </section>
+            <section class="info-card" style="margin: 0; height: 100%;">
+                <div class="icon-box"><i class="fas fa-gavel"></i></div>
+                <div class="address-content">
+                    <h3>ส่วนวังจันทน์ (ในเมือง)</h3>
+                    <p>66 ถนนวังจันทน์ ต.ในเมือง อ.เมือง จ.พิษณุโลก 65000</p>
+                    <small style="color: #555; display: block; margin-top: 8px;">
+                        <i class="fas fa-motorcycle"></i> <strong>การเดินทางและทำเล:</strong> ตั้งอยู่ใจกลางเมืองริมแม่น้ำน่าน ใกล้ศาลสมเด็จพระนเรศวรมหาราช ปัจจุบันเน้นจัดการศึกษาหลักสูตรระยะสั้น และบริการวิชาการแก่ชุมชน
+                    </small>
+                </div>
+            </section>
+        </div>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr><th>หัวข้อสำคัญ</th><th>รายละเอียดเชิงลึก</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>ชื่อย่อสถาบัน</strong></td><td>มรภ.พส. / PSRU (Pibulsongkram Rajabhat University)</td></tr>
+                        <tr><td><strong>สีประจำมหาวิทยาลัย</strong></td><td><span class="color-dot psru-green"></span> สีเขียว - <span class="color-dot psru-yellow"></span> สีเหลือง (Green & Yellow)</td></tr>
+                        <tr><td><strong>ดอกไม้ประจำสถาบัน</strong></td><td>ดอกแก้ว</td></tr>
+                        <tr><td><strong>ระบบการรับวุฒิ ปวส.</strong></td><td>เปิดรับสมัครทั้ง <strong>ภาคปกติ (เรียนจันทร์-ศุกร์)</strong> และ <strong>ภาคพิเศษ เสาร์-อาทิตย์ (โครงการจัดการศึกษาเพื่อพัฒนาบุคลากรท้องถิ่น)</strong> สำหรับคนทำงาน</td></tr>
+                        <tr><td><strong>ระยะเวลาศึกษา</strong></td><td>ประมาณ 2 ปีต่อเนื่อง (ขึ้นอยู่กับการเทียบโอนรายวิชาสะสมเดิมจาก ปวส.)</td></tr>
+                        <tr><td><strong>ค่าธรรมเนียมการศึกษา</strong></td><td>ประมาณ 9,500 - 13,000 บาท ต่อภาคการศึกษา (จัดเก็บในรูปแบบเหมาจ่ายคงที่)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-star"></i> จุดเด่นและสิทธิประโยชน์ในการเทียบโอนที่ มรภ.พิบูลสงคราม</h3>
+                <p>
+                    มรภ.พิบูลสงคราม โดดเด่นอย่างมากในเขตภาคเหนือตอนล่าง โดยเฉพาะด้าน **วิศวกรรมและการจัดการเทคโนโลยีอุตสาหกรรม** มีการจัดทำข้อตกลงร่วมกับวิทยาลัยเทคนิคในภาคเหนือเพื่อให้การเทียบโอนหน่วยกิตจากวุฒิ ปวส. ทำได้สูงสุด ทำให้ไม่ต้องเรียนซ้ำซ้อนในวิชาพื้นฐาน นอกจากนี้สำหรับผู้เลือกเรียนภาคพิเศษ (เสาร์-อาทิตย์) ทางสถาบันยังมีระบบสนับสนุนการเรียนออนไลน์ควบคู่กับการปฏิบัติตามมาตรฐานงานจริงอีกด้วย
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสาขาวิชาที่เปิดรับหลักสูตรเทียบโอน ปวส.</h2>
+            
+            <h4 style="margin: 15px 0 5px 0; color: var(--psru-green-dark);"><i class="fas fa-cogs"></i> 1. คณะเทคโนโลยีอุตสาหกรรม</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาการจัดการอุตสาหกรรม (ทล.บ. ต่อเนื่อง 2 ปี)</span>
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาเทคโนโลยีไฟฟ้าและพลังงาน (ทล.บ.)</span>
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาเทคโนโลยีวิศวกรรมการผลิตและยานยนต์</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--psru-green-dark);"><i class="fas fa-chart-line"></i> 2. คณะวิทยาการจัดการ</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาการบัญชี (บช.บ.) - เหมาะสำหรับผู้จบ ปวส. สายบัญชีโดยตรง</span>
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาบริหารธุรกิจ (การจัดการธุรกิจดิจิทัล, การตลาดและนวัตกรรมการค้า)</span>
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาการจัดการโลจิสติกส์และโซ่อุปทาน</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--psru-green-dark);"><i class="fas fa-laptop-code"></i> 3. คณะวิทยาศาสตร์และเทคโนโลยี</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาเทคโนโลยีสารสนเทศและวิทยาการข้อมูล (วท.บ.)</span>
+                <span><i class="fas fa-check-circle"></i> สาขาวิชาคอมพิวเตอร์และธุรกิจดิจิทัล</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.psru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เข้าสู่เว็บไซต์หลัก มรภ.พิบูลสงคราม
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏพิบูลสงคราม | ระบบฐานข้อมูลสถาบันการศึกษาเพื่อการรับเข้า ปวส. เทียบโอน</p>
+    </footer>
+</body>
+</html>

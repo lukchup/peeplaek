@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยพายัพ (PYU) - Payap University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="pyu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "pyu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="pyu.png" alt="โลโก้ มหาวิทยาลัยพายัพ" style="max-width: 75px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยพายัพ</h1>
+            <h2>PAYAP UNIVERSITY</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สัจจะ - บริการ" — สถาบันอุดมศึกษาเอกชนแห่งแรกของประเทศไทย มุ่งมั่นพัฒนาวิชาการและเทคโนโลยี ควบคู่ไปกับการบริการสังคมในระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ข้อมูลสถานที่ตั้งและวิทยาเขต -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marked-alt"></i></div>
+            <div class="address-content">
+                <h3>สถานที่ตั้งและวิทยาเขต</h3>
+                <p><strong>วิทยาเขตแม่คาว (หลัก):</strong> ซุปเปอร์ไฮเวย์ เชียงใหม่-ลำปาง อำเภอเมือง จังหวัดเชียงใหม่ (เยื้องเซ็นทรัล เฟสติวัล เชียงใหม่)</p>
+                <p style="margin-top: 5px;"><strong>วิทยาเขตแก้วนวรัฐ:</strong> ถนนแก้วนวรัฐ อำเภอเมือง จังหวัดเชียงใหม่ (บริเวณข้างโรงพยาบาลแมคคอร์มิค รองรับคณะพยาบาลศาสตร์และวิทยาลัยดุริยศิลป์)</p>
+                <small>
+                    <i class="fas fa-location-arrow"></i> <strong>การเดินทาง:</strong> เดินทางสะดวกสบายติดถนนสายหลักของเชียงใหม่ มีรถสาธารณะผ่านสม่ำเสมอ บรรยากาศร่มรื่น สวยงาม และผสมผสานกลิ่นอายวัฒนธรรมล้านนาได้อย่างลงตัว
+                </small>
+            </div>
+        </section>
+
+        <!-- ตารางข้อมูลสำคัญ -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานสถาบัน</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยพายัพ (Payap University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มพย. / PYU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นเฉพาะทาง</strong></td>
+                            <td>เป็นมหาวิทยาลัยเอกชนแห่งแรกของไทย โดดเด่นด้านคณะพยาบาลศาสตร์ที่มีประวัติยาวนาน คณะนิติศาสตร์ คณะบัญชีและการจัดการ และหลักสูตรนานาชาติที่มีนักศึกษาต่างชาติหลากหลาย</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot pyu-blue"></span> สีฟ้าคราม (ความเที่ยงธรรมและความสัจจริง) และ 
+                                <span class="color-dot pyu-white"></span> สีขาว (ความบริสุทธิ์)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td><strong>ต้นบุนนาค (หรือดอกบุนนาค) </strong> ดอกมีสีขาวบริสุทธิ์และมีกลิ่นหอม ซึ่งหมายถึงคุณงามความดีและความสะอาดหมดจด</td>
+                        </tr>
+                        <tr>
+                            <td><strong>บรรยากาศและการเรียน</strong></td>
+                            <td>เรียนท่ามกลางธรรมชาติและสิ่งแวดล้อมที่เอื้อต่อการเรียนรู้ มีศูนย์อาหาร ห้องสมุดสากล และสิ่งอำนวยความสะดวกครบครัน ได้ฝึกฝนทักษะภาษากับเจ้าของภาษาโดยตรง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเทอมโดยประมาณ</strong></td>
+                            <td>เริ่มต้นที่ประมาณ 30,000 - 45,000 บาทต่อเทอม (ขึ้นอยู่กับสาขาวิชา คณะพยาบาลและหลักสูตรนานาชาติจะสูงกว่าปกติ) สามารถยื่นกู้ กยศ. ได้</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- สำหรับนักศึกษา ปวส. เทียบโอน -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-user-graduate"></i> โอกาสการเทียบโอนวุฒิ ปวส. เข้าศึกษาต่อ</h3>
+                <p>
+                    มหาวิทยาลัยพายัพยินดีต้อนรับผู้สำเร็จการศึกษาในระดับ ปวส. เพื่อเข้าศึกษาต่อในระดับปริญญาตรีแบบเทียบโอนหน่วยกิตอย่างเป็นระบบ
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-exchange-alt"></i> การเทียบโอนเข้าคณะบริหารธุรกิจและคอมพิวเตอร์</strong>
+                        เปิดรับผู้จบ **ปวส. สาขาคอมพิวเตอร์ธุรกิจ เทคโนโลยีดิจิทัล การบัญชี และการตลาด** สามารถนำหน่วยกิตมาเทียบโอนเพื่อศึกษาต่อใน คณะบริหารธุรกิจ หรือ คณะบัญชี การเงินและการตลาด เพื่อสำเร็จการศึกษาปริญญาตรีได้ภายในเวลาประมาณ 1.5 - 2 ปี (มีทั้งแผนภาคปกติและแผนที่เอื้อต่อคนทำงาน)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- โครงสร้างคณะที่เปิดสอน -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและวิทยาลัยเด่น</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-heartbeat"></i> คณะพยาบาลศาสตร์แมคคอร์มิค</h4>
+                    <ul>
+                        <li>หลักสูตรพยาบาลศาสตรบัณฑิต (สถาบันผลิตพยาบาลเอกชนแห่งแรกที่มีชื่อเสียงระดับประเทศ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-briefcase"></i> คณะบริหารธุรกิจและบัญชี</h4>
+                    <ul>
+                        <li>สาขาวิชาคอมพิวเตอร์ธุรกิจและเทคโนโลยีดิจิทัล</li>
+                        <li>สาขาวิชาการบัญชี (มุ่งสู่นักบัญชีและผู้ตรวจสอบระดับสากล)</li>
+                        <li>สาขาวิชาการจัดการและการตลาดดิจิทัล</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-gavel"></i> คณะนิติศาสตร์และสังคมศาสตร์</h4>
+                    <ul>
+                        <li>หลักสูตรนิติศาสตรบัณฑิต</li>
+                        <li>สาขาวิชารัฐประศาสนศาสตร์</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-music"></i> วิทยาลัยดุริยศิลป์ / มนุษยศาสตร์</h4>
+                    <ul>
+                        <li>วิทยาลัยดุริยศิลป์ (โดดเด่นมากในสายดนตรีเชิงวิชาชีพ)</li>
+                        <li>คณะมนุษยศาสตร์และนิเทศศาสตร์ (ภาษาอังกฤษ/ภาษาจีน)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.payap.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยพายัพ
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยพายัพ (PYU) | สัจจะ - บริการ พัฒนาปัญญาเพื่อสังคม</p>
+    </footer>
+
+</body>
+</html>

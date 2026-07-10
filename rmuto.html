@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยเทคโนโลยีราชมงคลตะวันออก - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="rmuto.css"> <!-- แนะนำให้เปลี่ยนชื่อไฟล์ CSS ให้ตรงกัน --> 
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "rmuto";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="rmuto.png" alt="โลโก้ มทร.ตะวันออก" class="rmuto-logo">
+            </div>
+            <h1>มหาวิทยาลัยเทคโนโลยีราชมงคลตะวันออก</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยเทคโนโลยีเชิงสร้างสรรค์ นวัตกรรมแห่งภาคตะวันออก" — สถาบันการศึกษาที่มุ่งเน้นการผลิตบัณฑิตนักปฏิบัติที่มีทักษะวิชาชีพชั้นสูง รองรับการพัฒนาเขตเศรษฐกิจพิเศษภาคตะวันออก (EEC)
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 30px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งสำนักงานอธิการบดี (เขตพื้นที่บางพระ)</h3>
+                <p>43 หมู่ 6 ต.บางพระ อ.ศรีราชา จ.ชลบุรี 20110</p>
+                <small style="color: #64748b; display: block; margin-top: 8px;">
+                    <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> เดินทางสะดวกด้วยรถโดยสารสาธารณะบนถนนสุขุมวิท สามารถเชื่อมต่อเข้าสู่ตัวอำเภอศรีราชาและพัทยาได้อย่างรวดเร็ว
+                </small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานสถาบัน</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยเทคโนโลยีราชมงคลตะวันออก (Rajamangala University of Technology Tawan-ok)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มทร.ตะวันออก / RMUTO</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำสถาบัน</strong></td>
+                            <td>
+                                <span class="color-dot" style="background-color: #004a99;"></span> สีน้ำเงิน - ขาว
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นสุพรรณิการ์</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ความเป็นเลิศเด่น</strong></td>
+                            <td>เกษตรศาสตร์, วิศวกรรมศาสตร์, บริหารธุรกิจ, และเทคโนโลยีอุตสาหกรรม</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> ประตูสู่ความสำเร็จ: หลักสูตรเทียบโอน / ต่อเนื่อง ปวส. ที่ RMUTO</h3>
+                <p>
+                    มทร.ตะวันออก เปิดรับผู้สำเร็จการศึกษาระดับ **ปวส.** เข้าศึกษาต่อในหลักสูตรปริญญาตรีที่เน้นทักษะวิชาชีพ (Hands-on) รองรับอุตสาหกรรมในพื้นที่ EEC โดยแบ่งโครงสร้างค่าเทอมโดยประมาณดังนี้:
+                </p>
+                <ul style="margin-top: 10px; padding-left: 20px; color: var(--text-dark);">
+                    <li><strong>ภาคปกติ:</strong> อัตราค่าเล่าเรียนโดยเฉลี่ย <strong>11,000 - 16,000 บาท / ภาคการศึกษา</strong></li>
+                    <li><strong>ภาคพิเศษ:</strong> อัตราค่าเล่าเรียนโดยเฉลี่ย <strong>15,000 - 22,000 บาท / ภาคการศึกษา</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะเด่นที่เปิดสอน</h2>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิศวกรรมศาสตร์และสถาปัตยกรรมศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะบริหารธุรกิจและเทคโนโลยีสารสนเทศ</span>
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีสังคม</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="https://www.rmuto.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มทร.ตะวันออก
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยเทคโนโลยีราชมงคลตะวันออก | นวัตกรรมนำทาง สร้างสรรค์บัณฑิตนักปฏิบัติ</p>
+    </footer>
+
+</body>
+</html>

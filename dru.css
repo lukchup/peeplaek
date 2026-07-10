@@ -1,0 +1,217 @@
+/* --- 1. Global Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    /* โทนสี เหลือง - ฟ้า ของ มรภ.ธนบุรี (แก้ไขถูกต้อง) */
+    --dru-yellow: #f1b51c;        /* สีเหลืองทองธนบุรี */
+    --dru-blue: #007bc3;          /* สีฟ้าครามธนบุรี */
+    --dru-blue-dark: #004b82;     /* สีน้ำเงินเข้ม สำหรับพื้นหลังเน้นข้อความ */
+    --dru-yellow-light: #fffbea;  /* สีเหลืองอ่อนมาก สำหรับพื้นหลังเน้นข้อความ */
+    --text-dark: #1f2937;
+    --text-muted: #4b5563;
+    --white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #fdfbf7 0%, #ffffff 100%);
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px; margin: 0 auto; padding: 0 20px;
+}
+
+/* --- 2. Hero Section --- */
+.hero-section {
+    padding: 60px 0; text-align: center;
+    background: linear-gradient(135deg, var(--dru-blue-dark) 0%, var(--dru-blue) 100%);
+    color: var(--white);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom: 6px solid var(--dru-yellow); /* เส้นขอบล่างสีเหลืองทองเน้นอัตลักษณ์เด่นชัด */
+}
+
+.hero-section h1 {
+    color: var(--white) !important;
+}
+
+.dru-logo { 
+    width: 100px; height: auto;
+    filter: drop-shadow(0 6px 15px rgba(241, 181, 28, 0.4));
+}
+
+h1 {
+    font-family: 'Prompt', sans-serif;
+    font-size: 2.5rem; 
+    font-weight: 600;
+    color: var(--dru-blue-dark); 
+    margin: 20px 0 10px;
+}
+
+.divider {
+    width: 80px; height: 4px;
+    background: var(--dru-yellow); /* เส้นคั่นสีเหลืองทอง */
+    margin: 0 auto 25px; border-radius: 2px;
+}
+
+.intro-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    font-weight: 300;
+    opacity: 0.9;
+    padding: 0 15px;
+}
+
+/* --- 3. Info Cards & Tables --- */
+.info-card {
+    background: var(--white); padding: 25px; border-radius: 24px;
+    display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    margin-bottom: 35px; border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icon-box {
+    width: 60px; height: 60px;
+    background: var(--dru-yellow-light); 
+    color: var(--dru-yellow); 
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px; font-size: 1.5rem;
+}
+
+.address-content h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Prompt', sans-serif;
+    color: var(--dru-blue-dark);
+}
+
+.section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.6rem;
+    color: var(--dru-blue-dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--dru-yellow); /* เส้นใต้หัวข้อสีเหลืองทอง */
+    padding-bottom: 8px;
+}
+
+.table-responsive {
+    background: var(--white); border-radius: 20px;
+    overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    margin-bottom: 40px;
+    border: 1px solid #e5e7eb;
+}
+
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { 
+    background-color: var(--dru-blue-dark); 
+    color: var(--white); 
+    text-align: left;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    border-bottom: 3px solid var(--dru-yellow);
+}
+.facts-table th, .facts-table td { padding: 18px 25px; border-bottom: 1px solid #f3f4f6; }
+.facts-table tr:last-child td { border-bottom: none; }
+
+/* Color Dots สำหรับ มรภ.ธนบุรี */
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
+.color-dot.dru-yellow { background: var(--dru-yellow); box-shadow: 0 0 8px rgba(241, 181, 28, 0.5); }
+.color-dot.dru-blue { background: var(--dru-blue); box-shadow: 0 0 8px rgba(0, 123, 195, 0.4); }
+
+/* --- 4. Description & Schools Grid --- */
+.desc-box {
+    background: var(--white); padding: 30px; border-radius: 24px;
+    border-left: 6px solid var(--dru-yellow); /* เส้นขอบข้างสีเหลืองทองเด่น */
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+}
+
+.desc-box h3 {
+    font-family: 'Prompt', sans-serif;
+    color: var(--dru-blue-dark);
+    margin-top: 0;
+}
+
+.schools-grid {
+    margin-bottom: 40px;
+}
+.schools-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+.schools-list span {
+    background: var(--white);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+}
+.schools-list i {
+    color: var(--dru-blue); /* ไอคอนติ๊กถูกสีฟ้า */
+    margin-right: 8px;
+}
+
+/* --- 5. Buttons & Footer --- */
+.btn-container {
+    display: flex;          
+    justify-content: center; 
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin: 50px 0;
+    flex-wrap: wrap;
+}
+
+.btn-visit, .btn-back {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-visit {
+    background: var(--dru-blue-dark);
+    color: var(--white);
+    box-shadow: 0 8px 20px rgba(0, 75, 130, 0.2);
+    border: 1px solid var(--dru-blue-dark);
+}
+.btn-visit:hover {
+    background: var(--dru-blue);
+    border-color: var(--dru-yellow);
+    transform: translateY(-3px);
+}
+
+.btn-back {
+    background: var(--white);
+    color: #4b5563;
+    border: 1px solid #cbd5e1;
+}
+.btn-back:hover {
+    background: #f9fafb;
+    color: var(--dru-blue-dark);
+    border-color: var(--dru-blue);
+    transform: translateY(-3px);
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid #e5e7eb;
+}

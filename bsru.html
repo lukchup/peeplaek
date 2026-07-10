@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏบ้านสมเด็จเจ้าพระยา - ข้อมูลสถาบัน</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="bsru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "bsru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="bsru.png" alt="โลโก้ มรภ.บ้านสมเด็จเจ้าพระยา" class="bsru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏบ้านสมเด็จเจ้าพระยา</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สถาบันแห่งความสำเร็จ คลังปัญญาแห่งฝั่งธนบุรี มุ่งสร้างบัณฑิตคิดเป็น ทำเป็น เน้นคุณธรรม" — สถาบันอุดมศึกษาที่มีชื่อเสียงยาวนาน ตั้งอยู่ใจกลางย่านธนบุรี โดดเด่นทั้งด้านครุศาสตร์ ดนตรี ศิลปะ และเทคโนโลยี มุ่งมั่นเปิดโอกาสทางการศึกษาให้ผู้จบ ปวส. เทียบโอนเรียนต่อปริญญาตรีอย่างไร้รอยต่อ
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-map-marked-alt"></i> ที่ตั้งและพื้นที่จัดการศึกษา</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr; margin-bottom: 50px;">
+            <section class="info-card address-section" style="margin: 0;">
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="address-content">
+                    <h3>วิทยาเขตหลัก (ถนนอิสรภาพ เขตธนบุรี)</h3>
+                    <p>1061 ซอยอิสรภาพ 15 ถนนอิสรภาพ แขวงหิรัญรูจี เขตธนบุรี กรุงเทพมหานคร 10600</p>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        <i class="fas fa-subway"></i> <strong>การเดินทาง:</strong> เดินทางสะดวกสบายด้วยรถไฟฟ้า **MRT สายสีน้ำเงิน (สถานีอิสรภาพ)** ออกทางออกที่ 2 แล้วต่อรถประจำทางหรือเดินต่อได้ไม่ไกล หรือเชื่อมต่อจาก **BTS สถานีวงเวียนใหญ่** มีรถประจำทางสาย 40, 56, 149 วิ่งผ่านหน้าซอยสถาบันตลอดวัน
+                    </small>
+                </div>
+            </section>
+        </div>
+
+        <section class="facts-section" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏบ้านสมเด็จเจ้าพระยา (Bansomdejchaopraya Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.บส. / BSRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สมญานามสถาบัน</strong></td>
+                            <td>"สถาบันสัญลักษณ์แห่งสายใยม่วง-ขาว และคลังปัญญาแห่งฝั่งธนฯ"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot bsru-purple"></span> สีม่วง - <span class="color-dot bsru-white"></span> ขาว (Purple & White)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>สัญลักษณ์ประจำสถาบัน</strong></td>
+                            <td>ตราสุริยมณฑล (ตราประจำพระองค์ในสมเด็จเจ้าพระยาบรมมหาศรีสุริยวงศ์)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยของรัฐ ในกลุ่มมหาวิทยาลัยราชภัฏชั้นนำ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบรับวุฒิ ปวส.</strong></td>
+                            <td>เปิดรับสมัครผู้สำเร็จการศึกษา ปวส. เข้าศึกษาต่อปริญญาตรี (หลักสูตรเทียบโอน) ทั้งในภาคปกติ และภาคพิเศษ (เสาร์-อาทิตย์ สำหรับวัยทำงาน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>เริ่มต้นประมาณ 11,000 - 17,000 บาท / เทอม (ค่าเทอมระบบเหมาจ่ายคงที่ตามหลักเกณฑ์มหาวิทยาลัยรัฐ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section" style="margin-top: 40px;">
+            <div class="desc-box">
+                <h3><i class="fas fa-star"></i> จุดเด่นและระบบการเรียนสำหรับสายอาชีพ</h3>
+                <p>
+                    มรภ.บ้านสมเด็จเจ้าพระยา โดดเด่นอย่างมากในการส่งเสริมทักษะวิชาชีพและการประยุกต์ใช้นวัตกรรม สำหรับผู้เรียนที่จบระดับ ปวส. สถาบันมีโปรแกรมเทียบโอนที่ยืดหยุ่นและรองรับสาขาวิชาอย่างกว้างขวาง ช่วยให้นักศึกษาสายอาชีพสามารถยื่นรายวิชาเดิมเพื่อยกเว้นการเรียนวิชาพื้นฐานและฝึกปฏิบัติเบื้องต้น ทำให้จบการศึกษาในระดับปริญญาตรีได้อย่างรวดเร็วภายใน 2 ปี
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid var(--bsru-purple); padding-left: 15px; background: var(--bsru-purple-light); padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong style="color: var(--bsru-purple-dark);">รองรับคนทำงานควบคู่การเรียน:</strong> มหาวิทยาลัยตั้งอยู่ในทำเลที่เดินทางง่าย จึงมีการเปิดสอน **ภาคพิเศษ (เรียนวันเสาร์-อาทิตย์)** ในคณะวิทยาการจัดการ และคณะเทคโนโลยีอุตสาหกรรม เพื่อสนับสนุนให้พนักงานบริษัท ข้าราชการ หรือผู้ประกอบการส่วนตัวในเขตกรุงเทพฯ และปริมณฑล สามารถยกระดับวุฒิการศึกษาได้โดยไม่กระทบต่องานประจำครับ
+                </p>
+            </div>
+        </section>
+
+        <section class="schools-grid" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอน (แบ่งตามกลุ่มสาขาหลัก)</h2>
+            
+            <h4 style="margin: 15px 0 5px 0; color: var(--bsru-purple-dark);"><i class="fas fa-chart-line"></i> กลุ่มบริหารธุรกิจและการจัดการ</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (สาขาวิชาการบัญชี, บริหารธุรกิจ, การตลาดดิจิทัล, คอมพิวเตอร์ธุรกิจ, การจัดการโลจิสติกส์)</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--bsru-purple-dark);"><i class="fas fa-cogs"></i> กลุ่มเทคโนโลยีอุตสาหกรรมและวิทยาศาสตร์</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีอุตสาหกรรม (สาขาวิชาการจัดการวิศวกรรม, เทคโนโลยีไฟฟ้า, การจัดการอุตสาหกรรมและนวัตกรรม)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์และเทคโนโลยี (สาขาวิชาเทคโนโลยีสารสนเทศ, วิทยาการคอมพิวเตอร์)</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: var(--bsru-purple-dark);"><i class="fas fa-music"></i> กลุ่มดนตรี มนุษยศาสตร์ และครุศาสตร์</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> วิทยาลัยการดนตรี (สถาบันชั้นนำระดับประเทศด้านดนตรีไทยและดนตรีสากล)</span>
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์ / คณะครุศาสตร์ (หลักสูตรครูวิชาชีพ)</span>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            
+            <a href="https://www.bsru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.บ้านสมเด็จเจ้าพระยา
+            </a>
+
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏบ้านสมเด็จเจ้าพระยา | คลังปัญญาแห่งฝั่งธนบุรี</p>
+    </footer>
+
+</body>
+</html>

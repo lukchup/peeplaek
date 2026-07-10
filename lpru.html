@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยราชภัฏลำปาง - ข้อมูลสถาบัน</title>
+    
+    <!-- นำเข้า Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เรียกใช้ไฟล์ lpru.css ของลำปาง -->
+    <link rel="stylesheet" href="lpru.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "lpru";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <img src="lpru.png" alt="โลโก้ มรภ.ลำปาง" class="lpru-logo">
+            </div>
+            <h1>มหาวิทยาลัยราชภัฏลำปาง</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยเพื่อการพัฒนาท้องถิ่น มุ่งมั่นผลิตบัณฑิตให้มีคุณธรรม ความรู้ และทักษะวิชาชีพ" — สถาบันอุดมศึกษาหลักของจังหวัดลำปาง โดดเด่นด้านการจัดการศึกษาสายเทคโนโลยี ธุรกิจ และนวัตกรรมชุมชน พร้อมเปิดรับผู้สำเร็จการศึกษา ปวส. เทียบโอนเรียนต่อปริญญาตรีอย่างมั่นคง
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-map-marked-alt"></i> พื้นที่จัดการศึกษาหลัก</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 50px;">
+            <section class="info-card address-section" style="margin: 0; height: 100%;">
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="address-content">
+                    <h3>วิทยาเขตหลัก (ชมพู)</h3>
+                    <p>119 หมู่ 9 ถ.ลำปาง-แม่ทะ ต.ชมพู อ.เมือง จ.ลำปาง 52100</p>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        <i class="fas fa-bus"></i> <strong>การเดินทาง:</strong> ตั้งอยู่บนถนนลำปาง-แม่ทะ มีรถสองแถวประจำทาง (สาย มรภ.ลำปาง) คอยวิ่งรับส่งจากตัวเมืองและสถานีขนส่งผู้โดยสารจังหวัดลำปางตลอดวัน
+                    </small>
+                </div>
+            </section>
+        </div>
+
+        <!-- ข้อมูลสำคัญภาพรวม (ตั้งระยะห่างชัดเจน ป้องกันปัญหาคำจม) -->
+        <section class="facts-section" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยราชภัฏลำปาง (Lampang Rajabhat University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มรภ.ลป. / LPRU</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา / อัตลักษณ์</strong></td>
+                            <td>"คลังปัญญาแห่งภูมิปัญญาท้องถิ่น อัตลักษณ์บัณฑิตคิดเป็น ทำเป็น มีจิตสาธารณะ"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot lpru-red"></span> สีแดง - <span class="color-dot lpru-green"></span> เขียว (Red & Green)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นฉัตรทอง (กาสะลองคำ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยของรัฐ ในกลุ่มมหาวิทยาลัยราชภัฏเพื่อการพัฒนาท้องถิ่น</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบรับวุฒิ ปวส.</strong></td>
+                            <td>เปิดรับสมัครทั้งภาคปกติ (เรียนวันจันทร์-ศุกร์) และภาคพิเศษสำหรับคนทำงาน (เรียนวันเสาร์-อาทิตย์) ในโครงการเทียบโอนรายวิชา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>เริ่มต้นประมาณ 9,000 - 13,000 บาท / เทอม (ค่าเทอมเหมาจ่ายประหยัด แบ่งเบาภาระผู้ปกครองและคนทำงาน)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- จุดเด่นและระบบการศึกษา -->
+        <section class="description-section" style="margin-top: 40px;">
+            <div class="desc-box">
+                <h3><i class="fas fa-star"></i> จุดเด่นและระบบการเรียนสำหรับสายอาชีพ</h3>
+                <p>
+                    มรภ.ลำปาง เป็นสถาบันที่ให้ความสำคัญกับการยกระดับศักยภาพของนักศึกษาสายอาชีวศึกษาเป็นอย่างมาก โดยมีโครงสร้างการเทียบโอนหน่วยกิตจากวุฒิ ปวส. ที่ชัดเจนและเอื้อเฟื้อ ช่วยลดระยะเวลาเรียนให้สั้นลงและสามารถคว้าใบปริญญาตรีได้ภายใน 2 ถึง 3 ปี
+                </p>
+                <p style="margin-top: 10px; border-left: 4px solid var(--lpru-green); padding-left: 15px; background: var(--lpru-red-light); padding-top: 10px; padding-bottom: 10px;">
+                    💡 <strong style="color: var(--lpru-red);">ความยืดหยุ่นเพื่อคนทำงาน:</strong> สำหรับผู้ที่เรียนจบ ปวส. แล้วและต้องการทำงานประจำไปด้วย ทางมหาวิทยาลัยมีเปิดสอนหลักสูตรภาคพิเศษในวันเสาร์-อาทิตย์ ทำให้สามารถสะสมหน่วยกิต อัปเกรดวุฒิการศึกษาเพิ่มโอกาสเลื่อนขั้นหรือตำแหน่งการงานได้โดยไม่ต้องลาออกจากงานประจำครับ
+                </p>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะที่เปิดรับวุฒิ ปวส. -->
+        <section class="schools-grid" style="margin-top: 40px;">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะที่เปิดสอน (แบ่งตามกลุ่มสาขาหลัก)</h2>
+            
+            <h4 style="margin: 15px 0 5px 0; color: #991b1b;"><i class="fas fa-wallet"></i> กลุ่มบริหารธุรกิจและการบัญชี</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาการจัดการ (สาขาวิชาการบัญชี, บริหารธุรกิจ, การตลาด, คอมพิวเตอร์ธุรกิจดิจิทัล)</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: #991b1b;"><i class="fas fa-hammer"></i> กลุ่มเทคโนโลยีอุตสาหกรรมและวิทยาศาสตร์</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะเทคโนโลยีอุตสาหกรรม (สาขาวิชาเทคโนโลยีไฟฟ้า, เทคโนโลยีวิศวกรรมการผลิต, การจัดการอุตสาหกรรม)</span>
+                <span><i class="fas fa-check-circle"></i> คณะวิทยาศาสตร์</span>
+            </div>
+
+            <h4 style="margin: 25px 0 5px 0; color: #991b1b;"><i class="fas fa-balance-scale"></i> กลุ่มมนุษยศาสตร์ สังคมศาสตร์ และครุศาสตร์</h4>
+            <div class="schools-list">
+                <span><i class="fas fa-check-circle"></i> คณะมนุษยศาสตร์และสังคมศาสตร์</span>
+                <span><i class="fas fa-check-circle"></i> คณะครุศาสตร์ (หลักสูตรวิชาชีพครู)</span>
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์ภายนอก -->
+        <div class="btn-container">
+            
+            <a href="https://www.lpru.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มรภ.ลำปาง
+            </a>
+
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยราชภัฏลำปาง | สถาบันอุดมศึกษาเพื่อการพัฒนาท้องถิ่น</p>
+    </footer>
+
+</body>
+</html>

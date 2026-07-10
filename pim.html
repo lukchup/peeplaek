@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถาบันการจัดการปัญญาภิวัฒน์ - PIM</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="pim.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "pim";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า pim.png ตามมาตรฐานโครงสร้างโปรเจกต์ -->
+                <img src="pim.png" alt="โลโก้ สถาบันการจัดการปัญญาภิวัฒน์" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>สถาบันการจัดการปัญญาภิวัฒน์</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "สร้างเยาวชนสู่มืออาชีพด้วย Work-based Education" — มหาวิทยาลัยแห่งองค์กรธุรกิจชั้นนำระดับประเทศ เรียนรู้ทฤษฎีควบคู่การฝึกปฏิบัติงานจริงในเครือเจริญโภคภัณฑ์ (CP) และพันธมิตรระดับสากล
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งวิทยาเขตแจ้งวัฒนะ (วิทยาเขตหลัก)</h3>
+                <p>85/1 หมู่ 2 ถนนแจ้งวัฒนะ ตำบลบางตลาด อำเภอปากเกร็ด จังหวัดนนทบุรี 11120</p>
+                <small>
+                    <i class="fas fa-bus"></i> <strong>การเดินทางและจุดสังเกต:</strong> ตั้งอยู่ริมถนนแจ้งวัฒนะ เยื้องกับเซ็นทรัลแจ้งวัฒนะ การเดินทางสะดวกสบายมากด้วยรถไฟฟ้าสายสีชมพู (ลงสถานีแจ้งวัฒนะ-ปากเกร็ด 28 แล้วเดินต่อเข้าสถาบันได้ทันที) หรือรถประจำทางสาย 52, 150, 356 และรถตู้โดยสารประจำทางผ่านหน้าสถาบันหลากหลายสาย
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>สถาบันการจัดการปัญญาภิวัฒน์ (Panyapiwat Institute of Management)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>พีไอเอ็ม / PIM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โมเดลการเรียนรู้</strong></td>
+                            <td>Work-based Education (เรียน 3 เดือน สลับกับฝึกงานจริงในสถานประกอบการ 3 เดือน ตลอดปีการศึกษา มีรายได้ระหว่างฝึกงานในบางสาขาวิชา)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot pim-green"></span> สีเขียว และ 
+                                <span class="color-dot pim-gold"></span> สีเหลืองทอง (สีเขียวแทนการเจริญงอกงามอย่างยั่งยืน และสีเหลืองทองแทนความรุ่งโรจน์ ปัญญา และคุณธรรม)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นแคแสด (สะท้อนถึงความทนทาน เติบโตง่าย และพร้อมเบ่งบานในโลกธุรกิจ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โอกาสการทำงานหลังจบ</strong></td>
+                            <td>สูงมาก (เกือบ 100%) เนื่องจากหลักสูตรได้รับการออกแบบร่วมกับบริษัทชั้นนำ ทำให้นักศึกษามีประสบการณ์ทำงานจริง 4 ปีเต็มก่อนเรียนจบ พร้อมทำงานได้ทันทีโดยไม่ต้องเทรนงานใหม่</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ทุนการศึกษา</strong></td>
+                            <td>โดดเด่นที่สุดด้านการแจก **ทุนการศึกษาปัญญาภิวัฒน์** (ทุนส่วนลดค่าเล่าเรียน 50% - 100% สำหรับนักศึกษาใหม่ในเกือบทุกสาขาวิชา โดยผูกพันกับการเข้าฝึกงานตามโครงสร้างของสถาบัน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>สำหรับภาคปกติเริ่มต้นที่ประมาณ 35,000 - 55,000 บาทต่อเทอม (แต่ส่วนใหญ่นักศึกษาจะได้รับทุนสนับสนุนทำให้จ่ายจริงน้อยลงมาก และสามารถกู้ยืมกองทุน กยศ. ได้)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- คุณภาพการเรียนและโอกาสเรียนต่อ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-briefcase"></i> โครงสร้างการเรียนรู้ที่ตอบโจทย์สายอาชีพอย่างแท้จริง</h3>
+                <p>
+                    PIM เป็นสถาบันที่เน้นการลงมือทำ ซึ่งสอดคล้องกับพฤติกรรมการเรียนรู้ของนักศึกษาสายอาชีวศึกษาอย่างมาก นอกเหนือจากห้องเรียนคอนเซปต์เสมือนจริง (Simulation Lab) เช่น ร้านเซเว่นอีเลฟเว่นจำลอง หรือคลังสินค้าอัจฉริยะแล้ว นักศึกษายังได้ก้าวเข้าไปเรียนรู้งานในองค์กรขนาดใหญ่อีกด้วย
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-graduation-cap"></i> หลักสูตรต่อเนื่อง / เทียบโอน ปวส. เรียนต่อปริญญาตรี</strong>
+                        PIM เปิดรับผู้สำเร็จการศึกษาระดับ **ปวส. เข้าศึกษาต่อปริญญาตรี (หลักสูตรเทียบโอน)** ในหลากหลายคณะ เช่น **คณะบริหารธุรกิจ (สาขาการจัดการธุรกิจการค้าสมัยใหม่), คณะการจัดการโลจิสติกส์และคมนาคมขนส่ง และคณะวิศวกรรมศาสตร์และเทคโนโลยี** โดดเด่นด้วยการใช้เวลาเรียนเพียง 1.5 - 2 ปี มีการจัดตารางเรียนที่ยืดหยุ่น และที่สำคัญคือยังคงได้รับสิทธิ์รับทุนการศึกษาตามเงื่อนไขของสถาบัน ทำให้เป็นตัวเลือกอันดับต้น ๆ ของนักศึกษา ปวส. ทั่วประเทศ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะและกลุ่มสาขาวิชาอย่างละเอียด -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสาขาวิชาที่เปิดสอน</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-shopping-cart"></i> กลุ่มบริหารธุรกิจและการค้าสมัยใหม่</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การจัดการธุรกิจการค้าสมัยใหม่, การจัดการอสังหาริมทรัพย์)</li>
+                        <li>คณะการจัดการโลจิสติกส์และคมนาคมขนส่ง (การจัดการโลจิสติกส์และโซ่อุปทาน)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-code"></i> กลุ่มวิศวกรรมศาสตร์และเทคโนโลยี</h4>
+                    <ul>
+                        <li>คณะวิศวกรรมศาสตร์และเทคโนโลยี (เทคโนโลยีดิจิทัลและสารสนเทศ, วิศวกรรมคอมพิวเตอร์และปัญญาประดิษฐ์, วิศวกรรมหุ่นยนต์และระบบอัตโนมัติ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-tv"></i> กลุ่มนิเทศศาสตร์และมนุษยศาสตร์</h4>
+                    <ul>
+                        <li>คณะนิเทศศาสตร์ (การสื่อสารองค์กรและแบรนด์, สื่อสารการตลาดดิจิทัล)</li>
+                        <li>คณะศิลปศาสตร์ (ภาษาจีนธุรกิจ, ภาษาญี่ปุ่นธุรกิจ, ภาษาอังกฤษเพื่อการสื่อสารธุรกิจ)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-utensils"></i> กลุ่มอุตสาหกรรมเกษตร อาหาร และอื่นๆ</h4>
+                    <ul>
+                        <li>คณะนวัตกรรมการจัดการเกษตร / คณะอุตสาหกรรมอาหาร (การจัดการเทคโนโลยีแปรรูปอาหาร)</li>
+                        <li>คณะศึกษาศาสตร์ (การสอนภาษาจีน, การสอนภาษาอังกฤษ)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.pim.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก สถาบันการจัดการปัญญาภิวัฒน์
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 สถาบันการจัดการปัญญาภิวัฒน์ | มุ่งสร้างมืออาชีพด้วยการศึกษาที่บูรณาการกับการทำงาน</p>
+    </footer>
+
+</body>
+</html>

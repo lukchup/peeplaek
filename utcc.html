@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยหอการค้าไทย (UTCC) - University of the Thai Chamber of Commerce</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- เชื่อมโยงไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="utcc.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "utcc";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <!-- ส่วนหัวข้อเด่นด้านบน (Hero Section) -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="logo-wrapper">
+                <!-- ตั้งชื่อไฟล์โลโก้ว่า utcc.png ตามมาตรฐานโครงสร้างโปรเจกต์ -->
+                <img src="utcc.png" alt="โลโก้ มหาวิทยาลัยหอการค้าไทย" style="max-width: 85px; height: auto; margin-bottom: 10px;">
+            </div>
+            <h1>มหาวิทยาลัยหอการค้าไทย</h1>
+            <h2>UNIVERSITY OF THE THAI CHAMBER OF COMMERCE</h2>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มุ่งสร้างผู้ประกอบการขับเคลื่อนเศรษฐกิจด้วยนวัตกรรมและดิจิทัลเทคโนโลยีชั้นนำของเอเชีย" — สถาบันการศึกษาเพื่อธุรกิจที่ได้รับการสนับสนุนจากหอการค้าไทย
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ส่วนที่ตั้งและการเดินทาง -->
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งสถาบัน (วิทยาเขตวิภาวดีรังสิต)</h3>
+                <p>126/1 ถนนวิภาวดีรังสิต แขวงรัชดาภิเษก เขตดินแดง กรุงเทพมหานคร 10400</p>
+                <small>
+                    <i class="fas fa-subway"></i> <strong>การเดินทางและจุดสังเกต:</strong> ตั้งอยู่ริมถนนวิภาวดีรังสิต ใกล้กับสโมสรทหารบก การเดินทางเชื่อมต่อได้ง่ายด้วยรถไฟฟ้า MRT สถานีสุทธิสาร หรือสถานีห้วยขวาง (แล้วต่อรถประจำทางหรือวินมอเตอร์ไซค์) หรือรถไฟฟ้า BTS สถานีอารีย์/สถานีสนามเป้า นอกจากนี้ยังมีรถประจำทางผ่านหน้ามหาวิทยาลัยหลายสาย เช่น สาย 24, 69, 92, 107, 129 และ 138
+                </small>
+            </div>
+        </section>
+
+        <!-- ข้อมูลสำคัญภาพรวม -->
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยหอการค้าไทย (University of the Thai Chamber of Commerce)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อ</strong></td>
+                            <td>มกค. / UTCC</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ผู้ก่อตั้ง/พันธมิตรหลัก</strong></td>
+                            <td>หอการค้าไทย (ทำให้นักศึกษามีโอกาสเครือข่ายธุรกิจที่เหนียวแน่นกับผู้ประกอบการจริงทั่วประเทศ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot utcc-blue"></span> สีน้ำเกิัน และ 
+                                <span class="color-dot utcc-gold"></span> สีทอง (สีน้ำเงินหมายถึงความจงรักภักดีและความหนักแน่น สีทองหมายถึงความเจริญรุ่งเรืองและปัญญา)
+                            </td>
+                        </tr>
+                        <tr>
+                            <tr>
+                                <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                                <td>ต้นไทร (สัญลักษณ์ "แม่ไทร" สิ่งศักดิ์สิทธิ์และศูนย์รวมจิตใจอันเป็นร่มโพธิ์ร่มไทรของชาวหอการค้าไทย)</td>
+                            </tr>
+                        </tr>
+                        <tr>
+                            <td><strong>ระบบการเรียนการสอน</strong></td>
+                            <td>โดดเด่นด้วยระบบ **Digital Hybrid Learning** แจกอุปกรณ์การเรียนดิจิทัล (เช่น iPad) แก่นักศึกษาใหม่ทุกคนเพื่อใช้เข้าถึงแพลตฟอร์มการเรียนรู้และคอนเทนต์วิชาการที่อัปเดตตลอดเวลา</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โอกาสและเครือข่ายธุรกิจ</strong></td>
+                            <td>มีศูนย์บ่มเพาะผู้ประกอบการ (UTCC Ecosystem) ที่เปิดโอกาสให้นักศึกษาสามารถสร้างไอเดียสตาร์ทอัพ ประกวดแข่งขัน และเข้าฝึกงานในบริษัทชั้นนำที่เป็นสมาชิกของหอการค้าไทย</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>ภาคการศึกษาปกติเริ่มต้นที่ประมาณ 40,000 - 65,000+ บาทต่อเทอม (ขึ้นอยู่กับสาขาวิชา มีทุนการศึกษาหอการค้าไทย และทุนความสามารถพิเศษรองรับหลากหลายประเภท)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- โอกาสเรียนต่อของผู้จบ ปวส. -->
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-chart-pie"></i> จุดเชื่อมต่อที่ยอดเยี่ยมสำหรับนักศึกษา ปวส.</h3>
+                <p>
+                    เนื่องจาก UTCC มีรากฐานที่เข้มแข็งจากหอการค้าไทย หลักสูตรจึงมีความยืดหยุ่นและเน้นทักษะไปที่การบริหารจัดการและเทคโนโลยีที่สามารถใช้งานในโลกธุรกิจได้จริง ซึ่งตรงกับความต้องการของกลุ่มผู้เรียนสายวิชาชีพอย่างยิ่ง
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-user-tie"></i> หลักสูตรต่อเนื่องและเทียบโอน ปวส. เรียนต่อ ปริญญาตรี</strong>
+                        UTCC มีการเปิดรับผู้จบ **ปวส. (ทั้งสาขาวิชาคอมพิวเตอร์ธุรกิจ, การตลาด, การบัญชี, เทคโนโลยีดิจิทัล และสาขาอื่น ๆ)** เพื่อเข้าศึกษาต่อปริญญาตรีในโครงการ **เทียบโอนหน่วยกิต** โดยเฉพาะใน **คณะบริหารธุรกิจ และคณะบัญชี** ซึ่งมีการเปิดเซกชันที่เอื้ออำนวยต่อการเทียบโอนรายวิชา สามารถจบได้ภายในเวลาประมาณ 2 ปี นอกจากนี้ยังมีรอบการเรียนสำหรับผู้ทำงานไปด้วยเรียนไปด้วย (ภาคค่ำหรือเสาร์-อาทิตย์) ในบางสาขาวิชาอีกด้วยครับ
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- รายชื่อคณะที่โดดเด่น -->
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและสถาบันวิชาชั้นนำ</h2>
+            <div class="schools-list">
+                
+                <div class="school-card">
+                    <h4><i class="fas fa-briefcase"></i> กลุ่มธุรกิจ ค้าขาย และบัญชี</h4>
+                    <ul>
+                        <li>คณะบริหารธุรกิจ (การตลาดดิจิทัล, ธุรกิจระหว่างประเทศ, โลจิสติกส์, การเป็นผู้ประกอบการ) *คณะเรือธงของสถาบัน</li>
+                        <li>คณะบัญชี (ระบบสารสนเทศทางการบัญชี, การสอบบัญชีและการตรวจสอบภายใน)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-laptop-code"></i> กลุ่มเทคโนโลยี สารสนเทศ และวิศวกรรม</h4>
+                    <ul>
+                        <li>คณะวิทยาศาสตร์และเทคโนโลยี (เทคโนโลยีดิจิทัลแนวธุรกิจ, วิทยาการคอมพิวเตอร์, บิ๊กดาต้าและการวิเคราะห์)</li>
+                        <li>คณะวิศวกรรมศาสตร์ (วิศวกรรมคอมพิวเตอร์และปัญญาประดิษฐ์, วิศวกรรมโลจิสติกส์)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-bullhorn"></i> กลุ่มนิเทศศาสตร์และมนุษยศาสตร์</h4>
+                    <ul>
+                        <li>คณะนิเทศศาสตร์ (การสื่อสารการตลาดดิจิทัล, การผลิตสื่อภาพยนตร์และดิจิทัล)</li>
+                        <li>คณะมนุษยศาสตร์ (ภาษาอังกฤษเพื่อการสื่อสารธุรกิจ, ภาษาจีนเพื่อการค้า)</li>
+                    </ul>
+                </div>
+
+                <div class="school-card">
+                    <h4><i class="fas fa-plane"></i> กลุ่มการท่องเที่ยว การบริการ และนานาชาติ</h4>
+                    <ul>
+                        <li>คณะการท่องเที่ยวและอุตสาหกรรมบริการ (การจัดการการบิน, การจัดการโรงแรม)</li>
+                        <li>วิทยาลัยนานาชาติ (UTCC International College: หลักสูตรอินเตอร์เน้นธุรกิจโลก)</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ส่วนปุ่มแอคชันและลิงก์กลับหน้าหลัก -->
+        <div class="btn-container">
+            <a href="https://www.utcc.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> ไปยังเว็บไซต์หลัก มหาวิทยาลัยหอการค้าไทย
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยหอการค้าไทย (UTCC) | ขับเคลื่อนอนาคตเศรษฐกิจไทยด้วยการศึกษาด้านธุรกิจชั้นนำ</p>
+    </footer>
+
+</body>
+</html>

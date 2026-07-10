@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มหาวิทยาลัยธนบุรี - Professional Practice University</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="thonburiu.css">
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query,
+             orderBy, limit, onSnapshot, serverTimestamp,
+             doc, deleteDoc, updateDoc }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+        authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+        projectId:         "myuniversityguide-c083c",
+        storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+        messagingSenderId: "649652214412",
+        appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // pageId ต้องไม่ซ้ำกับมหาวิทยาลัยอื่น แนะนำใช้ชื่อย่อภาษาอังกฤษเดียวกับชื่อไฟล์
+    const PAGE_ID = "thonburiu";   // ← เปลี่ยนตามมหาวิทยาลัย เช่น "ku", "cmru", "wu"
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) return;   // ไม่บังคับ login ก็เข้าดูหน้านี้ได้ตามปกติ
+
+        const tryInit = () => {
+            if (typeof window.initPageComments === 'function') {
+                window.initPageComments(user, db, {
+                    collection, addDoc, query,
+                    orderBy, limit, onSnapshot, serverTimestamp,
+                    doc, deleteDoc, updateDoc
+                }, PAGE_ID);
+            } else {
+                setTimeout(tryInit, 100);
+            }
+        };
+        tryInit();
+    });
+</script>
+    <script src="comments(page).js" defer></script>
+    <script src="aichat.js" defer></script>
+    <script src="global.js" type="module"></script>
+</head>
+<body>
+<a href="index.html" class="back-home-btn" title="กลับสู่หน้าหลัก">
+    หน้าหลัก
+</a>
+
+<style>
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #111;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.back-home-btn:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(-1px);
+    color: #111;
+    text-decoration: none;
+}
+</style>
+    <header class="hero-section">
+        <div class="container">
+            <img src="thonburiu.png" alt="TRU Logo" class="tru-logo">
+            <h1>มหาวิทยาลัยธนบุรี</h1>
+            <div class="divider"></div>
+            <p class="intro-text">
+                "มหาวิทยาลัยแห่งความสำเร็จของนักปฏิบัติ" — มุ่งเน้นการผลิตบัณฑิตที่พร้อมทำงานจริง โดยเฉพาะกลุ่มผู้เรียนสายอาชีพที่ต้องการยกระดับวิชาชีพผ่านระบบการเรียนที่ยืดหยุ่นและทันสมัยที่สุด
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="info-card address-section" style="margin-top: 35px;">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="address-content">
+                <h3>ที่ตั้งและการเดินทาง</h3>
+                <p>29 ถนนเพชรเกษม แขวงหนองค้างพลู เขตหนองแขม กรุงเทพฯ 10160</p>
+                <small>ตั้งอยู่ริมถนนเพชรเกษม (ซอย 110) เดินทางสะดวกด้วย MRT สายสีน้ำเงิน (สถานีหลักสอง) ต่อรถประจำทางสาย 80, 84 หรือ 157 เข้าสู่มหาวิทยาลัยได้อย่างรวดเร็ว</small>
+            </div>
+        </section>
+
+        <section class="facts-section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> ข้อมูลพื้นฐานที่ควรรู้</h2>
+            <div class="table-responsive">
+                <table class="facts-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">หัวข้อ</th>
+                            <th style="width: 70%;">รายละเอียดข้อมูลเชิงลึก</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ชื่อสถาบัน</strong></td>
+                            <td>มหาวิทยาลัยธนบุรี (Thonburi University)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ชื่อย่อสถาบัน</strong></td>
+                            <td>ม.ธนบุรี / TRU *(หมายเหตุ: แตกต่างจาก ม.ราชภัฏธนบุรี หรือ DRU)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ปรัชญา</strong></td>
+                            <td>"ความรู้ คู่คุณธรรม นำการพัฒนา"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สีประจำมหาวิทยาลัย</strong></td>
+                            <td>
+                                <span class="color-dot tru-red"></span> สีแดง (พลังและความเพียร) และ 
+                                <span class="color-dot tru-yellow"></span> สีเหลืองทอง (ความรุ่งเรืองแห่งปัญญา)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ต้นไม้ประจำมหาวิทยาลัย</strong></td>
+                            <td>ต้นราชพฤกษ์</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ประเภทสถาบัน</strong></td>
+                            <td>สถาบันอุดมศึกษาเอกชน (เน้นความคล่องตัวและหลักสูตรที่ตอบโจทย์ตลาดงาน)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>จุดเด่นระดับประเทศ</strong></td>
+                            <td>เป็นสถาบันยอดนิยมอันดับต้นๆ ของผู้จบ ปวส. ในการเข้าศึกษาต่อปริญญาตรี ภาคพิเศษ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ทางเลือกเวลาเรียน (รอบเรียน)</strong></td>
+                            <td>
+                                • <strong>รอบปกติ:</strong> จันทร์ - พฤหัสบดี<br>
+                                • <strong>รอบวันพุธ:</strong> เน้นการเรียนรู้ระบบออนไลน์ยืดหยุ่น<br>
+                                • <strong>รอบวันอาทิตย์ / รอบค่ำ:</strong> 18.15 น. – 20.30 น. (เหมาะสำหรับวัยทำงานและ ปวส. เทียบโอน)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>ค่าเล่าเรียนโดยประมาณ</strong></td>
+                            <td>จัดเก็บในอัตราค่าธรรมเนียมการศึกษาแบบเหมาจ่ายเริ่มต้นประมาณ 17,000 - 32,000 บาท ต่อภาคการศึกษา (มีระบบแบ่งชำระเป็นรายเดือนได้)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="description-section">
+            <div class="desc-box">
+                <h3><i class="fas fa-graduation-cap"></i> ยุทธศาสตร์การสอน: Practical Education</h3>
+                <p>ม.ธนบุรี ยกระดับการศึกษามากกว่าทฤษฎี โดยเน้นกระบวนการ <strong>Professional Experience</strong> อาจารย์ผู้สอนมีประสบการณ์จริงจากภาคธุรกิจ ทำให้นักศึกษาได้รับทางลัดในการแก้ปัญหาที่เกิดขึ้นจริงในองค์กร</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <strong><i class="fas fa-exchange-alt"></i> ข้อมูล ปวส. เทียบโอน</strong>
+                        รับเทียบโอนสูงสุด 51-60 หน่วยกิต (2 ปีจบ) ค่าพิจารณาเหมาจ่ายเพียง 500 บาทถ้วน และมีทุนส่วนลดแรกเข้าสูงสุดถึง 40,000 บาท
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="schools-grid">
+            <h2 class="section-title"><i class="fas fa-university"></i> คณะและหลักสูตรที่โดดเด่น</h2>
+            <div class="schools-list">
+                <div class="school-card">
+                    <h4><i class="fas fa-chart-bar"></i> คณะบริหารธุรกิจ</h4>
+                    <ul>
+                        <li>สาขาการบัญชี (อัปเกรดสู่สมุห์บัญชีและผู้สอบบัญชี)</li>
+                        <li>สาขาการจัดการ / การตลาดดิจิทัล</li>
+                        <li>สาขาโลจิสติกส์และโซ่อุปทาน</li>
+                    </ul>
+                </div>
+                <div class="school-card">
+                    <h4><i class="fas fa-cogs"></i> คณะวิศวกรรมศาสตร์</h4>
+                    <ul>
+                        <li>วิศวกรรมไฟฟ้า (เน้นระบบกำลังและการควบคุม)</li>
+                        <li>วิศวกรรมอุตสาหการ (การจัดการโรงงานและผลิต)</li>
+                        <li>วิศวกรรมเครื่องกล (การออกแบบและบำรุงรักษาขั้นสูง)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="btn-container">
+            <a href="http://www.thonburi-u.ac.th" target="_blank" rel="noopener noreferrer" class="btn-visit">
+                <i class="fas fa-external-link-alt"></i> เข้าสู่เว็บไซต์หลัก ม.ธนบุรี
+            </a>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-home"></i> กลับสู่หน้าหลัก
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 มหาวิทยาลัยธนบุรี | สร้างสรรค์นักปฏิบัติมืออาชีพเพื่อร่วมขับเคลื่อนเศรษฐกิจของประเทศ</p>
+    </footer>
+</body>
+</html>
