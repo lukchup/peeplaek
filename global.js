@@ -3,7 +3,7 @@ import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey:            "AQ.Ab8RN6IAgrFqC1WGf-czIOWE__jT7-7UEv_kdAgvsZozwvS3Ow",
+    apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
     authDomain:        "myuniversityguide-c083c.firebaseapp.com",
     projectId:         "myuniversityguide-c083c",
     storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
@@ -19,7 +19,7 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         const tryInit = () => {
             if (typeof window.initAIChat === 'function') {
-                window.initAIChat("AQ.Ab8RN6IAgrFqC1WGf-czIOWE__jT7-7UEv_kdAgvsZozwvS3Ow", user.email);
+                window.initAIChat("AIzaSyA3mKyFYZkrUxEiA0tseQ-YN3EO-3nnVRg", user.email);
             } else {
                 setTimeout(tryInit, 100);
             }
