@@ -66,7 +66,7 @@ onAuthStateChanged(auth, (user) => {
         const tryInit = () => {
             if (typeof window.initAIChat === 'function') {
                 // เพิ่ม user.email เป็น parameter ที่ 2
-                window.initAIChat("AQ.Ab8RN6ImgqwzqHYYG4bdqmtW4bOBSIA2NfIXTZV-Yc4-kpNjDw", user.email);
+                window.initAIChat("AIzaSyA3mKyFYZkrUxEiA0tseQ-YN3EO-3nnVRg", user.email);
             } else {
                 setTimeout(tryInit, 100);
             }

@@ -125,7 +125,7 @@
                         ส่ง ➤
                     </button>
                 </div>
-                <div class="ai-chat-footer">ขับเคลื่อนโดย OpenAI GPT · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
+                <div class="ai-chat-footer">ขับเคลื่อนโดย google gemini · ข้อมูลอาจมีการผิดพลาด</div>
             </div>
         `;
 
