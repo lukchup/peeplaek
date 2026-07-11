@@ -1,7 +1,7 @@
 /* ============================================================
-   ai-chat.js — แชท AI ลอยมุมขวาล่าง (gemini-1.5-flash)
+   ai-chat.js — แชท AI ลอยมุมขวาล่าง (OpenAI GPT)
    ใช้งาน: วาง <script src="ai-chat.js" defer></script> ก่อน </body>
-   จากนั้นเรียก window.initAIChat("YOUR_GEMINI_API_KEY")
+   จากนั้นเรียก window.initAIChat("YOUR_OPENAI_API_KEY")
 ============================================================ */
 
 (function () {
@@ -62,6 +62,8 @@
     let apiKey = '';
     let isOpen = false;
     let isTyping = false;
+    let lastSentTime = 0;
+    const COOLDOWN_MS = 6000; // รอ 6 วินาทีระหว่างแต่ละข้อความ
 
     // ===== สร้าง HTML =====
     function createChatUI() {
@@ -125,7 +127,7 @@
                         ส่ง ➤
                     </button>
                 </div>
-                <div class="ai-chat-footer">ขับเคลื่อนโดย Gemini 1.5 Flash · ข้อมูลอาจมีการผิดพลาด</div>
+                <div class="ai-chat-footer">ขับเคลื่อนโดย google gemini · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
             </div>
         `;
 
@@ -212,6 +214,16 @@
     window.sendAIMessage = async function () {
         if (isTyping) return;
 
+        // cooldown ป้องกันส่งถี่เกินไป
+        const now = Date.now();
+        const elapsed = now - lastSentTime;
+        if (elapsed < COOLDOWN_MS) {
+            const wait = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+            appendMessage('assistant', `⏳ รออีก ${wait} วินาทีก่อนนะน้อง ไม่งั้น quota หมดได้`);
+            return;
+        }
+        lastSentTime = now;
+
         const input  = document.getElementById('aiChatInput');
         const sendBtn = document.getElementById('aiChatSend');
         const text   = (input?.value || '').trim();
@@ -244,23 +256,30 @@
                 parts: [{ text: m.content }]
             }));
 
-            const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+            const fetchGemini = () => fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        system_instruction: {
-                            parts: [{ text: SYSTEM_PROMPT }]
-                        },
+                        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
                         contents: geminiHistory,
-                        generationConfig: {
-                            maxOutputTokens: 3000,
-                            temperature: 0.7
-                        }
+                        generationConfig: { maxOutputTokens: 3000, temperature: 0.7 }
                     })
                 }
             );
+
+            let response = await fetchGemini();
+
+            // ถ้าโดน 429 (rate limit) รอ 12 วินาทีแล้วลองใหม่ 1 ครั้ง
+            if (response.status === 429) {
+                hideTyping();
+                const waitMsg = appendMessage('assistant', '⏳ มีคนถามเยอะอยู่นิดนึงนะน้อง รอ 12 วินาทีแล้วพี่แปกจะตอบให้เลย...');
+                await new Promise(r => setTimeout(r, 12000));
+                if (waitMsg) waitMsg.remove();
+                showTyping();
+                response = await fetchGemini();
+            }
 
             if (!response.ok) {
                 const err = await response.json();
@@ -290,7 +309,7 @@
             let errMsg = '❌ เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะน้อง';
             if (err.message.includes('401'))        errMsg = '❌ API Key ไม่ถูกต้อง กรุณาติดต่อผู้ดูแลเว็บ';
             else if (err.message.includes('429'))   errMsg = '⚠️ ขอโทษนะน้อง ตอนนี้มีคนถามเยอะมาก รอแป๊บแล้วลองใหม่นะ 😅';
-            else if (err.message.includes('quota')) errMsg = '⚠️ ขีดจำกัด API หมดแล้ว กรุณาติดต่อผู้ดูแลเว็บ';
+            else if (err.message.includes('quota')) errMsg = '⚠️ ขอโทษนะน้อง ตอนนี้ quota หมดแล้ว รอให้ผู้ดูแลเว็บเติม quota ก่อนนะครับ';
 
             appendMessage('assistant', errMsg);
         } finally {
