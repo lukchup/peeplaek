@@ -1,7 +1,7 @@
 /* ============================================================
-   ai-chat.js — แชท AI ลอยมุมขวาล่าง (OpenAI GPT)
+   ai-chat.js — แชท AI ลอยมุมขวาล่าง (gemini-1.5-flash)
    ใช้งาน: วาง <script src="ai-chat.js" defer></script> ก่อน </body>
-   จากนั้นเรียก window.initAIChat("YOUR_OPENAI_API_KEY")
+   จากนั้นเรียก window.initAIChat("YOUR_GEMINI_API_KEY")
 ============================================================ */
 
 (function () {
@@ -125,7 +125,7 @@
                         ส่ง ➤
                     </button>
                 </div>
-                <div class="ai-chat-footer">ขับเคลื่อนโดย google gemini · ข้อมูลอาจมีการผิดพลาด</div>
+                <div class="ai-chat-footer">ขับเคลื่อนโดย Gemini 1.5 Flash · ข้อมูลอาจมีการผิดพลาด</div>
             </div>
         `;
 
@@ -245,7 +245,7 @@
             }));
 
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
