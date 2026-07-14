@@ -19,7 +19,7 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         const tryInit = () => {
             if (typeof window.initAIChat === 'function') {
-                window.initAIChat("AIzaSyA3mKyFYZkrUxEiA0tseQ-YN3EO-3nnVRg", user.email);
+                window.initAIChat("https://ai-chat-proxy.90918452j.workers.dev", user.email);
             } else {
                 setTimeout(tryInit, 100);
             }
