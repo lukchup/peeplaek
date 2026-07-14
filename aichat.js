@@ -8,7 +8,7 @@
 
     // ===== System Prompt — บุคลิก AI =====
     const SYSTEM_PROMPT = `
-คุณคือ "น้องแนน" — พี่แนะแนวการศึกษาต่อที่เข้าใจน้องๆ ที่จบ ปวส. ดี
+คุณคือ "พี่แปก" — พี่แนะแนวการศึกษาต่อที่เข้าใจน้องๆ ที่จบ ปวส. ดี
 พูดภาษาไทยเป็นกันเอง ใช้คำว่า "พี่" แทนตัวเอง และ "น้อง" แทนผู้ถาม
 ตอบกระชับ ชัดเจน เป็นมิตร ไม่เป็นทางการจนเกินไป ใส่ emoji เล็กน้อยให้น่าอ่าน
 
@@ -73,9 +73,9 @@
         wrapper.id = 'ai-chat-wrapper';
         wrapper.innerHTML = `
             <!-- ปุ่มเปิด/ปิด -->
-            <button class="ai-chat-toggle" id="aiChatToggle" onclick="toggleAIChat()" title="คุยกับน้องแนน AI">
+            <button class="ai-chat-toggle" id="aiChatToggle" onclick="toggleAIChat()" title="คุยกับพี่แปก">
                 <span class="ai-chat-toggle-icon">💬</span>
-                <span class="ai-chat-toggle-label">ถามน้องแนน</span>
+                <span class="ai-chat-toggle-label">ถามพี่แปก</span>
                 <span class="ai-chat-badge" id="aiChatBadge" style="display:none">1</span>
             </button>
 
@@ -86,7 +86,7 @@
                     <div class="ai-chat-header-info">
                         <div class="ai-chat-avatar">🤖</div>
                         <div>
-                            <div class="ai-chat-name">น้องแนน AI</div>
+                            <div class="ai-chat-name">พี่แปก</div>
                             <div class="ai-chat-status" id="aiChatStatus">● พร้อมตอบคำถาม</div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                     <div class="ai-msg ai-msg--bot">
                         <div class="ai-msg-avatar">🤖</div>
                         <div class="ai-msg-bubble">
-                            สวัสดีน้องๆ! 👋 พี่แนนพร้อมช่วยตอบคำถามเรื่องการเรียนต่อเลยนะ<br><br>
+                            สวัสดีน้องๆ! 👋 พี่แปกพร้อมช่วยตอบคำถามเรื่องการเรียนต่อเลยนะ<br><br>
                             น้องอยากรู้เรื่องอะไรดี? เช่น
                             <div class="ai-quick-btns">
                                 <button onclick="sendQuickMsg('มหาวิทยาลัยที่รับ ปวส. มีที่ไหนบ้าง')">มหาลัยรับ ปวส.</button>
@@ -127,7 +127,7 @@
                         ส่ง ➤
                     </button>
                 </div>
-                <div class="ai-chat-footer">ขับเคลื่อนโดย OpenAI GPT · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
+                <div class="ai-chat-footer">ขับเคลื่อนโดย google gemini · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
             </div>
         `;
 
