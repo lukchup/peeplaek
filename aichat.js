@@ -8,7 +8,7 @@
 
     // ===== System Prompt — บุคลิก AI =====
     const SYSTEM_PROMPT = `
-คุณคือ "พี่แปก" — พี่แนะแนวการศึกษาต่อที่เข้าใจน้องๆ ที่จบ ปวส. ดี
+คุณคือ "น้องแนน" — พี่แนะแนวการศึกษาต่อที่เข้าใจน้องๆ ที่จบ ปวส. ดี
 พูดภาษาไทยเป็นกันเอง ใช้คำว่า "พี่" แทนตัวเอง และ "น้อง" แทนผู้ถาม
 ตอบกระชับ ชัดเจน เป็นมิตร ไม่เป็นทางการจนเกินไป ใส่ emoji เล็กน้อยให้น่าอ่าน
 
@@ -73,9 +73,9 @@
         wrapper.id = 'ai-chat-wrapper';
         wrapper.innerHTML = `
             <!-- ปุ่มเปิด/ปิด -->
-            <button class="ai-chat-toggle" id="aiChatToggle" onclick="toggleAIChat()" title="คุยกับพี่แปก">
+            <button class="ai-chat-toggle" id="aiChatToggle" onclick="toggleAIChat()" title="คุยกับน้องแนน AI">
                 <span class="ai-chat-toggle-icon">💬</span>
-                <span class="ai-chat-toggle-label">ถามพี่แปก</span>
+                <span class="ai-chat-toggle-label">ถามน้องแนน</span>
                 <span class="ai-chat-badge" id="aiChatBadge" style="display:none">1</span>
             </button>
 
@@ -86,7 +86,7 @@
                     <div class="ai-chat-header-info">
                         <div class="ai-chat-avatar">🤖</div>
                         <div>
-                            <div class="ai-chat-name">พี่แปก</div>
+                            <div class="ai-chat-name">น้องแนน AI</div>
                             <div class="ai-chat-status" id="aiChatStatus">● พร้อมตอบคำถาม</div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                     <div class="ai-msg ai-msg--bot">
                         <div class="ai-msg-avatar">🤖</div>
                         <div class="ai-msg-bubble">
-                            สวัสดีน้องๆ! 👋 พี่แปกพร้อมช่วยตอบคำถามเรื่องการเรียนต่อเลยนะ<br><br>
+                            สวัสดีน้องๆ! 👋 พี่แนนพร้อมช่วยตอบคำถามเรื่องการเรียนต่อเลยนะ<br><br>
                             น้องอยากรู้เรื่องอะไรดี? เช่น
                             <div class="ai-quick-btns">
                                 <button onclick="sendQuickMsg('มหาวิทยาลัยที่รับ ปวส. มีที่ไหนบ้าง')">มหาลัยรับ ปวส.</button>
@@ -127,7 +127,7 @@
                         ส่ง ➤
                     </button>
                 </div>
-                <div class="ai-chat-footer">ขับเคลื่อนโดย google gemini · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
+                <div class="ai-chat-footer">ขับเคลื่อนโดย OpenAI GPT · ข้อมูลอาจมีการเปลี่ยนแปลง</div>
             </div>
         `;
 
@@ -257,7 +257,7 @@
             }));
 
             const fetchGemini = () => fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+                apiKey, // apiKey = Cloudflare Worker URL (ไม่ใช่ Gemini key โดยตรงอีกต่อไป)
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -271,14 +271,9 @@
 
             let response = await fetchGemini();
 
-            // ถ้าโดน 429 (rate limit) รอ 12 วินาทีแล้วลองใหม่ 1 ครั้ง
+            // ถ้าโดน 429 แจ้งสั้นๆ ไม่ให้รอนาน
             if (response.status === 429) {
-                hideTyping();
-                const waitMsg = appendMessage('assistant', '⏳ มีคนถามเยอะอยู่นิดนึงนะน้อง รอ 12 วินาทีแล้วพี่แปกจะตอบให้เลย...');
-                await new Promise(r => setTimeout(r, 12000));
-                if (waitMsg) waitMsg.remove();
-                showTyping();
-                response = await fetchGemini();
+                throw new Error('quota_exceeded');
             }
 
             if (!response.ok) {
@@ -307,9 +302,9 @@
             hideTyping();
 
             let errMsg = '❌ เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะน้อง';
-            if (err.message.includes('401'))        errMsg = '❌ API Key ไม่ถูกต้อง กรุณาติดต่อผู้ดูแลเว็บ';
-            else if (err.message.includes('429'))   errMsg = '⚠️ ขอโทษนะน้อง ตอนนี้มีคนถามเยอะมาก รอแป๊บแล้วลองใหม่นะ 😅';
-            else if (err.message.includes('quota')) errMsg = '⚠️ ขอโทษนะน้อง ตอนนี้ quota หมดแล้ว รอให้ผู้ดูแลเว็บเติม quota ก่อนนะครับ';
+            if (err.message === 'quota_exceeded') errMsg = '😅 ขอโทษนะน้อง พี่แปกตอบได้ไม่ไหวในตอนนี้ ลองถามใหม่อีกครู่นะ';
+            else if (err.message.includes('401'))  errMsg = '❌ API Key ไม่ถูกต้อง กรุณาติดต่อผู้ดูแลเว็บ';
+            else if (err.message.includes('403'))  errMsg = '❌ API Key ถูกระงับ กรุณาติดต่อผู้ดูแลเว็บ';
 
             appendMessage('assistant', errMsg);
         } finally {
