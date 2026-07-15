@@ -3,236 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ - คู่มือมหาวิทยาลัยในประเทศไทย</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&family=Sarabun:wght@400;500&display=swap" rel="stylesheet">
-    
-    <link href="tooplate-minimal-white-style.css" rel="stylesheet">
+    <title>เข้าสู่ระบบ — มหาวิทยาลัยรับสมัครผู้จบ ปวส.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword,
+                 createUserWithEmailAndPassword, sendPasswordResetEmail }
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey:            "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
+            authDomain:        "myuniversityguide-c083c.firebaseapp.com",
+            projectId:         "myuniversityguide-c083c",
+            storageBucket:     "myuniversityguide-c083c.firebasestorage.app",
+            messagingSenderId: "649652214412",
+            appId:             "1:649652214412:web:06937089fc7bbe111579a9"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ===== เข้าสู่ระบบ =====
+        window.handleLogin = async function () {
+            const email    = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errEl    = document.getElementById('errorMsg');
+            errEl.textContent = '';
+
+            if (!email || !password) {
+                errEl.textContent = 'กรุณากรอกอีเมลและรหัสผ่านให้ครบครับ';
+                return;
+            }
+
+            setLoading(true);
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'index.html';
+            } catch (err) {
+                errEl.textContent = getErrorMessage(err.code);
+                setLoading(false);
+            }
+        };
+
+        // ===== ลงทะเบียน =====
+        window.handleRegister = async function () {
+            const email    = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errEl    = document.getElementById('errorMsg');
+            errEl.textContent = '';
+
+            if (!email || !password) {
+                errEl.textContent = 'กรุณากรอกอีเมลและรหัสผ่านให้ครบครับ';
+                return;
+            }
+            if (password.length < 6) {
+                errEl.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรครับ';
+                return;
+            }
+
+            setLoading(true);
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                window.location.href = 'index.html';
+            } catch (err) {
+                errEl.textContent = getErrorMessage(err.code);
+                setLoading(false);
+            }
+        };
+
+        // ===== ลืมรหัสผ่าน =====
+        window.handleForgotPassword = async function () {
+            const email = document.getElementById('email').value.trim();
+            const errEl = document.getElementById('errorMsg');
+            errEl.textContent = '';
+
+            if (!email) {
+                errEl.textContent = 'กรุณากรอกอีเมลในช่องด้านบนก่อนนะครับ';
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showToast('✅ ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ' + email + ' แล้วครับ กรุณาเช็ค inbox');
+            } catch (err) {
+                errEl.textContent = getErrorMessage(err.code);
+            }
+        };
+
+        // ===== แปล error code =====
+        function getErrorMessage(code) {
+            const map = {
+                'auth/invalid-email':       'รูปแบบอีเมลไม่ถูกต้องครับ',
+                'auth/user-not-found':      'ไม่พบบัญชีนี้ในระบบครับ',
+                'auth/wrong-password':      'รหัสผ่านไม่ถูกต้องครับ',
+                'auth/email-already-in-use':'อีเมลนี้ถูกใช้งานแล้วครับ',
+                'auth/weak-password':       'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรครับ',
+                'auth/too-many-requests':   'ลองใหม่อีกครั้งในภายหลังนะครับ',
+                'auth/invalid-credential':  'อีเมลหรือรหัสผ่านไม่ถูกต้องครับ',
+            };
+            return map[code] || 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งครับ';
+        }
+
+        function setLoading(state) {
+            document.getElementById('loginBtn').disabled    = state;
+            document.getElementById('registerBtn').disabled = state;
+            document.getElementById('loginBtn').textContent    = state ? 'กำลังดำเนินการ...' : 'เข้าสู่ระบบ';
+        }
+
+        // กด Enter ส่งได้เลย
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('password').addEventListener('keydown', e => {
+                if (e.key === 'Enter') window.handleLogin();
+            });
+        });
+    </script>
+
     <style>
-        /* เอฟเฟกต์กล่องสั่นเมื่อเกิดข้อผิดพลาด */
-        .shake {
-            animation: shake 0.5s;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            min-height: 100vh;
+            background: #f5f5f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+        /* ===== Card ===== */
+        .login-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+            padding: 48px 40px 40px;
+            width: 100%;
+            max-width: 420px;
         }
 
-        /* ตั้งค่าสไตล์มินิมอลและคุมระบบฟอนต์ */
-        body { 
-            background-color: #f9f9f9; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            margin: 0; 
-            font-family: 'Sarabun', sans-serif; 
+        /* ===== Header ===== */
+        .login-logo {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 6px;
         }
-        
-        .login-card { 
-            background: white; 
-            padding: 40px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            width: 100%; 
-            max-width: 400px; 
-            text-align: center; 
-            border-radius: 12px; /* เติมความโค้งมนเล็กน้อยให้ดูทันสมัย */
-        }
-
-        /* หัวข้อหลักใช้ฟอนต์ Prompt */
-        .login-card h2 {
-            font-family: 'Prompt', sans-serif;
-            font-weight: 500;
-            font-size: 22px;
-            margin-bottom: 30px;
+        .login-title {
+            font-size: 20px;
+            font-weight: 700;
             color: #111;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .login-subtitle {
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+            margin-bottom: 32px;
         }
 
-        .form-group { position: relative; margin-bottom: 25px; text-align: left; }
-        .form-group input { width: 100%; padding: 10px 0; border: none; border-bottom: 1px solid #ddd; outline: none; background: transparent; font-family: 'Sarabun', sans-serif; font-size: 15px; }
-        .form-group label { position: absolute; top: 10px; left: 0; color: #999; pointer-events: none; transition: 0.3s; font-size: 15px; }
-        .form-group input:focus ~ label, .form-group input:not(:placeholder-shown) ~ label { top: -15px; font-size: 12px; color: #000; }
-        
-        /* ปุ่มและข้อความแจ้งเตือนใช้ฟอนต์ Prompt เพื่อความชัดเจนและสวยงาม */
-        .submit-btn { width: 100%; padding: 12px; background: #000; color: #fff; border: none; cursor: pointer; letter-spacing: 1px; font-family: 'Prompt', sans-serif; font-size: 14px; font-weight: 500; transition: background 0.2s; }
-        .submit-btn:hover { background: #222; }
-        
-        .secondary-btn { width: 100%; padding: 10px; background: #fff; color: #000; border: 1px solid #000; margin-top: 10px; cursor: pointer; font-family: 'Prompt', sans-serif; font-size: 13px; font-weight: 400; transition: all 0.2s; }
-        .secondary-btn:hover { background: #f5f5f5; }
-        
-        #message { font-family: 'Prompt', sans-serif; margin-top: 15px; font-size: 13px; font-weight: 400; }
+        /* ===== Form ===== */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 10px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 15px;
+            color: #222;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fafafa;
+        }
+        .form-group input:focus {
+            border-color: #111;
+            background: #fff;
+        }
+        .form-group input::placeholder { color: #bbb; }
+
+        /* ===== Error ===== */
+        .error-msg {
+            font-size: 13px;
+            color: #c81e1e;
+            text-align: center;
+            min-height: 20px;
+            margin-bottom: 12px;
+        }
+
+        /* ===== Buttons ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 13px;
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 10px;
+        }
+        .btn-primary:hover    { background: #333; }
+        .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 13px;
+            background: transparent;
+            color: #111;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover    { border-color: #111; }
+        .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ===== Divider ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .divider-line { flex: 1; height: 1px; background: #eee; }
+        .divider-text { font-size: 12px; color: #bbb; white-space: nowrap; }
+
+        /* ===== Forgot password ===== */
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .forgot-link:hover { color: #111; }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-family: 'Sarabun', sans-serif;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast.show { opacity: 1; }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .login-card { padding: 36px 24px 32px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <h2>มหาวิทยาลัยรับสมัครผู้จบ ปวส.</h2>
-    <form id="loginForm">
+    <div class="login-card">
+        <div class="login-logo">🎓</div>
+        <h1 class="login-title">มหาวิทยาลัยรับสมัครผู้จบ ปวส.</h1>
+        <p class="login-subtitle">เข้าสู่ระบบเพื่อเริ่มค้นหามหาวิทยาลัยที่ใช่</p>
+
         <div class="form-group">
-            <input type="email" id="loginEmail" placeholder=" " required>
-            <label>อีเมล</label>
+            <label for="email">อีเมล</label>
+            <input type="email" id="email" placeholder="example@email.com">
         </div>
+
         <div class="form-group">
-            <input type="password" id="loginPassword" placeholder=" " required>
-            <label>รหัสผ่าน</label>
+            <label for="password">รหัสผ่าน</label>
+            <input type="password" id="password" placeholder="อย่างน้อย 6 ตัวอักษร">
         </div>
-        <button type="submit" class="submit-btn">เข้าสู่ระบบ</button>
-        <button type="button" id="signUpBtn" class="secondary-btn">ลงทะเบียนสมาชิก</button>
-        <p id="message"></p>
-        
-        <button onclick="handleLogin()">เข้าสู่ระบบ</button>
-        <p style="text-align:center; margin-top:10px;">
-            <a href="#" onclick="handleForgotPassword()" 
-               style="font-size:13px; color:#888; text-decoration:none;">
-                ลืมรหัสผ่าน?
-    </a>
-</p>
-    </form>
-</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-           sendPasswordResetEmail} 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    
+        <p class="error-msg" id="errorMsg"></p>
 
-    // 1. Firebase Config ของคุณ
-    const firebaseConfig = {
-        apiKey: "AIzaSyB_ucVfdd-BpTRbtHWZ9LyiETduVIYKCqE",
-        authDomain: "myuniversityguide-c083c.firebaseapp.com",
-        projectId: "myuniversityguide-c083c",
-        storageBucket: "myuniversityguide-c083c.firebasestorage.app",
-        messagingSenderId: "649652214412",
-        appId: "1:649652214412:web:06937089fc7bbe111579a9"
-    };
+        <button class="btn-primary" id="loginBtn" onclick="handleLogin()">
+            เข้าสู่ระบบ
+        </button>
 
-    // 2. Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">ยังไม่มีบัญชี?</span>
+            <div class="divider-line"></div>
+        </div>
 
-    const loginForm = document.getElementById('loginForm');
-    const msg = document.getElementById('message');
+        <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">
+            ลงทะเบียนสมาชิกใหม่
+        </button>
 
-    // 3. ฟังก์ชัน Login (ภาษาไทย)
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailField = document.getElementById('loginEmail');
-        const passwordField = document.getElementById('loginPassword');
-        const email = emailField.value;
-        const password = passwordField.value;
+        <a class="forgot-link" onclick="handleForgotPassword()">
+            ลืมรหัสผ่าน?
+        </a>
+    </div>
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                msg.style.color = "#28a745"; // สีเขียวมินิมอล
-                msg.innerText = "เข้าสู่ระบบสำเร็จ! กำลังนำคุณเข้าสู่หน้าหลัก...";
-                setTimeout(() => window.location.href = "index.html", 1500);
-            })
-            .catch((error) => {
-                msg.style.color = "#d9534f"; // สีแดงซอฟต์
-                
-                // แปลงคำแจ้งเตือน Error เป็นภาษาไทยที่เข้าใจง่าย
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                    case 'auth/invalid-credential': // รองรับอัปเดต Firebase Auth ใหม่ที่รวมยอด Error Code
-                        msg.innerText = "ไม่พบบัญชีผู้ใช้ หรือข้อมูลประจำตัวไม่ถูกต้อง";
-                        break;
-                    case 'auth/wrong-password':
-                        msg.innerText = "รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง";
-                        break;
-                    case 'auth/invalid-email':
-                        msg.innerText = "รูปแบบอีเมลไม่ถูกต้อง";
-                        break;
-                    case 'auth/too-many-requests':
-                        msg.innerText = "ระงับการเข้าสู่ระบบชั่วคราวเนื่องจากลองผิดมากเกินไป กรุณารอสักครู่";
-                        break;
-                    default:
-                        msg.innerText = "เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง";
-                }
+    <div class="toast" id="toast"></div>
 
-                // ล้างข้อความในช่องกรอกข้อมูลเพื่อให้ลองใหม่ได้ทันที
-                emailField.value = "";
-                passwordField.value = "";
-                
-                // คืนค่า Floating Label ให้กลับมาที่ตำแหน่งเดิม
-                emailField.blur();
-                passwordField.blur();
-
-                // เอฟเฟกต์เขย่ากล่องเตือน
-                const card = document.querySelector('.login-card');
-                card.classList.add('shake');
-                setTimeout(() => card.classList.remove('shake'), 500);
-            });
-    });
-
-    // 4. ฟังก์ชัน Register สมัครสมาชิก (ภาษาไทย)
-    document.getElementById('signUpBtn').addEventListener('click', () => {
-        const emailField = document.getElementById('loginEmail');
-        const passwordField = document.getElementById('loginPassword');
-        const email = emailField.value;
-        const password = passwordField.value;
-
-        if(!email || !password) {
-            msg.style.color = "#d9534f";
-            msg.innerText = "กรุณากรอกทั้งอีเมลและรหัสผ่านเพื่อสมัครใช้งาน";
-            return;
+    <script>
+        function showToast(msg, duration = 3500) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), duration);
         }
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                msg.style.color = "#1a56db"; // สีน้ำเงินสไตล์เดียวกับหน้าแรก
-                msg.innerText = "ลงทะเบียนสำเร็จ! คุณสามารถกด 'เข้าสู่ระบบ' ได้ทันที";
-                window.location.href = "index.html";
-            })
-            .catch((error) => {
-                msg.style.color = "#d9534f";
-                
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        msg.innerText = "อีเมลนี้ถูกใช้งานในระบบแล้ว";
-                        break;
-                    case 'auth/weak-password':
-                        msg.innerText = "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
-                        break;
-                    case 'auth/invalid-email':
-                        msg.innerText = "รูปแบบอีเมลไม่ถูกต้อง";
-                        break;
-                    default:
-                        msg.innerText = "การลงทะเบียนล้มเหลว กรุณาลองใหม่อีกครั้ง";
-                }
-                
-                // ล้างค่าข้อมูล
-                emailField.value = "";
-                passwordField.value = "";
-                emailField.blur();
-                passwordField.blur();
-            });
-    });
-    // 5.===== ลืมรหัสผ่าน =====
-window.handleForgotPassword = async function () {
-    const email = document.getElementById('email').value.trim();
-
-    if (!email) {
-        alert('กรุณาใส่ email ของคุณในช่อง email ก่อนนะครับ');
-        return;
-    }
-
-    try {
-        await sendPasswordResetEmail(auth, email);
-        alert('✅ ส่ง link รีเซ็ตรหัสผ่านไปที่ ' + email + ' แล้วครับ\nกรุณาเช็ค inbox (และ spam) ด้วยนะ');
-    } catch (err) {
-        if (err.code === 'auth/user-not-found') {
-            alert('❌ ไม่พบ email นี้ในระบบครับ');
-        } else {
-            alert('❌ เกิดข้อผิดพลาด: ' + err.message);
-        }
-    }
-};
-</script>
+    </script>
 
 </body>
 </html>
