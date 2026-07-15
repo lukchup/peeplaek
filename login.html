@@ -83,13 +83,23 @@
         <button type="submit" class="submit-btn">เข้าสู่ระบบ</button>
         <button type="button" id="signUpBtn" class="secondary-btn">ลงทะเบียนสมาชิก</button>
         <p id="message"></p>
+        
+        <button onclick="handleLogin()">เข้าสู่ระบบ</button>
+        <p style="text-align:center; margin-top:10px;">
+            <a href="#" onclick="handleForgotPassword()" 
+               style="font-size:13px; color:#888; text-decoration:none;">
+                ลืมรหัสผ่าน?
+    </a>
+</p>
     </form>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } 
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+           sendPasswordResetEmail} 
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    
 
     // 1. Firebase Config ของคุณ
     const firebaseConfig = {
@@ -202,6 +212,26 @@
                 passwordField.blur();
             });
     });
+    // 5.===== ลืมรหัสผ่าน =====
+window.handleForgotPassword = async function () {
+    const email = document.getElementById('email').value.trim();
+
+    if (!email) {
+        alert('กรุณาใส่ email ของคุณในช่อง email ก่อนนะครับ');
+        return;
+    }
+
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert('✅ ส่ง link รีเซ็ตรหัสผ่านไปที่ ' + email + ' แล้วครับ\nกรุณาเช็ค inbox (และ spam) ด้วยนะ');
+    } catch (err) {
+        if (err.code === 'auth/user-not-found') {
+            alert('❌ ไม่พบ email นี้ในระบบครับ');
+        } else {
+            alert('❌ เกิดข้อผิดพลาด: ' + err.message);
+        }
+    }
+};
 </script>
 
 </body>
