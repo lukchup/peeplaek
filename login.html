@@ -74,22 +74,28 @@
 
         // ===== ลืมรหัสผ่าน =====
         window.handleForgotPassword = async function () {
-            const email = document.getElementById('email').value.trim();
-            const errEl = document.getElementById('errorMsg');
-            errEl.textContent = '';
+    const email = document.getElementById('email').value.trim();
+    const errEl = document.getElementById('errorMsg');
+    errEl.textContent = '';
 
-            if (!email) {
-                errEl.textContent = 'กรุณากรอกอีเมลในช่องด้านบนก่อนนะครับ';
-                return;
-            }
+    if (!email) {
+        errEl.textContent = 'กรุณากรอกอีเมลในช่องด้านบนก่อนนะครับ';
+        return;
+    }
 
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showToast('✅ ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ' + email + ' แล้วครับ กรุณาเช็ค inbox');
-            } catch (err) {
-                errEl.textContent = getErrorMessage(err.code);
-            }
-        };
+    // กำหนด URL ที่จะ redirect หลัง reset password
+    const actionCodeSettings = {
+        url: 'https://lukchup.github.io/peeplaek/login.html',
+        handleCodeInApp: false
+    };
+
+    try {
+        await sendPasswordResetEmail(auth, email, actionCodeSettings);
+        showToast('✅ ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ' + email + ' แล้วครับ กรุณาเช็ค inbox');
+    } catch (err) {
+        errEl.textContent = getErrorMessage(err.code);
+    }
+};
 
         // ===== แปล error code =====
         function getErrorMessage(code) {
