@@ -174,9 +174,9 @@
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                window.location.href = "index.html";
                 msg.style.color = "#1a56db"; // สีน้ำเงินสไตล์เดียวกับหน้าแรก
                 msg.innerText = "ลงทะเบียนสำเร็จ! คุณสามารถกด 'เข้าสู่ระบบ' ได้ทันที";
+                window.location.href = "index.html";
             })
             .catch((error) => {
                 msg.style.color = "#d9534f";
