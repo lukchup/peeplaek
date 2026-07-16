@@ -1,0 +1,229 @@
+/* --- 1. Global Styles --- */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@500;600;700&display=swap');
+
+:root {
+    /* โทนสี ส้ม - เทา ของ ม.บูรพา */
+    --buu-orange: #f37021;      /* สีส้มประจำสถาบัน */
+    --buu-grey: #58595b;        /* สีเทาประจำสถาบัน */
+    --buu-orange-light: #fff0e6;/* สีส้มอ่อน สำหรับพื้นหลังเน้นข้อความ */
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px; margin: 0 auto; padding: 0 20px;
+}
+
+/* --- 2. Hero Section --- */
+.hero-section {
+    padding: 60px 0; text-align: center;
+    background: linear-gradient(135deg, var(--buu-grey) 0%, #2d2e2f 100%);
+    color: var(--white);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom: 5px solid var(--buu-orange); /* เส้นขอบล่างสีส้ม */
+}
+
+.hero-section h1 {
+    color: var(--white) !important;
+}
+
+.buu-logo { 
+    width: 130px; height: auto;
+    filter: drop-shadow(0 6px 15px rgba(243, 112, 33, 0.3));
+}
+
+h1 {
+    font-family: 'Prompt', sans-serif;
+    font-size: 2.5rem; 
+    font-weight: 600;
+    color: var(--buu-grey); 
+    margin: 20px 0 10px;
+}
+
+.divider {
+    width: 80px; height: 4px;
+    background: var(--buu-orange); /* เส้นคั่นสีส้ม */
+    margin: 0 auto 25px; border-radius: 2px;
+}
+
+.intro-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    font-weight: 300;
+    opacity: 0.9;
+    padding: 0 15px;
+}
+
+/* --- 3. Info Cards & Tables --- */
+.info-card {
+    background: var(--white); padding: 25px; border-radius: 24px;
+    display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    margin-bottom: 40px; border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.icon-box {
+    width: 60px; height: 60px;
+    background: var(--buu-orange-light); 
+    color: var(--buu-orange);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px; font-size: 1.5rem;
+}
+
+.address-content h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Prompt', sans-serif;
+    color: var(--buu-grey);
+    color: var(--buu-gold);
+}
+
+.section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.6rem;
+    color: var(--buu-grey);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 8px;
+}
+
+.table-responsive {
+    background: var(--white); border-radius: 20px;
+    overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    margin-bottom: 40px;
+    border: 1px solid #e9ecef;
+}
+
+.facts-table { width: 100%; border-collapse: collapse; }
+.facts-table th { 
+    background-color: var(--buu-grey); 
+    color: var(--white); 
+    text-align: left;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    border-bottom: 3px solid var(--buu-orange);
+}
+.facts-table th, .facts-table td { padding: 18px 25px; border-bottom: 1px solid #f1f1f1; }
+.facts-table tr:last-child td { border-bottom: none; }
+
+/* Color Dots สำหรับ ม.บูรพา */
+.color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
+.color-dot.buu-grey { background: var(--buu-grey); }
+.color-dot.buu-orange { background: var(--buu-orange); }
+
+/* --- 4. Description & Schools Grid --- */
+.desc-box {
+    background: var(--white); padding: 30px; border-radius: 24px;
+    border-left: 6px solid var(--buu-orange); /* เส้นขอบข้างสีส้ม ม.บูรพา */
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.desc-box h3 {
+    font-family: 'Prompt', sans-serif;
+    color: var(--buu-grey);
+    margin-top: 0;
+}
+
+.schools-grid {
+    margin-bottom: 40px;
+}
+
+.schools-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.schools-list span {
+    background: var(--white);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    display: flex; /* เพิ่มเพื่อให้ไอคอนกับข้อความจัดวางง่ายขึ้น */
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* เพิ่ม Effect เวลาเอาเมาส์ไปชี้ที่ชื่อคณะ */
+.schools-list span:hover {
+    border-color: var(--buu-orange);
+    background-color: var(--buu-orange-light);
+    transform: translateX(5px);
+}
+
+.schools-list i {
+    color: var(--buu-orange); /* ปรับสีไอคอนเป็นสีส้ม */
+    margin-right: 12px;
+    font-size: 1.1rem;
+}/* --- 5. Buttons & Footer --- */
+.btn-container {
+    display: flex;          
+    justify-content: center; 
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin: 50px 0;
+    flex-wrap: wrap;
+}
+
+.btn-visit, .btn-back {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+/* ปุ่มหลัก (Visit) - ใช้สีส้มเด่นชัด */
+.btn-visit {
+    background: var(--buu-orange);
+    color: var(--white);
+    border: 1px solid var(--buu-orange);
+    box-shadow: 0 8px 20px rgba(243, 112, 33, 0.2);
+}
+.btn-visit:hover {
+    background: #d95e1a; /* สีส้มเข้มขึ้นเมื่อ Hover */
+    border-color: #d95e1a;
+    transform: translateY(-3px);
+}
+
+/* ปุ่มรอง (Back) - ใช้สีเทาและกรอบส้ม */
+.btn-back {
+    background: var(--white);
+    color: var(--buu-grey);
+    border: 1px solid var(--buu-grey);
+}
+.btn-back:hover {
+    background: var(--buu-grey);
+    color: var(--white);
+    transform: translateY(-3px);
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    border-top: 1px solid #e9ecef;
+}
